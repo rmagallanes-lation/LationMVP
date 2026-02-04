@@ -37,7 +37,10 @@ export const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-24 bg-primary relative overflow-hidden">
+    <section
+      id="contact"
+      className="py-24 bg-primary text-primary-foreground dark:bg-gradient-section dark:text-foreground relative overflow-hidden"
+    >
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-foreground/5 rounded-full blur-3xl" />
@@ -72,12 +75,12 @@ export const ContactSection = () => {
               <Sparkles className="w-8 h-8 text-accent" />
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground dark:text-foreground mb-6 leading-tight">
               {t('landing.contact.title').split('Conversation')[0]} <br />
               <span className="text-accent">Conversation</span>
             </h2>
 
-            <p className="text-lg md:text-xl text-primary-foreground/80 mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-primary-foreground/80 dark:text-muted-foreground mb-10 leading-relaxed">
               {t('landing.contact.subtitle')}
             </p>
 
@@ -94,8 +97,8 @@ export const ContactSection = () => {
                   <Mail className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-primary-foreground/60">{t('landing.contact.email.label')}</p>
-                  <p className="font-semibold text-primary-foreground">hello@lation.io</p>
+                  <p className="text-sm text-primary-foreground/60 dark:text-muted-foreground">{t('landing.contact.email.label')}</p>
+                  <p className="font-semibold text-primary-foreground dark:text-foreground">hello@lation.io</p>
                 </div>
               </motion.a>
 
@@ -109,8 +112,8 @@ export const ContactSection = () => {
                   <MessageSquare className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-primary-foreground/60">{t('landing.contact.response.label')}</p>
-                  <p className="font-semibold text-primary-foreground">{t('landing.contact.response.time')}</p>
+                  <p className="text-sm text-primary-foreground/60 dark:text-muted-foreground">{t('landing.contact.response.label')}</p>
+                  <p className="font-semibold text-primary-foreground dark:text-foreground">{t('landing.contact.response.time')}</p>
                 </div>
               </motion.div>
             </div>
@@ -124,16 +127,16 @@ export const ContactSection = () => {
           >
             <form
               onSubmit={handleSubmit}
-              className="bg-primary-foreground/5 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-primary-foreground/10"
+              className="bg-primary-foreground/5 dark:bg-card/60 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-primary-foreground/10 dark:border-border"
             >
-              <h3 className="text-2xl font-bold text-primary-foreground mb-6">
+              <h3 className="text-2xl font-bold text-primary-foreground dark:text-foreground mb-6">
                 {t('landing.contact.form.title')}
               </h3>
 
               <div className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-primary-foreground/80 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-primary-foreground/80 dark:text-muted-foreground mb-2">
                       {t('landing.contact.form.name')}
                     </label>
                     <Input
@@ -143,11 +146,11 @@ export const ContactSection = () => {
                       onChange={handleChange}
                       placeholder={t('landing.contact.form.namePlaceholder')}
                       required
-                      className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent"
+                      className="bg-primary-foreground/10 dark:bg-background/60 border-primary-foreground/20 dark:border-border text-primary-foreground dark:text-foreground placeholder:text-primary-foreground/40 dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-primary-foreground/80 mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-primary-foreground/80 dark:text-muted-foreground mb-2">
                       {t('landing.contact.form.email')}
                     </label>
                     <Input
@@ -158,13 +161,13 @@ export const ContactSection = () => {
                       onChange={handleChange}
                       placeholder={t('landing.contact.form.emailPlaceholder')}
                       required
-                      className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent"
+                      className="bg-primary-foreground/10 dark:bg-background/60 border-primary-foreground/20 dark:border-border text-primary-foreground dark:text-foreground placeholder:text-primary-foreground/40 dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-primary-foreground/80 mb-2">
+                  <label htmlFor="company" className="block text-sm font-medium text-primary-foreground/80 dark:text-muted-foreground mb-2">
                     {t('landing.contact.form.company')}
                   </label>
                   <Input
@@ -173,12 +176,12 @@ export const ContactSection = () => {
                     value={formData.company}
                     onChange={handleChange}
                     placeholder={t('landing.contact.form.companyPlaceholder')}
-                    className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent"
+                    className="bg-primary-foreground/10 dark:bg-background/60 border-primary-foreground/20 dark:border-border text-primary-foreground dark:text-foreground placeholder:text-primary-foreground/40 dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-primary-foreground/80 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-primary-foreground/80 dark:text-muted-foreground mb-2">
                     {t('landing.contact.form.message')}
                   </label>
                   <Textarea
@@ -189,7 +192,7 @@ export const ContactSection = () => {
                     placeholder={t('landing.contact.form.messagePlaceholder')}
                     rows={4}
                     required
-                    className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent resize-none"
+                    className="bg-primary-foreground/10 dark:bg-background/60 border-primary-foreground/20 dark:border-border text-primary-foreground dark:text-foreground placeholder:text-primary-foreground/40 dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent resize-none"
                   />
                 </div>
 
@@ -210,7 +213,7 @@ export const ContactSection = () => {
                 </Button>
               </div>
 
-              <p className="text-xs text-primary-foreground/50 text-center mt-6">
+              <p className="text-xs text-primary-foreground/50 dark:text-muted-foreground text-center mt-6">
                 {t('landing.contact.form.privacy')}
               </p>
             </form>

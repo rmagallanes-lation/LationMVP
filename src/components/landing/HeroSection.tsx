@@ -114,7 +114,7 @@ export const HeroSection = () => {
                       <p className="font-semibold text-foreground">Backend Engineer</p>
                       <p className="text-sm text-muted-foreground">Evaluation complete</p>
                     </div>
-                    <span className="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full font-medium">
+                    <span className="px-3 py-1 bg-success/15 text-success text-sm rounded-full font-medium">
                       Strong Hire
                     </span>
                   </div>
