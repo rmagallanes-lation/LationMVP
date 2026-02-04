@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Mail, MessageSquare, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export const ContactSection = () => {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -21,11 +23,11 @@ export const ContactSection = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    toast.success("Message sent successfully! We'll get back to you soon.");
+
+    toast.success(t('landing.contact.form.success'));
     setFormData({ name: "", email: "", company: "", message: "" });
     setIsSubmitting(false);
   };
@@ -44,7 +46,7 @@ export const ContactSection = () => {
       </div>
 
       {/* Grid Pattern */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `linear-gradient(hsl(var(--primary-foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary-foreground)) 1px, transparent 1px)`,
@@ -71,14 +73,12 @@ export const ContactSection = () => {
             </motion.div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
-              Let's Start a <br />
+              {t('landing.contact.title').split('Conversation')[0]} <br />
               <span className="text-accent">Conversation</span>
             </h2>
-            
+
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-10 leading-relaxed">
-              Curious about how Lation can revolutionize your hiring? 
-              Drop us a message and our team will reach out to discuss 
-              your specific needs.
+              {t('landing.contact.subtitle')}
             </p>
 
             {/* Contact Options */}
@@ -94,7 +94,7 @@ export const ContactSection = () => {
                   <Mail className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-primary-foreground/60">Email us at</p>
+                  <p className="text-sm text-primary-foreground/60">{t('landing.contact.email.label')}</p>
                   <p className="font-semibold text-primary-foreground">hello@lation.io</p>
                 </div>
               </motion.a>
@@ -109,8 +109,8 @@ export const ContactSection = () => {
                   <MessageSquare className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <p className="text-sm text-primary-foreground/60">Response time</p>
-                  <p className="font-semibold text-primary-foreground">Within 24 hours</p>
+                  <p className="text-sm text-primary-foreground/60">{t('landing.contact.response.label')}</p>
+                  <p className="font-semibold text-primary-foreground">{t('landing.contact.response.time')}</p>
                 </div>
               </motion.div>
             </div>
@@ -122,33 +122,33 @@ export const ContactSection = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <form 
+            <form
               onSubmit={handleSubmit}
               className="bg-primary-foreground/5 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-primary-foreground/10"
             >
               <h3 className="text-2xl font-bold text-primary-foreground mb-6">
-                Get in Touch
+                {t('landing.contact.form.title')}
               </h3>
 
               <div className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-primary-foreground/80 mb-2">
-                      Your Name
+                      {t('landing.contact.form.name')}
                     </label>
                     <Input
                       id="name"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="John Doe"
+                      placeholder={t('landing.contact.form.namePlaceholder')}
                       required
                       className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent"
                     />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-primary-foreground/80 mb-2">
-                      Email Address
+                      {t('landing.contact.form.email')}
                     </label>
                     <Input
                       id="email"
@@ -156,7 +156,7 @@ export const ContactSection = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="john@company.com"
+                      placeholder={t('landing.contact.form.emailPlaceholder')}
                       required
                       className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent"
                     />
@@ -165,45 +165,45 @@ export const ContactSection = () => {
 
                 <div>
                   <label htmlFor="company" className="block text-sm font-medium text-primary-foreground/80 mb-2">
-                    Company Name
+                    {t('landing.contact.form.company')}
                   </label>
                   <Input
                     id="company"
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    placeholder="Your Company Inc."
+                    placeholder={t('landing.contact.form.companyPlaceholder')}
                     className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent"
                   />
                 </div>
 
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-primary-foreground/80 mb-2">
-                    Your Message
+                    {t('landing.contact.form.message')}
                   </label>
                   <Textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder="Tell us about your hiring needs, team size, or any questions you have..."
+                    placeholder={t('landing.contact.form.messagePlaceholder')}
                     rows={4}
                     required
                     className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:border-accent focus:ring-accent resize-none"
                   />
                 </div>
 
-                <Button 
+                <Button
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                 >
                   {isSubmitting ? (
-                    "Sending..."
+                    t('landing.contact.form.sending')
                   ) : (
                     <>
-                      Send Message
+                      {t('landing.contact.form.submit')}
                       <Send className="w-4 h-4 ml-2" />
                     </>
                   )}
@@ -211,7 +211,7 @@ export const ContactSection = () => {
               </div>
 
               <p className="text-xs text-primary-foreground/50 text-center mt-6">
-                By submitting, you agree to our privacy policy. We'll never share your information.
+                {t('landing.contact.form.privacy')}
               </p>
             </form>
           </motion.div>

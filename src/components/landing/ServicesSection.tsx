@@ -2,37 +2,39 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { FileText, Brain, Video, BarChart } from "lucide-react";
-
-const services = [
-  {
-    icon: FileText,
-    title: "Technical Interviews",
-    description: "Expert-led technical interviews tailored to your job requirements. Our interviewers assess coding skills, system design, and problem-solving abilities.",
-    features: ["Live coding sessions", "System design discussions", "Behavioral assessment"],
-  },
-  {
-    icon: Brain,
-    title: "AI-Powered Questions",
-    description: "Our AI analyzes job descriptions to generate targeted technical questions, ensuring comprehensive and relevant candidate evaluations.",
-    features: ["Job-specific questions", "Adaptive difficulty", "Standardized scoring"],
-  },
-  {
-    icon: Video,
-    title: "Microsoft Teams Integration",
-    description: "Seamless video interviews with automatic scheduling, calendar integration, and meeting recordings for later review.",
-    features: ["Auto-scheduled meetings", "Recording & playback", "Multi-party support"],
-  },
-  {
-    icon: BarChart,
-    title: "Detailed PDF Reports",
-    description: "Comprehensive evaluation reports with skill assessments, scores, and hiring recommendations delivered within 24 hours.",
-    features: ["Skill-by-skill breakdown", "Comparative scoring", "Clear recommendations"],
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export const ServicesSection = () => {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const services = [
+    {
+      icon: FileText,
+      title: t('landing.services.items.interviews.title'),
+      description: t('landing.services.items.interviews.description'),
+      features: t('landing.services.items.interviews.features', { returnObjects: true }) as string[],
+    },
+    {
+      icon: Brain,
+      title: t('landing.services.items.ai.title'),
+      description: t('landing.services.items.ai.description'),
+      features: t('landing.services.items.ai.features', { returnObjects: true }) as string[],
+    },
+    {
+      icon: Video,
+      title: t('landing.services.items.teams.title'),
+      description: t('landing.services.items.teams.description'),
+      features: t('landing.services.items.teams.features', { returnObjects: true }) as string[],
+    },
+    {
+      icon: BarChart,
+      title: t('landing.services.items.reports.title'),
+      description: t('landing.services.items.reports.description'),
+      features: t('landing.services.items.reports.features', { returnObjects: true }) as string[],
+    },
+  ];
 
   return (
     <section id="services" className="py-24 bg-background relative">
@@ -45,13 +47,13 @@ export const ServicesSection = () => {
           className="text-center mb-16"
         >
           <span className="text-accent font-semibold text-sm uppercase tracking-wider mb-4 block">
-            What We Offer
+            {t('landing.services.label')}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Complete Interview <span className="text-accent">Solutions</span>
+            {t('landing.services.title').split('Solutions')[0]}<span className="text-accent">Solutions</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            End-to-end technical interview services designed to help you hire the best talent efficiently.
+            {t('landing.services.subtitle')}
           </p>
         </motion.div>
 

@@ -2,37 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Users, Calendar, Award, Timer } from "lucide-react";
-
-const stats = [
-  {
-    icon: Calendar,
-    value: 10000,
-    suffix: "+",
-    label: "Interviews Completed",
-    description: "Technical assessments conducted",
-  },
-  {
-    icon: Users,
-    value: 500,
-    suffix: "+",
-    label: "Active Clients",
-    description: "Companies trust Lation",
-  },
-  {
-    icon: Award,
-    value: 150,
-    suffix: "+",
-    label: "Certified Interviewers",
-    description: "Expert technical evaluators",
-  },
-  {
-    icon: Timer,
-    value: 24,
-    suffix: "h",
-    label: "Average SLA",
-    description: "From request to report",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const CountUpAnimation = ({ target, suffix }: { target: number; suffix: string }) => {
   const [count, setCount] = useState(0);
@@ -69,8 +39,40 @@ const CountUpAnimation = ({ target, suffix }: { target: number; suffix: string }
 };
 
 export const StatsSection = () => {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const stats = [
+    {
+      icon: Calendar,
+      value: 10000,
+      suffix: "+",
+      label: t('landing.stats.interviewsCompleted'),
+      description: t('landing.stats.descriptions.interviews'),
+    },
+    {
+      icon: Users,
+      value: 500,
+      suffix: "+",
+      label: t('landing.stats.activeClients'),
+      description: t('landing.stats.descriptions.clients'),
+    },
+    {
+      icon: Award,
+      value: 150,
+      suffix: "+",
+      label: t('landing.stats.interviewers'),
+      description: t('landing.stats.descriptions.interviewers'),
+    },
+    {
+      icon: Timer,
+      value: 24,
+      suffix: "h",
+      label: t('landing.stats.sla'),
+      description: t('landing.stats.descriptions.sla'),
+    },
+  ];
 
   return (
     <section id="stats" className="py-24 bg-gradient-section relative overflow-hidden">
@@ -89,13 +91,13 @@ export const StatsSection = () => {
           className="text-center mb-16"
         >
           <span className="text-accent font-semibold text-sm uppercase tracking-wider mb-4 block">
-            Our Impact
+            {t('landing.stats.label')}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Numbers That <span className="text-accent">Speak</span>
+            {t('landing.stats.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Trusted by hundreds of companies worldwide to deliver exceptional technical interviews.
+            {t('landing.stats.subtitle')}
           </p>
         </motion.div>
 

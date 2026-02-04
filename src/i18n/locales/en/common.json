@@ -1,0 +1,261 @@
+{
+  "nav": {
+    "home": "Home",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "logout": "Logout"
+  },
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "viewDetails": "View Details",
+    "close": "Close"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "pt": "Português"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "upcomingInterviews": "Upcoming Interviews",
+    "scheduledInterviews": "Scheduled Interviews",
+    "completedInterviews": "Completed Interviews",
+    "stats": {
+      "totalInterviews": "Total Interviews",
+      "creditsRemaining": "Credits Remaining",
+      "pendingReports": "Pending Reports",
+      "teamMembers": "Team Members"
+    },
+    "scheduleInterview": "Schedule Interview",
+    "viewAll": "View All"
+  },
+  "interviewer": {
+    "title": "Interviewer Dashboard",
+    "pendingRequests": "Pending Requests",
+    "upcomingInterviews": "Upcoming Interviews",
+    "completedInterviews": "Completed Interviews",
+    "accept": "Accept",
+    "reject": "Reject",
+    "joinMeeting": "Join Meeting",
+    "submitEvaluation": "Submit Evaluation",
+    "viewReport": "View Report"
+  },
+  "interview": {
+    "position": "Position",
+    "candidate": "Candidate",
+    "company": "Company",
+    "date": "Date",
+    "time": "Time",
+    "status": "Status",
+    "experience": "Experience",
+    "skills": "Skills",
+    "notes": "Notes",
+    "evaluation": "Evaluation"
+  },
+  "status": {
+    "scheduled": "Scheduled",
+    "completed": "Completed",
+    "pending": "Pending",
+    "cancelled": "Cancelled",
+    "pending_evaluation": "Pending Evaluation",
+    "evaluation_submitted": "Evaluation Submitted"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "credits": {
+    "title": "Credits",
+    "remaining": "Remaining",
+    "purchase": "Purchase Credits",
+    "history": "Credit History"
+  },
+  "landing": {
+    "hero": {
+      "title": "Technical Interviews. Done Right",
+      "subtitle": "Scale your hiring with expert technical interviews. Get standardized evaluations, AI-powered insights, and comprehensive reports in hours, not weeks.",
+      "cta": "Let's Build Your Dream Team",
+      "learnMore": "Learn More",
+      "trustedBy": "Trusted by 500+ Companies",
+      "features": {
+        "expert": "Expert Technical Interviewers",
+        "aiPowered": "AI-Powered Question Generation",
+        "reports": "Detailed PDF Reports"
+      }
+    },
+    "about": {
+      "label": "About Lation",
+      "title": "Transforming How Companies Hire Technical Talent",
+      "description1": "Lation bridges the gap between companies and top technical talent through standardized, expert-led interview processes. We combine human expertise with AI-driven insights to deliver the most accurate candidate evaluations.",
+      "description2": "Our platform supports recruiters and hiring managers with comprehensive technical assessments, detailed PDF reports, and data-driven recommendations that help you make confident hiring decisions.",
+      "features": {
+        "fast": {
+          "title": "Lightning Fast",
+          "description": "Get comprehensive technical evaluations within 24 hours. Our streamlined process ensures you never miss a great candidate."
+        },
+        "expert": {
+          "title": "Expert Interviewers",
+          "description": "Our certified technical interviewers have years of industry experience across various tech stacks and domains."
+        },
+        "ai": {
+          "title": "AI-Powered Insights",
+          "description": "Leverage artificial intelligence to generate targeted questions and provide standardized, unbiased evaluations."
+        },
+        "scalable": {
+          "title": "Scalable Process",
+          "description": "Whether you're hiring one engineer or building a team, our platform scales with your needs effortlessly."
+        }
+      }
+    },
+    "services": {
+      "label": "What We Offer",
+      "title": "Complete Interview Solutions",
+      "subtitle": "End-to-end technical interview services designed to help you hire the best talent efficiently.",
+      "items": {
+        "interviews": {
+          "title": "Technical Interviews",
+          "description": "Expert-led technical interviews tailored to your job requirements. Our interviewers assess coding skills, system design, and problem-solving abilities.",
+          "features": [
+            "Live coding sessions",
+            "System design discussions",
+            "Behavioral assessment"
+          ]
+        },
+        "ai": {
+          "title": "AI-Powered Questions",
+          "description": "Our AI analyzes job descriptions to generate targeted technical questions, ensuring comprehensive and relevant candidate evaluations.",
+          "features": [
+            "Job-specific questions",
+            "Adaptive difficulty",
+            "Standardized scoring"
+          ]
+        },
+        "teams": {
+          "title": "Microsoft Teams Integration",
+          "description": "Seamless video interviews with automatic scheduling, calendar integration, and meeting recordings for later review.",
+          "features": [
+            "Auto-scheduled meetings",
+            "Recording & playback",
+            "Multi-party support"
+          ]
+        },
+        "reports": {
+          "title": "Detailed PDF Reports",
+          "description": "Comprehensive evaluation reports with skill assessments, scores, and hiring recommendations delivered within 24 hours.",
+          "features": [
+            "Skill-by-skill breakdown",
+            "Comparative scoring",
+            "Clear recommendations"
+          ]
+        }
+      }
+    },
+    "stats": {
+      "label": "Our Impact",
+      "title": "Numbers That Speak",
+      "subtitle": "Trusted by hundreds of companies worldwide to deliver exceptional technical interviews.",
+      "interviewsCompleted": "Interviews Completed",
+      "activeClients": "Active Clients",
+      "interviewers": "Certified Interviewers",
+      "sla": "Average SLA",
+      "descriptions": {
+        "interviews": "Technical assessments conducted",
+        "clients": "Companies trust Lation",
+        "interviewers": "Expert technical evaluators",
+        "sla": "From request to report"
+      }
+    },
+    "clients": {
+      "label": "Trusted By Leaders",
+      "title": "Companies That Trust Us",
+      "subtitle": "From startups to enterprises, leading companies rely on Lation for their technical hiring needs.",
+      "testimonial": {
+        "quote": "Lation transformed our hiring process. Their expert interviewers and detailed reports helped us make confident decisions and hire top talent faster than ever.",
+        "author": "Jane Doe",
+        "position": "VP of Engineering, TechCorp"
+      }
+    },
+    "contact": {
+      "title": "Let's Start a Conversation",
+      "subtitle": "Curious about how Lation can revolutionize your hiring? Drop us a message and our team will reach out to discuss your specific needs.",
+      "form": {
+        "title": "Get in Touch",
+        "name": "Your Name",
+        "namePlaceholder": "John Doe",
+        "email": "Email Address",
+        "emailPlaceholder": "john@company.com",
+        "company": "Company Name",
+        "companyPlaceholder": "Your Company Inc.",
+        "message": "Your Message",
+        "messagePlaceholder": "Tell us about your hiring needs, team size, or any questions you have...",
+        "submit": "Send Message",
+        "sending": "Sending...",
+        "privacy": "By submitting, you agree to our privacy policy. We'll never share your information.",
+        "success": "Message sent successfully! We'll get back to you soon."
+      },
+      "email": {
+        "label": "Email us at",
+        "address": "hello@lation.io"
+      },
+      "response": {
+        "label": "Response time",
+        "time": "Within 24 hours"
+      }
+    },
+    "footer": {
+      "tagline": "Transforming technical hiring with expert interviews, AI-powered insights, and comprehensive candidate evaluations.",
+      "columns": {
+        "product": {
+          "title": "Product",
+          "features": "Features",
+          "enterprises": "For Enterprises",
+          "api": "API"
+        },
+        "company": {
+          "title": "Company",
+          "about": "About",
+          "careers": "Careers",
+          "blog": "Blog",
+          "press": "Press"
+        },
+        "resources": {
+          "title": "Resources",
+          "documentation": "Documentation",
+          "helpCenter": "Help Center",
+          "contact": "Contact",
+          "status": "Status"
+        },
+        "legal": {
+          "title": "Legal",
+          "privacy": "Privacy",
+          "terms": "Terms",
+          "security": "Security",
+          "cookies": "Cookies"
+        }
+      },
+      "copyright": "Lation. All rights reserved.",
+      "madeWith": "Made with",
+      "forHiring": "for better hiring"
+    }
+  }
+}

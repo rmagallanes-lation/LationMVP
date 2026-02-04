@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import {
   Calendar,
   CreditCard,
@@ -189,6 +190,7 @@ const Dashboard = () => {
             </div>
 
             <div className="flex items-center gap-3">
+              <LanguageToggle />
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-accent" />
@@ -264,11 +266,10 @@ const Dashboard = () => {
                       {interview.status === "completed" && (
                         <div className="flex items-center gap-2">
                           <span
-                            className={`text-sm font-medium ${
-                              interview.score === "Strong Hire"
+                            className={`text-sm font-medium ${interview.score === "Strong Hire"
                                 ? "text-green-600"
                                 : "text-primary"
-                            }`}
+                              }`}
                           >
                             {interview.score}
                           </span>

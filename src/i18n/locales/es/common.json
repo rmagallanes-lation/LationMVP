@@ -1,0 +1,261 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "dashboard": "Panel",
+    "logout": "Cerrar Sesión"
+  },
+  "common": {
+    "welcome": "Bienvenido",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "submit": "Enviar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "viewDetails": "Ver Detalles",
+    "close": "Cerrar"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "pt": "Português"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "upcomingInterviews": "Próximas Entrevistas",
+    "scheduledInterviews": "Entrevistas Programadas",
+    "completedInterviews": "Entrevistas Completadas",
+    "stats": {
+      "totalInterviews": "Total de Entrevistas",
+      "creditsRemaining": "Créditos Restantes",
+      "pendingReports": "Informes Pendientes",
+      "teamMembers": "Miembros del Equipo"
+    },
+    "scheduleInterview": "Programar Entrevista",
+    "viewAll": "Ver Todos"
+  },
+  "interviewer": {
+    "title": "Panel del Entrevistador",
+    "pendingRequests": "Solicitudes Pendientes",
+    "upcomingInterviews": "Próximas Entrevistas",
+    "completedInterviews": "Entrevistas Completadas",
+    "accept": "Aceptar",
+    "reject": "Rechazar",
+    "joinMeeting": "Unirse a la Reunión",
+    "submitEvaluation": "Enviar Evaluación",
+    "viewReport": "Ver Informe"
+  },
+  "interview": {
+    "position": "Posición",
+    "candidate": "Candidato",
+    "company": "Empresa",
+    "date": "Fecha",
+    "time": "Hora",
+    "status": "Estado",
+    "experience": "Experiencia",
+    "skills": "Habilidades",
+    "notes": "Notas",
+    "evaluation": "Evaluación"
+  },
+  "status": {
+    "scheduled": "Programada",
+    "completed": "Completada",
+    "pending": "Pendiente",
+    "cancelled": "Cancelada",
+    "pending_evaluation": "Evaluación Pendiente",
+    "evaluation_submitted": "Evaluación Enviada"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "register": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidaste tu Contraseña?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "signIn": "Ingresar",
+    "signUp": "Registrarse"
+  },
+  "credits": {
+    "title": "Créditos",
+    "remaining": "Restantes",
+    "purchase": "Comprar Créditos",
+    "history": "Historial de Créditos"
+  },
+  "landing": {
+    "hero": {
+      "title": "Entrevistas Técnicas. Hechas Correctamente",
+      "subtitle": "Escala tu contratación con entrevistas técnicas expertas. Obtén evaluaciones estandarizadas, perspectivas impulsadas por IA y informes completos en horas, no en semanas.",
+      "cta": "Construyamos Tu Equipo Soñado",
+      "learnMore": "Saber Más",
+      "trustedBy": "Confiado por 500+ Empresas",
+      "features": {
+        "expert": "Entrevistadores Técnicos Expertos",
+        "aiPowered": "Generación de Preguntas Impulsada por IA",
+        "reports": "Informes PDF Detallados"
+      }
+    },
+    "about": {
+      "label": "Sobre Lation",
+      "title": "Transformando cómo las Empresas Contratan Talento Técnico",
+      "description1": "Lation cierra la brecha entre empresas y talento técnico de primera categoría a través de procesos de entrevista estandarizados y dirigidos por expertos. Combinamos experiencia humana con ideas impulsadas por IA para ofrecer las evaluaciones de candidatos más precisas.",
+      "description2": "Nuestra plataforma apoya a reclutadores y gerentes de contratación con evaluaciones técnicas completas, informes PDF detallados y recomendaciones basadas en datos que te ayudan a tomar decisiones de contratación seguras.",
+      "features": {
+        "fast": {
+          "title": "Ultrarrápido",
+          "description": "Obtén evaluaciones técnicas completas en 24 horas. Nuestro proceso optimizado asegura que nunca pierdas un gran candidato."
+        },
+        "expert": {
+          "title": "Entrevistadores Expertos",
+          "description": "Nuestros entrevistadores técnicos certificados tienen años de experiencia en la industria en varios stacks tecnológicos y dominios."
+        },
+        "ai": {
+          "title": "Perspectivas Impulsadas por IA",
+          "description": "Aprovecha la inteligencia artificial para generar preguntas específicas yproporcion ar evaluaciones estandarizadas e imparciales."
+        },
+        "scalable": {
+          "title": "Proceso Escalable",
+          "description": "Ya sea que estés contratando a un ingeniero o construyendo un equipo, nuestra plataforma se escala con tus necesidades sin esfuerzo."
+        }
+      }
+    },
+    "services": {
+      "label": "Lo Que Ofrecemos",
+      "title": "Soluciones Completas de Entrevistas",
+      "subtitle": "Servicios de entrevistas técnicas de extremo a extremo diseñados para ayudarte a contratar el mejor talento de manera eficiente.",
+      "items": {
+        "interviews": {
+          "title": "Entrevistas Técnicas",
+          "description": "Entrevistas técnicas dirigidas por expertos adaptadas a tus requisitos laborales. Nuestros entrevistadores evalúan habilidades de codificación, diseño de sistemas y capacidades de resolución de problemas.",
+          "features": [
+            "Sesiones de codificación en vivo",
+            "Discusiones de diseño de sistemas",
+            "Evaluación conductual"
+          ]
+        },
+        "ai": {
+          "title": "Preguntas Impulsadas por IA",
+          "description": "Nuestra IA analiza descripciones de trabajos para generar preguntas técnicas específicas, asegurando evaluaciones de candidatos completas y relevantes.",
+          "features": [
+            "Preguntas específicas del trabajo",
+            "Dificultad adaptativa",
+            "Puntuación estandarizada"
+          ]
+        },
+        "teams": {
+          "title": "Integración con Microsoft Teams",
+          "description": "Entrevistas de video sin problemas con programación automática, integración de calendario y grabaciones de reuniones para revisión posterior.",
+          "features": [
+            "Reuniones programadas automáticamente",
+            "Grabación y reproducción",
+            "Soporte multiparte"
+          ]
+        },
+        "reports": {
+          "title": "Informes PDF Detallados",
+          "description": "Informes de evaluación completos con evaluaciones de habilidades, puntajes y recomendaciones de contratación entregados en 24 horas.",
+          "features": [
+            "Desglose habilidad por habilidad",
+            "Puntuación comparativa",
+            "Recomendaciones claras"
+          ]
+        }
+      }
+    },
+    "stats": {
+      "label": "Nuestro Impacto",
+      "title": "Números Que Hablan",
+      "subtitle": "Confiado por cientos de empresas en todo el mundo para ofrecer entrevistas técnicas excepcionales.",
+      "interviewsCompleted": "Entrevistas Completadas",
+      "activeClients": "Clientes Activos",
+      "interviewers": "Entrevistadores Certificados",
+      "sla": "SLA Promedio",
+      "descriptions": {
+        "interviews": "Evaluaciones técnicas realizadas",
+        "clients": "Empresas confían en Lation",
+        "interviewers": "Evaluadores técnicos expertos",
+        "sla": "De solicitud a informe"
+      }
+    },
+    "clients": {
+      "label": "Confiado por Líderes",
+      "title": "Empresas Que Confían en Nosotros",
+      "subtitle": "Desde startups hasta empresas, las compañías líderes confían en Lation para sus necesidades de contratación técnica.",
+      "testimonial": {
+        "quote": "Lation transformó nuestro proceso de contratación. Sus entrevistadores expertos e informes detallados nos ayudaron a tomar decisiones seguras y contratar talento de primera categoría más rápido que nunca.",
+        "author": "Jane Doe",
+        "position": "VP de Ingeniería, TechCorp"
+      }
+    },
+    "contact": {
+      "title": "Iniciemos una Conversación",
+      "subtitle": "¿Curioso sobre cómo Lation puede revolucionar tu contratación? Envíanos un mensaje y nuestro equipo se pondrá en contacto para discutir tus necesidades específicas.",
+      "form": {
+        "title": "Ponte en Contacto",
+        "name": "Tu Nombre",
+        "namePlaceholder": "Juan Pérez",
+        "email": "Correo Electrónico",
+        "emailPlaceholder": "juan@empresa.com",
+        "company": "Nombre de la Empresa",
+        "companyPlaceholder": "Tu Empresa S.A.",
+        "message": "Tu Mensaje",
+        "messagePlaceholder": "Cuéntanos sobre tus necesidades de contratación, tamaño del equipo o cualquier pregunta que tengas...",
+        "submit": "Enviar Mensaje",
+        "sending": "Enviando...",
+        "privacy": "Al enviar, aceptas nuestra política de privacidad. Nunca compartiremos tu información.",
+        "success": "¡Mensaje enviado exitosamente! Nos pondremos en contacto pronto."
+      },
+      "email": {
+        "label": "Envíanos un correo a",
+        "address": "hello@lation.io"
+      },
+      "response": {
+        "label": "Tiempo de respuesta",
+        "time": "Dentro de 24 horas"
+      }
+    },
+    "footer": {
+      "tagline": "Transformando la contratación técnica con entrevistas expertas, perspectivas impulsadas por IA y evaluaciones completas de candidatos.",
+      "columns": {
+        "product": {
+          "title": "Producto",
+          "features": "Características",
+          "enterprises": "Para Empresas",
+          "api": "API"
+        },
+        "company": {
+          "title": "Empresa",
+          "about": "Acerca de",
+          "careers": "Carreras",
+          "blog": "Blog",
+          "press": "Prensa"
+        },
+        "resources": {
+          "title": "Recursos",
+          "documentation": "Documentación",
+          "helpCenter": "Centro de Ayuda",
+          "contact": "Contacto",
+          "status": "Estado"
+        },
+        "legal": {
+          "title": "Legal",
+          "privacy": "Privacidad",
+          "terms": "Términos",
+          "security": "Seguridad",
+          "cookies": "Cookies"
+        }
+      },
+      "copyright": "Lation. Todos los derechos reservados.",
+      "madeWith": "Hecho con",
+      "forHiring": "para mejor contratación"
+    }
+  }
+}

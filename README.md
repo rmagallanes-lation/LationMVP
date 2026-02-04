@@ -91,6 +91,55 @@ A modern, full-featured interview scheduling and management platform built for t
 - **Sonner** - Elegant toast notifications
 - **next-themes** - Perfect dark mode support
 
+### Internationalization
+- **react-i18next** - React integration for i18next
+- **i18next** - Internationalization framework
+- **i18next-browser-languagedetector** - Automatic language detection
+
+## 🌍 Internationalization (i18n)
+
+The application supports multiple languages with automatic detection and persistence:
+
+### Supported Languages
+- 🇺🇸 **English** (default)
+- 🇪🇸 **Español** (Spanish)
+- 🇧🇷 **Português** (Portuguese)
+
+### Language Switcher
+A language toggle appears in the top-right corner of the application, featuring:
+- Flag emoji + language code display
+- Dropdown menu with all available languages
+- Active language indicator
+- Persistent language preference (localStorage)
+
+### For Developers
+
+#### Using Translations
+```tsx
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t } = useTranslation();
+  return <h1>{t('dashboard.title')}</h1>;
+}
+```
+
+#### Adding New Languages
+1. Create translation file: `src/i18n/locales/[code]/common.json`
+2. Add language to config: `src/i18n/config.ts`
+3. Update LanguageToggle component with flag emoji
+
+#### Translation Files Location
+```
+src/i18n/
+├── config.ts
+└── locales/
+    ├── en/common.json
+    ├── es/common.json
+    └── pt/common.json
+```
+
+
 ## 📁 Project Structure
 
 ```

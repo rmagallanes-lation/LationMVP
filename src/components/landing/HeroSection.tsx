@@ -2,14 +2,11 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const features = [
-  "Expert Technical Interviewers",
-  "AI-Powered Question Generation",
-  "Detailed PDF Reports",
-];
+import { useTranslation } from "react-i18next";
 
 export const HeroSection = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero pt-20">
       {/* Background Elements */}
@@ -20,7 +17,7 @@ export const HeroSection = () => {
       </div>
 
       {/* Grid Pattern */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
@@ -44,24 +41,27 @@ export const HeroSection = () => {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-sm font-medium text-primary">Trusted by 500+ Companies</span>
+              <span className="text-sm font-medium text-primary">{t('landing.hero.trustedBy')}</span>
             </motion.div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
-              Technical Interviews.{" "}
-              <span className="text-accent">Done Right.</span>
+              {t('landing.hero.title').split('.')[0]}.{" "}
+              <span className="text-accent">{t('landing.hero.title').split('.')[1]}.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
-              Scale your hiring with expert technical interviews. Get standardized evaluations, 
-              AI-powered insights, and comprehensive reports in hours, not weeks.
+              {t('landing.hero.subtitle')}
             </p>
 
             {/* Features List */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
-              {features.map((feature, index) => (
+              {[
+                t('landing.hero.features.expert'),
+                t('landing.hero.features.aiPowered'),
+                t('landing.hero.features.reports')
+              ].map((feature, index) => (
                 <motion.div
-                  key={feature}
+                  key={index}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
@@ -77,7 +77,7 @@ export const HeroSection = () => {
             <div className="flex justify-center lg:justify-start">
               <Button variant="hero" size="xl" asChild className="group">
                 <Link to="/register">
-                  Let's Build Your Dream Team
+                  {t('landing.hero.cta')}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
