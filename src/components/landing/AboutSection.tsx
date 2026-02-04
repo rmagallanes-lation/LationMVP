@@ -2,39 +2,41 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Zap, Shield, BarChart3, Clock } from "lucide-react";
-
-const features = [
-  {
-    icon: Zap,
-    title: "Lightning Fast",
-    description: "Get comprehensive technical evaluations within 24 hours. Our streamlined process ensures you never miss a great candidate.",
-  },
-  {
-    icon: Shield,
-    title: "Expert Interviewers",
-    description: "Our certified technical interviewers have years of industry experience across various tech stacks and domains.",
-  },
-  {
-    icon: BarChart3,
-    title: "AI-Powered Insights",
-    description: "Leverage artificial intelligence to generate targeted questions and provide standardized, unbiased evaluations.",
-  },
-  {
-    icon: Clock,
-    title: "Scalable Process",
-    description: "Whether you're hiring one engineer or building a team, our platform scales with your needs effortlessly.",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export const AboutSection = () => {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const features = [
+    {
+      icon: Zap,
+      title: t('landing.about.features.fast.title'),
+      description: t('landing.about.features.fast.description'),
+    },
+    {
+      icon: Shield,
+      title: t('landing.about.features.expert.title'),
+      description: t('landing.about.features.expert.description'),
+    },
+    {
+      icon: BarChart3,
+      title: t('landing.about.features.ai.title'),
+      description: t('landing.about.features.ai.description'),
+    },
+    {
+      icon: Clock,
+      title: t('landing.about.features.scalable.title'),
+      description: t('landing.about.features.scalable.description'),
+    },
+  ];
 
   return (
     <section id="about" className="py-24 bg-background relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
-      
+
       <div className="container mx-auto px-4 md:px-6" ref={ref}>
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
@@ -44,21 +46,17 @@ export const AboutSection = () => {
             transition={{ duration: 0.6 }}
           >
             <span className="text-accent font-semibold text-sm uppercase tracking-wider mb-4 block">
-              About Lation
+              {t('landing.about.label')}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
-              Transforming How Companies{" "}
-              <span className="text-accent">Hire Technical Talent</span>
+              {t('landing.about.title').split('Hire')[0]}{" "}
+              <span className="text-accent">Hire{t('landing.about.title').split('Hire')[1]}</span>
             </h2>
             <p className="text-lg text-muted-foreground mb-6">
-              Lation bridges the gap between companies and top technical talent through 
-              standardized, expert-led interview processes. We combine human expertise 
-              with AI-driven insights to deliver the most accurate candidate evaluations.
+              {t('landing.about.description1')}
             </p>
             <p className="text-muted-foreground mb-8">
-              Our platform supports recruiters and hiring managers with comprehensive 
-              technical assessments, detailed PDF reports, and data-driven recommendations 
-              that help you make confident hiring decisions.
+              {t('landing.about.description2')}
             </p>
           </motion.div>
 

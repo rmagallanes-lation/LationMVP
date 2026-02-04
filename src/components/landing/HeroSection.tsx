@@ -4,12 +4,6 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const features = [
-  "Expert Technical Interviewers",
-  "AI-Powered Question Generation",
-  "Detailed PDF Reports",
-];
-
 export const HeroSection = () => {
   const { t } = useTranslation();
 
@@ -47,7 +41,7 @@ export const HeroSection = () => {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-sm font-medium text-primary">Trusted by 500+ Companies</span>
+              <span className="text-sm font-medium text-primary">{t('landing.hero.trustedBy')}</span>
             </motion.div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
@@ -61,9 +55,13 @@ export const HeroSection = () => {
 
             {/* Features List */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
-              {features.map((feature, index) => (
+              {[
+                t('landing.hero.features.expert'),
+                t('landing.hero.features.aiPowered'),
+                t('landing.hero.features.reports')
+              ].map((feature, index) => (
                 <motion.div
-                  key={feature}
+                  key={index}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}

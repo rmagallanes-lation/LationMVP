@@ -1,22 +1,24 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-
-// Placeholder client logos - replace with actual logos
-const clients = [
-  { name: "TechCorp", initial: "TC" },
-  { name: "InnovateLab", initial: "IL" },
-  { name: "DataFlow", initial: "DF" },
-  { name: "CloudScale", initial: "CS" },
-  { name: "DevForce", initial: "DV" },
-  { name: "ByteWorks", initial: "BW" },
-  { name: "CodeNinja", initial: "CN" },
-  { name: "StackPro", initial: "SP" },
-];
+import { useTranslation } from "react-i18next";
 
 export const ClientsSection = () => {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  // Placeholder client logos
+  const clients = [
+    { name: "TechCorp", initial: "TC" },
+    { name: "InnovateLab", initial: "IL" },
+    { name: "DataFlow", initial: "DF" },
+    { name: "CloudScale", initial: "CS" },
+    { name: "DevForce", initial: "DV" },
+    { name: "ByteWorks", initial: "BW" },
+    { name: "CodeNinja", initial: "CN" },
+    { name: "StackPro", initial: "SP" },
+  ];
 
   return (
     <section id="clients" className="py-24 bg-secondary/30 relative overflow-hidden">
@@ -29,13 +31,13 @@ export const ClientsSection = () => {
           className="text-center mb-16"
         >
           <span className="text-primary font-semibold text-sm uppercase tracking-wider mb-4 block">
-            Trusted By Leaders
+            {t('landing.clients.label')}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Companies That <span className="text-primary">Trust Us</span>
+            {t('landing.clients.title')}
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From startups to enterprises, leading companies rely on Lation for their technical hiring needs.
+            {t('landing.clients.subtitle')}
           </p>
         </motion.div>
 
@@ -89,19 +91,18 @@ export const ClientsSection = () => {
             <div className="absolute top-6 left-8 text-6xl text-primary/10 font-serif leading-none">
               "
             </div>
-            
+
             <p className="text-lg md:text-xl text-foreground italic mb-6 relative z-10">
-              Lation transformed our hiring process. Their expert interviewers and 
-              detailed reports helped us make confident decisions and hire top talent faster than ever.
+              {t('landing.clients.testimonial.quote')}
             </p>
-            
+
             <div className="flex items-center justify-center gap-4">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                 <span className="text-primary font-bold">JD</span>
               </div>
               <div className="text-left">
-                <p className="font-semibold text-foreground">Jane Doe</p>
-                <p className="text-sm text-muted-foreground">VP of Engineering, TechCorp</p>
+                <p className="font-semibold text-foreground">{t('landing.clients.testimonial.author')}</p>
+                <p className="text-sm text-muted-foreground">{t('landing.clients.testimonial.position')}</p>
               </div>
             </div>
           </div>

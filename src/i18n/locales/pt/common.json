@@ -1,113 +1,261 @@
 {
-    "nav": {
-        "home": "Início",
-        "login": "Entrar",
-        "register": "Registrar",
-        "dashboard": "Painel",
-        "logout": "Sair"
+  "nav": {
+    "home": "Início",
+    "login": "Entrar",
+    "register": "Registrar",
+    "dashboard": "Painel",
+    "logout": "Sair"
+  },
+  "common": {
+    "welcome": "Bem-vindo",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "submit": "Enviar",
+    "search": "Pesquisar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "viewDetails": "Ver Detalhes",
+    "close": "Fechar"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "pt": "Português"
+  },
+  "dashboard": {
+    "title": "Painel",
+    "upcomingInterviews": "Próximas Entrevistas",
+    "scheduledInterviews": "Entrevistas Agendadas",
+    "completedInterviews": "Entrevistas Concluídas",
+    "stats": {
+      "totalInterviews": "Total de Entrevistas",
+      "creditsRemaining": "Créditos Restantes",
+      "pendingReports": "Relatórios Pendentes",
+      "teamMembers": "Membros da Equipe"
     },
-    "common": {
-        "welcome": "Bem-vindo",
-        "loading": "Carregando...",
-        "error": "Erro",
-        "success": "Sucesso",
-        "cancel": "Cancelar",
-        "save": "Salvar",
-        "delete": "Excluir",
-        "edit": "Editar",
-        "submit": "Enviar",
-        "search": "Buscar",
-        "filter": "Filtrar",
-        "sort": "Ordenar",
-        "viewDetails": "Ver Detalhes",
-        "close": "Fechar"
+    "scheduleInterview": "Agendar Entrevista",
+    "viewAll": "Ver Todos"
+  },
+  "interviewer": {
+    "title": "Painel do Entrevistador",
+    "pendingRequests": "Solicitações Pendentes",
+    "upcomingInterviews": "Próximas Entrevistas",
+    "completedInterviews": "Entrevistas Concluídas",
+    "accept": "Aceitar",
+    "reject": "Rejeitar",
+    "joinMeeting": "Entrar na Reunião",
+    "submitEvaluation": "Enviar Avaliação",
+    "viewReport": "Ver Relatório"
+  },
+  "interview": {
+    "position": "Posição",
+    "candidate": "Candidato",
+    "company": "Empresa",
+    "date": "Data",
+    "time": "Hora",
+    "status": "Status",
+    "experience": "Experiência",
+    "skills": "Habilidades",
+    "notes": "Notas",
+    "evaluation": "Avaliação"
+  },
+  "status": {
+    "scheduled": "Agendada",
+    "completed": "Concluída",
+    "pending": "Pendente",
+    "cancelled": "Cancelada",
+    "pending_evaluation": "Avaliação Pendente",
+    "evaluation_submitted": "Avaliação Enviada"
+  },
+  "auth": {
+    "login": "Entrar",
+    "register": "Registrar",
+    "email": "E-mail",
+    "password": "Senha",
+    "confirmPassword": "Confirmar Senha",
+    "forgotPassword": "Esqueceu sua Senha?",
+    "dontHaveAccount": "Não tem uma conta?",
+    "alreadyHaveAccount": "Já tem uma conta?",
+    "signIn": "Entrar",
+    "signUp": "Registrar-se"
+  },
+  "credits": {
+    "title": "Créditos",
+    "remaining": "Restantes",
+    "purchase": "Comprar Créditos",
+    "history": "Histórico de Créditos"
+  },
+  "landing": {
+    "hero": {
+      "title": "Entrevistas Técnicas. Feitas Corretamente",
+      "subtitle": "Dimensione sua contratação com entrevistas técnicas especializadas. Obtenha avaliações padronizadas, insights alimentados por IA e relatórios abrangentes em horas, não em semanas.",
+      "cta": "Vamos Construir Seu Time dos Sonhos",
+      "learnMore": "Saiba Mais",
+      "trustedBy": "Confiado por 500+ Empresas",
+      "features": {
+        "expert": "Entrevistadores Técnicos Especialistas",
+        "aiPowered": "Geração de Perguntas Alimentada por IA",
+        "reports": "Relatórios PDF Detalhados"
+      }
     },
-    "languages": {
-        "en": "English",
-        "es": "Español",
-        "pt": "Português"
-    },
-    "dashboard": {
-        "title": "Painel de Controle",
-        "upcomingInterviews": "Próximas Entrevistas",
-        "scheduledInterviews": "Entrevistas Agendadas",
-        "completedInterviews": "Entrevistas Concluídas",
-        "stats": {
-            "totalInterviews": "Total de Entrevistas",
-            "creditsRemaining": "Créditos Restantes",
-            "pendingReports": "Relatórios Pendentes",
-            "teamMembers": "Membros da Equipe"
+    "about": {
+      "label": "Sobre a Lation",
+      "title": "Transformando como as Empresas Contratam Talento Técnico",
+      "description1": "A Lation preenche a lacuna entre empresas e talentos técnicos de primeira linha através de processos de entrevista padronizados e liderados por especialistas. Combinamos experiência humana com insights alimentados por IA para fornecer as avaliações de candidatos mais precisas.",
+      "description2": "Nossa plataforma apoia recrutadores e gerentes de contratação com avaliações técnicas abrangentes, relatórios PDF detalhados e recomendações baseadas em dados que ajudam você a tomar decisões de contratação confiantes.",
+      "features": {
+        "fast": {
+          "title": "Ultraveloz",
+          "description": "Obtenha avaliações técnicas abrangentes em 24 horas. Nosso processo simplificado garante que você nunca perca um ótimo candidato."
         },
-        "scheduleInterview": "Agendar Entrevista",
-        "viewAll": "Ver Tudo"
-    },
-    "interviewer": {
-        "title": "Painel do Entrevistador",
-        "pendingRequests": "Solicitações Pendentes",
-        "upcomingInterviews": "Próximas Entrevistas",
-        "completedInterviews": "Entrevistas Concluídas",
-        "accept": "Aceitar",
-        "reject": "Rejeitar",
-        "joinMeeting": "Entrar na Reunião",
-        "submitEvaluation": "Enviar Avaliação",
-        "viewReport": "Ver Relatório"
-    },
-    "interview": {
-        "position": "Posição",
-        "candidate": "Candidato",
-        "company": "Empresa",
-        "date": "Data",
-        "time": "Hora",
-        "status": "Status",
-        "experience": "Experiência",
-        "skills": "Habilidades",
-        "notes": "Notas",
-        "evaluation": "Avaliação"
-    },
-    "status": {
-        "scheduled": "Agendada",
-        "completed": "Concluída",
-        "pending": "Pendente",
-        "cancelled": "Cancelada",
-        "pending_evaluation": "Avaliação Pendente",
-        "evaluation_submitted": "Avaliação Enviada"
-    },
-    "auth": {
-        "login": "Entrar",
-        "register": "Registrar",
-        "email": "E-mail",
-        "password": "Senha",
-        "confirmPassword": "Confirmar Senha",
-        "forgotPassword": "Esqueceu sua senha?",
-        "dontHaveAccount": "Não tem uma conta?",
-        "alreadyHaveAccount": "Já tem uma conta?",
-        "signIn": "Entrar",
-        "signUp": "Registrar"
-    },
-    "credits": {
-        "title": "Créditos",
-        "remaining": "Restantes",
-        "purchase": "Comprar Créditos",
-        "history": "Histórico de Créditos"
-    },
-    "landing": {
-        "hero": {
-            "title": "Entrevistas Técnicas Especializadas Feitas Corretamente",
-            "subtitle": "Dimensione sua contratação com entrevistas técnicas especializadas. Obtenha avaliações alimentadas por IA, relatórios PDF detalhados e contrate os melhores desenvolvedores em 24 horas.",
-            "cta": "Começar",
-            "learnMore": "Saiba Mais"
+        "expert": {
+          "title": "Entrevistadores Especialistas",
+          "description": "Nossos entrevistadores técnicos certificados têm anos de experiência na indústria em várias pilhas de tecnologia e domínios."
         },
-        "stats": {
-            "interviews": "Entrevistas Realizadas",
-            "companies": "Empresas Confiam em Nós",
-            "satisfaction": "Taxa de Satisfação",
-            "turnaround": "Horas de Retorno"
+        "ai": {
+          "title": "Insights Alimentados por IA",
+          "description": "Aproveite a inteligência artificial para gerar perguntas direcionadas e fornecer avaliações padronizadas e imparciais."
         },
-        "services": {
-            "title": "Nossos Serviços",
-            "technical": "Entrevistas Técnicas",
-            "evaluation": "Avaliação Alimentada por IA",
-            "reports": "Relatórios Detalhados"
+        "scalable": {
+          "title": "Processo Escalável",
+          "description": "Seja contratando um engenheiro ou construindo uma equipe, nossa plataforma escala com suas necessidades sem esforço."
         }
+      }
+    },
+    "services": {
+      "label": "O Que Oferecemos",
+      "title": "Soluções Completas de Entrevistas",
+      "subtitle": "Serviços de entrevistas técnicas de ponta a ponta projetados para ajudá-lo a contratar o melhor talento de forma eficiente.",
+      "items": {
+        "interviews": {
+          "title": "Entrevistas Técnicas",
+          "description": "Entrevistas técnicas lideradas por especialistas adaptadas aos seus requisitos de trabalho. Nossos entrevistadores avaliam habilidades de codificação, design de sistema e capacidades de resolução de problemas.",
+          "features": [
+            "Sessões de codificação ao vivo",
+            "Discussões de design de sistema",
+            "Avaliação comportamental"
+          ]
+        },
+        "ai": {
+          "title": "Perguntas Alimentadas por IA",
+          "description": "Nossa IA analisa descrições de trabalho para gerar perguntas técnicas direcionadas, garantindo avaliações de candidatos abrangentes e relevantes.",
+          "features": [
+            "Perguntas específicas do trabalho",
+            "Dificuldade adaptativa",
+            "Pontuação padronizada"
+          ]
+        },
+        "teams": {
+          "title": "Integração com Microsoft Teams",
+          "description": "Entrevistas em vídeo sem interrupções com agendamento automático, integração de calendário e gravações de reuniões para revisão posterior.",
+          "features": [
+            "Reuniões agendadas automaticamente",
+            "Gravação e reprodução",
+            "Suporte multiparte"
+          ]
+        },
+        "reports": {
+          "title": "Relatórios PDF Detalhados",
+          "description": "Relatórios de avaliação abrangentes com avaliações de habilidades, pontuações e recomendações de contratação entregues em 24 horas.",
+          "features": [
+            "Detalhamento habilidade por habilidade",
+            "Pontuação comparativa",
+            "Recomendações claras"
+          ]
+        }
+      }
+    },
+    "stats": {
+      "label": "Nosso Impacto",
+      "title": "Números Que Falam",
+      "subtitle": "Confiado por centenas de empresas em todo o mundo para fornecer entrevistas técnicas excepcionais.",
+      "interviewsCompleted": "Entrevistas Concluídas",
+      "activeClients": "Clientes Ativos",
+      "interviewers": "Entrevistadores Certificados",
+      "sla": "SLA Médio",
+      "descriptions": {
+        "interviews": "Avaliações técnicas realizadas",
+        "clients": "Empresas confiam na Lation",
+        "interviewers": "Avaliadores técnicos especialistas",
+        "sla": "De solicitação a relatório"
+      }
+    },
+    "clients": {
+      "label": "Confiado por Líderes",
+      "title": "Empresas Que Confiam em Nós",
+      "subtitle": "De startups a empresas, as principais empresas confiam na Lation para suas necessidades de contratação técnica.",
+      "testimonial": {
+        "quote": "A Lation transformou nosso processo de contratação. Seus entrevistadores especialistas e relatórios detalhados nos ajudaram a tomar decisões confiantes e contratar os melhores talentos mais rápido do que nunca.",
+        "author": "Jane Doe",
+        "position": "VP de Engenharia, TechCorp"
+      }
+    },
+    "contact": {
+      "title": "Vamos Iniciar uma Conversa",
+      "subtitle": "Curioso sobre como a Lation pode revolucionar sua contratação? Envie-nos uma mensagem e nossa equipe entrará em contato para discutir suas necessidades específicas.",
+      "form": {
+        "title": "Entre em Contato",
+        "name": "Seu Nome",
+        "namePlaceholder": "João Silva",
+        "email": "Endereço de E-mail",
+        "emailPlaceholder": "joao@empresa.com",
+        "company": "Nome da Empresa",
+        "companyPlaceholder": "Sua Empresa Ltda.",
+        "message": "Sua Mensagem",
+        "messagePlaceholder": "Conte-nos sobre suas necessidades de contratação, tamanho da equipe ou qualquer dúvida que você tenha...",
+        "submit": "Enviar Mensagem",
+        "sending": "Enviando...",
+        "privacy": "Ao enviar, você concorda com nossa política de privacidade. Nunca compartilharemos suas informações.",
+        "success": "Mensagem enviada com sucesso! Entraremos em contato em breve."
+      },
+      "email": {
+        "label": "Envie-nos um e-mail para",
+        "address": "hello@lation.io"
+      },
+      "response": {
+        "label": "Tempo de resposta",
+        "time": "Dentro de 24 horas"
+      }
+    },
+    "footer": {
+      "tagline": "Transformando a contratação técnica com entrevistas especializadas, insights alimentados por IA e avaliações abrangentes de candidatos.",
+      "columns": {
+        "product": {
+          "title": "Produto",
+          "features": "Recursos",
+          "enterprises": "Para Empresas",
+          "api": "API"
+        },
+        "company": {
+          "title": "Empresa",
+          "about": "Sobre",
+          "careers": "Carreiras",
+          "blog": "Blog",
+          "press": "Imprensa"
+        },
+        "resources": {
+          "title": "Recursos",
+          "documentation": "Documentação",
+          "helpCenter": "Central de Ajuda",
+          "contact": "Contato",
+          "status": "Status"
+        },
+        "legal": {
+          "title": "Legal",
+          "privacy": "Privacidade",
+          "terms": "Termos",
+          "security": "Segurança",
+          "cookies": "Cookies"
+        }
+      },
+      "copyright": "Lation. Todos os direitos reservados.",
+      "madeWith": "Feito com",
+      "forHiring": "para melhor contratação"
     }
+  }
 }
