@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import {
   Calendar,
   FileText,
@@ -188,6 +189,7 @@ const InterviewerDashboard = () => {
             </div>
 
             <div className="flex items-center gap-3">
+              <LanguageToggle />
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-accent" />
@@ -425,11 +427,10 @@ const InterviewerDashboard = () => {
                               [item.key]: score,
                             })
                           }
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                            (evaluationData as any)[item.key] >= score
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${(evaluationData as any)[item.key] >= score
                               ? "bg-primary text-primary-foreground"
                               : "bg-muted text-muted-foreground hover:bg-muted/80"
-                          }`}
+                            }`}
                         >
                           {score}
                         </button>
@@ -452,11 +453,10 @@ const InterviewerDashboard = () => {
                       onClick={() =>
                         setEvaluationData({ ...evaluationData, recommendation: option.value })
                       }
-                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                        evaluationData.recommendation === option.value
+                      className={`px-4 py-2 rounded-lg font-medium transition-colors ${evaluationData.recommendation === option.value
                           ? `${option.color} text-primary-foreground`
                           : "bg-muted text-muted-foreground hover:bg-muted/80"
-                      }`}
+                        }`}
                     >
                       {option.label}
                     </button>

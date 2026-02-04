@@ -1,0 +1,113 @@
+{
+    "nav": {
+        "home": "Inicio",
+        "login": "Iniciar Sesión",
+        "register": "Registrarse",
+        "dashboard": "Panel",
+        "logout": "Cerrar Sesión"
+    },
+    "common": {
+        "welcome": "Bienvenido",
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "submit": "Enviar",
+        "search": "Buscar",
+        "filter": "Filtrar",
+        "sort": "Ordenar",
+        "viewDetails": "Ver Detalles",
+        "close": "Cerrar"
+    },
+    "languages": {
+        "en": "English",
+        "es": "Español",
+        "pt": "Português"
+    },
+    "dashboard": {
+        "title": "Panel de Control",
+        "upcomingInterviews": "Próximas Entrevistas",
+        "scheduledInterviews": "Entrevistas Programadas",
+        "completedInterviews": "Entrevistas Completadas",
+        "stats": {
+            "totalInterviews": "Total de Entrevistas",
+            "creditsRemaining": "Créditos Restantes",
+            "pendingReports": "Informes Pendientes",
+            "teamMembers": "Miembros del Equipo"
+        },
+        "scheduleInterview": "Programar Entrevista",
+        "viewAll": "Ver Todo"
+    },
+    "interviewer": {
+        "title": "Panel del Entrevistador",
+        "pendingRequests": "Solicitudes Pendientes",
+        "upcomingInterviews": "Próximas Entrevistas",
+        "completedInterviews": "Entrevistas Completadas",
+        "accept": "Aceptar",
+        "reject": "Rechazar",
+        "joinMeeting": "Unirse a la Reunión",
+        "submitEvaluation": "Enviar Evaluación",
+        "viewReport": "Ver Informe"
+    },
+    "interview": {
+        "position": "Posición",
+        "candidate": "Candidato",
+        "company": "Empresa",
+        "date": "Fecha",
+        "time": "Hora",
+        "status": "Estado",
+        "experience": "Experiencia",
+        "skills": "Habilidades",
+        "notes": "Notas",
+        "evaluation": "Evaluación"
+    },
+    "status": {
+        "scheduled": "Programada",
+        "completed": "Completada",
+        "pending": "Pendiente",
+        "cancelled": "Cancelada",
+        "pending_evaluation": "Evaluación Pendiente",
+        "evaluation_submitted": "Evaluación Enviada"
+    },
+    "auth": {
+        "login": "Iniciar Sesión",
+        "register": "Registrarse",
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar Contraseña",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+        "dontHaveAccount": "¿No tienes una cuenta?",
+        "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+        "signIn": "Iniciar Sesión",
+        "signUp": "Registrarse"
+    },
+    "credits": {
+        "title": "Créditos",
+        "remaining": "Restantes",
+        "purchase": "Comprar Créditos",
+        "history": "Historial de Créditos"
+    },
+    "landing": {
+        "hero": {
+            "title": "Entrevistas Técnicas Expertas Hechas Correctamente",
+            "subtitle": "Escala tu contratación con entrevistas técnicas expertas. Obtén evaluaciones impulsadas por IA, informes PDF detallados y contrata a los mejores desarrolladores en 24 horas.",
+            "cta": "Comenzar",
+            "learnMore": "Saber Más"
+        },
+        "stats": {
+            "interviews": "Entrevistas Realizadas",
+            "companies": "Empresas Confían en Nosotros",
+            "satisfaction": "Tasa de Satisfacción",
+            "turnaround": "Horas de Respuesta"
+        },
+        "services": {
+            "title": "Nuestros Servicios",
+            "technical": "Entrevistas Técnicas",
+            "evaluation": "Evaluación Impulsada por IA",
+            "reports": "Informes Detallados"
+        }
+    }
+}

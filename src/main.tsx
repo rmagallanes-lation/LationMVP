@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import "./i18n/config";
 import "@fontsource/plus-jakarta-sans/300.css";
 import "@fontsource/plus-jakarta-sans/400.css";
 import "@fontsource/plus-jakarta-sans/500.css";

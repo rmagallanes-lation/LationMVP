@@ -1,0 +1,113 @@
+{
+    "nav": {
+        "home": "Home",
+        "login": "Login",
+        "register": "Register",
+        "dashboard": "Dashboard",
+        "logout": "Logout"
+    },
+    "common": {
+        "welcome": "Welcome",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "submit": "Submit",
+        "search": "Search",
+        "filter": "Filter",
+        "sort": "Sort",
+        "viewDetails": "View Details",
+        "close": "Close"
+    },
+    "languages": {
+        "en": "English",
+        "es": "Español",
+        "pt": "Português"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "upcomingInterviews": "Upcoming Interviews",
+        "scheduledInterviews": "Scheduled Interviews",
+        "completedInterviews": "Completed Interviews",
+        "stats": {
+            "totalInterviews": "Total Interviews",
+            "creditsRemaining": "Credits Remaining",
+            "pendingReports": "Pending Reports",
+            "teamMembers": "Team Members"
+        },
+        "scheduleInterview": "Schedule Interview",
+        "viewAll": "View All"
+    },
+    "interviewer": {
+        "title": "Interviewer Dashboard",
+        "pendingRequests": "Pending Requests",
+        "upcomingInterviews": "Upcoming Interviews",
+        "completedInterviews": "Completed Interviews",
+        "accept": "Accept",
+        "reject": "Reject",
+        "joinMeeting": "Join Meeting",
+        "submitEvaluation": "Submit Evaluation",
+        "viewReport": "View Report"
+    },
+    "interview": {
+        "position": "Position",
+        "candidate": "Candidate",
+        "company": "Company",
+        "date": "Date",
+        "time": "Time",
+        "status": "Status",
+        "experience": "Experience",
+        "skills": "Skills",
+        "notes": "Notes",
+        "evaluation": "Evaluation"
+    },
+    "status": {
+        "scheduled": "Scheduled",
+        "completed": "Completed",
+        "pending": "Pending",
+        "cancelled": "Cancelled",
+        "pending_evaluation": "Pending Evaluation",
+        "evaluation_submitted": "Evaluation Submitted"
+    },
+    "auth": {
+        "login": "Login",
+        "register": "Register",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "forgotPassword": "Forgot Password?",
+        "dontHaveAccount": "Don't have an account?",
+        "alreadyHaveAccount": "Already have an account?",
+        "signIn": "Sign In",
+        "signUp": "Sign Up"
+    },
+    "credits": {
+        "title": "Credits",
+        "remaining": "Remaining",
+        "purchase": "Purchase Credits",
+        "history": "Credit History"
+    },
+    "landing": {
+        "hero": {
+            "title": "Expert Technical Interviews Done Right",
+            "subtitle": "Scale your hiring with expert technical interviews. Get AI-powered evaluations, detailed PDF reports, and hire top developers in 24 hours.",
+            "cta": "Get Started",
+            "learnMore": "Learn More"
+        },
+        "stats": {
+            "interviews": "Interviews Conducted",
+            "companies": "Companies Trust Us",
+            "satisfaction": "Satisfaction Rate",
+            "turnaround": "Hour Turnaround"
+        },
+        "services": {
+            "title": "Our Services",
+            "technical": "Technical Interviews",
+            "evaluation": "AI-Powered Evaluation",
+            "reports": "Detailed Reports"
+        }
+    }
+}

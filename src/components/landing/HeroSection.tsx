@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const features = [
   "Expert Technical Interviewers",
@@ -10,6 +11,8 @@ const features = [
 ];
 
 export const HeroSection = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero pt-20">
       {/* Background Elements */}
@@ -20,7 +23,7 @@ export const HeroSection = () => {
       </div>
 
       {/* Grid Pattern */}
-      <div 
+      <div
         className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
@@ -48,13 +51,12 @@ export const HeroSection = () => {
             </motion.div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
-              Technical Interviews.{" "}
-              <span className="text-accent">Done Right.</span>
+              {t('landing.hero.title').split('.')[0]}.{" "}
+              <span className="text-accent">{t('landing.hero.title').split('.')[1]}.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
-              Scale your hiring with expert technical interviews. Get standardized evaluations, 
-              AI-powered insights, and comprehensive reports in hours, not weeks.
+              {t('landing.hero.subtitle')}
             </p>
 
             {/* Features List */}
@@ -77,7 +79,7 @@ export const HeroSection = () => {
             <div className="flex justify-center lg:justify-start">
               <Button variant="hero" size="xl" asChild className="group">
                 <Link to="/register">
-                  Let's Build Your Dream Team
+                  {t('landing.hero.cta')}
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
