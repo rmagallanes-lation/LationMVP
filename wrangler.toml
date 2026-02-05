@@ -1,0 +1,22 @@
+name = "lation-interviews"
+type = "javascript"
+account_id = ""
+workers_dev = false
+route = "lation.com.mx/*"
+zone_id = ""
+
+[env.production]
+name = "lation-interviews-prod"
+route = "lation.com.mx/*"
+
+[build]
+command = "npm install && npm run build"
+cwd = "."
+watch_paths = ["src/**/*.{ts,tsx,js,jsx}"]
+
+[build.upload]
+format = "service-worker"
+
+# Note: This is optional. If deploying frontend via Cloudflare Pages UI instead,
+# connect your GitHub repo directly and set build command to "npm run build"
+# with publish directory "dist"

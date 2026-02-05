@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  backend:
+    build: ./server
+    environment:
+      - PORT=${PORT:-3001}
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-http://host.docker.internal:5678}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
+      # For production with Cloudflare Tunnel (example):
+      # FRONTEND_URL=https://lation.com.mx
+      # N8N_WEBHOOK_URL=https://n8n.lation.com.mx/webhook/contact
+    ports:
+      - "${PORT:-3001}:${PORT:-3001}"
+    restart: unless-stopped
