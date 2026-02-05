@@ -274,13 +274,24 @@ npm run preview
 
 ### Deployment Options
 
-This project can be deployed to various platforms:
+**For lation.com.mx: Cloudflare Pages + Backend + n8n Tunnel**
 
-- **Vercel** - Recommended for Vite projects ([Deploy Guide](https://vercel.com/docs))
-- **Netlify** - Easy deployment with continuous integration ([Deploy Guide](https://docs.netlify.com/))
-- **GitHub Pages** - Free hosting for static sites
-- **AWS S3 + CloudFront** - Scalable cloud hosting
-- **Any static hosting service** that supports SPA routing
+- **Frontend:** Cloudflare Pages (auto-deploys from GitHub)
+- **Backend:** Node.js/Express on same server (Docker)
+- **n8n:** Exposed via Cloudflare Tunnel (local workflow automation, publicly accessible)
+- **SSL/TLS:** Auto-issued by Cloudflare
+
+📖 **[See DEPLOYMENT.md for Complete Setup Guide →](./DEPLOYMENT.md)**
+
+This includes:
+- 7-step deployment walkthrough
+- Architecture diagram
+- Environment variable configuration
+- Cloudflare Tunnel setup for n8n
+- GitHub Actions CI/CD template
+- Troubleshooting and production checklist
+
+**Other platforms:** Vercel, Netlify, GitHub Pages, AWS S3+CloudFront also supported
 
 ## 🤝 Contributing
 
