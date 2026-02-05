@@ -216,6 +216,33 @@ This project can be deployed to various platforms:
 - **AWS S3 + CloudFront** - Scalable cloud hosting
 - **Any static hosting service** that supports SPA routing
 
+### Cloudflare Pages Deployment
+
+Cloudflare Pages is a great option for deploying this project. Follow the steps below to set up and deploy:
+
+#### 1. Create a New Project
+- Log in to your [Cloudflare Dashboard](https://dash.cloudflare.com/).
+- Navigate to **Pages** and click **Create a project**.
+- Connect your Git repository and select the branch to deploy.
+
+#### 2. Configure Build Settings
+- **Build command**: `bun install --save-text-lockfile && npm run build`
+- **Output directory**: `dist`
+
+#### 3. Environment Variables (Optional)
+If your project requires environment variables, add them in the **Environment Variables** section of the Cloudflare Pages settings.
+
+#### 4. Deploy
+- Save the settings and trigger a deployment.
+- Cloudflare Pages will build and deploy your project automatically.
+
+#### 5. Troubleshooting
+- **Build command errors**: Ensure `bun` is installed and accessible in your environment.
+- **Missing dependencies**: Verify that all dependencies are correctly listed in `package.json`.
+- **Output directory issues**: Ensure the `dist` folder is generated during the build process.
+
+For more details, refer to the [Cloudflare Pages Documentation](https://developers.cloudflare.com/pages/).
+
 ## 🤝 Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
