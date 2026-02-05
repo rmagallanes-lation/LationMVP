@@ -55,6 +55,72 @@ A modern, full-featured interview scheduling and management platform built for t
    
    Navigate to `http://localhost:5173` (or the port shown in your terminal)
 
+## Backend Integration (n8n) — Contact Form
+
+This project includes a minimal backend in `server/` that forwards contact form submissions to an n8n webhook. Use this when you want the frontend contact form to be processed by your n8n workflows (for example, to save to Google Sheets, send emails, or push to a CRM).
+
+Steps to run locally:
+
+1. Create a `.env` file at project root (or set environment variables). Example values are in `.env.example`.
+
+2. Start the backend in dev mode:
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+3. Ensure `VITE_API_URL` is set in your frontend environment (for example, in `.env.local`) to point to the backend, e.g.:
+
+```
+VITE_API_URL=http://localhost:3001
+```
+
+4. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. The frontend will POST to `${VITE_API_URL}/api/contact`.
+
+Docker (optional):
+
+```
+# Ensure .env has N8N_WEBHOOK_URL configured (see .env.example)
+docker compose up --build
+```
+
+Notes:
+- The backend will forward validated JSON to the `N8N_WEBHOOK_URL` environment variable (defaults to `http://localhost:5678`).
+- If n8n runs on your host and the backend runs in Docker, set `N8N_WEBHOOK_URL=http://host.docker.internal:5678` so the container can reach host n8n.
+- The backend performs schema validation (Zod) and a simple in-memory rate limiter (5 requests per 10 minutes per IP). Adjust in `server/src/contact.ts` as needed.
+
+Integration test & curl examples
+
+Quick curl test (replace values as needed):
+
+```bash
+curl -X POST http://localhost:3001/api/contact \
+   -H "Content-Type: application/json" \
+   -d '{"name":"Acme Corp","email":"hello@acme.test","company":"Acme","message":"Hello from curl"}'
+```
+
+Expected responses:
+- `200 {"ok":true}` — forwarded to n8n successfully
+- `400` — validation error (invalid or missing fields)
+- `429` — rate limited
+- `502` — n8n forwarding error
+
+If you prefer a small Node-based smoke test, run this from the repo root (requires Node >=18):
+
+```bash
+# from repo root
+node -e "(async()=>{const res=await fetch('http://localhost:3001/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Test',email:'test@example.com',company:'Acme',message:'Hello'})});console.log(await res.text());})()"
+```
+
+Security & production notes
+
+- Use a persistent datastore and proper rate limiting for production (the current in-memory limiter is temporary).
+- Protect the backend with a secret or token before exposing `N8N_WEBHOOK_URL` in production; you can add a shared secret header that n8n checks.
+- Consider adding CAPTCHA on the frontend or verifying an HMAC signature from the frontend for stronger spam protection.
+
+
 ## 📋 Available Scripts
 
 | Script | Description |

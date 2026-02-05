@@ -1,11 +1,17 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const HeroSection = () => {
   const { t } = useTranslation();
+
+  const handleScrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero pt-20">
@@ -75,11 +81,14 @@ export const HeroSection = () => {
 
             {/* CTA */}
             <div className="flex justify-center lg:justify-start">
-              <Button variant="hero" size="xl" asChild className="group">
-                <Link to="/register">
-                  {t('landing.hero.cta')}
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
+              <Button 
+                variant="hero" 
+                size="xl" 
+                onClick={handleScrollToContact}
+                className="group"
+              >
+                {t('landing.hero.cta')}
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
           </motion.div>

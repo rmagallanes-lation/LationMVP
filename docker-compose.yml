@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  backend:
+    build: ./server
+    environment:
+      - PORT=3001
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-http://host.docker.internal:5678}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
