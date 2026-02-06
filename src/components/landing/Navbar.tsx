@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import lationLogo from "@/assets/lation-logo.png";
+import lationLogoLight from "@/assets/lation-logo-light.png";
+import lationLogoDark from "@/assets/lation-logo-dark.png";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -31,9 +32,14 @@ export const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <img
-              src={lationLogo}
+              src={lationLogoLight}
               alt="Lation"
-              className="h-16 md:h-20 lg:h-24 w-auto"
+              className="block dark:hidden h-16 md:h-20 lg:h-24 w-auto"
+            />
+            <img
+              src={lationLogoDark}
+              alt="Lation"
+              className="hidden dark:block h-16 md:h-20 lg:h-24 w-auto"
             />
           </Link>
 

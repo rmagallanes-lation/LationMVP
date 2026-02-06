@@ -22,15 +22,6 @@ export const HeroSection = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-secondary/30 rounded-full blur-3xl" />
       </div>
 
-      {/* Grid Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }}
-      />
-
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
@@ -47,7 +38,7 @@ export const HeroSection = () => {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-6"
             >
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-sm font-medium text-primary">{t('landing.hero.trustedBy')}</span>
+              <span className="text-sm font-medium text-primary dark:text-accent">{t('landing.hero.trustedBy')}</span>
             </motion.div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
@@ -114,7 +105,7 @@ export const HeroSection = () => {
                       <p className="font-semibold text-foreground">{t('landing.hero.preview.cards.first.title')}</p>
                       <p className="text-sm text-muted-foreground">{t('landing.hero.preview.cards.first.subtitle')}</p>
                     </div>
-                    <span className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full font-medium">
+                    <span className="px-3 py-1 bg-primary/10 dark:bg-accent/15 text-primary dark:text-accent text-sm rounded-full font-medium">
                       {t('landing.hero.preview.cards.first.badge')}
                     </span>
                   </div>

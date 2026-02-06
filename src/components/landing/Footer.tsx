@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Linkedin, Twitter, Github, Mail } from "lucide-react";
-import lationLogo from "@/assets/lation-logo.png";
+import lationLogoDark from "@/assets/lation-logo-dark.png";
 import { useTranslation } from "react-i18next";
 
 const socialLinks = [
@@ -40,20 +40,22 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-primary text-primary-foreground pt-16 pb-8">
+    <footer className="bg-black text-primary-foreground pt-16 pb-8">
       <div className="container mx-auto px-4 md:px-6">
         {/* Main Footer Content */}
         <div className="grid md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center mb-4">
-              <img
-                src={lationLogo}
-                alt="Lation"
-                className="h-12 w-auto brightness-0 invert"
-              />
+              <span className="inline-flex items-center">
+                <img
+                  src={lationLogoDark}
+                  alt="Lation"
+                  className="h-12 w-auto"
+                />
+              </span>
             </Link>
-            <p className="text-primary-foreground/70 mb-6 max-w-xs">
+            <p className="text-primary-foreground mb-6 max-w-xs">
               {t('landing.footer.tagline')}
             </p>
             {/* Social Links */}
@@ -79,7 +81,7 @@ export const Footer = () => {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
+                    className="text-primary-foreground hover:text-primary-foreground transition-colors text-sm"
                   >
                     {link.label}
                   </a>
@@ -95,7 +97,7 @@ export const Footer = () => {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
+                    className="text-primary-foreground hover:text-primary-foreground transition-colors text-sm"
                   >
                     {link.label}
                   </a>
@@ -111,7 +113,7 @@ export const Footer = () => {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
+                    className="text-primary-foreground hover:text-primary-foreground transition-colors text-sm"
                   >
                     {link.label}
                   </a>
@@ -127,7 +129,7 @@ export const Footer = () => {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
+                    className="text-primary-foreground hover:text-primary-foreground transition-colors text-sm"
                   >
                     {link.label}
                   </a>
@@ -140,10 +142,10 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-primary-foreground/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-primary-foreground/50 text-sm">
+            <p className="text-primary-foreground text-sm">
               {t('landing.footer.copyright', { year: new Date().getFullYear() })}
             </p>
-            <p className="text-primary-foreground/50 text-sm">
+            <p className="text-primary-foreground text-sm">
               {t('landing.footer.madeWith')} <span className="text-accent">❤️</span> {t('landing.footer.forHiring')}
             </p>
           </div>

@@ -30,7 +30,7 @@ export const ClientsSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-primary font-semibold text-sm uppercase tracking-wider mb-4 block">
+          <span className="text-primary dark:text-accent font-semibold text-sm uppercase tracking-wider mb-4 block">
             {t('landing.clients.label')}
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -69,7 +69,7 @@ export const ClientsSection = () => {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <span className="text-primary font-bold text-sm">{client.initial}</span>
+                      <span className="text-primary dark:text-accent font-bold text-sm">{client.initial}</span>
                     </div>
                     <span className="font-semibold text-foreground">{client.name}</span>
                   </div>
@@ -88,7 +88,7 @@ export const ClientsSection = () => {
         >
           <div className="bg-card rounded-2xl border border-border p-8 md:p-12 relative">
             {/* Quote Mark */}
-            <div className="absolute top-6 left-8 text-6xl text-primary/10 font-serif leading-none">
+            <div className="absolute top-6 left-8 text-6xl text-primary/10 dark:text-accent/20 font-serif leading-none">
               "
             </div>
 
@@ -98,7 +98,7 @@ export const ClientsSection = () => {
 
             <div className="flex items-center justify-center gap-4">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="text-primary font-bold">JD</span>
+                <span className="text-primary dark:text-accent font-bold">JD</span>
               </div>
               <div className="text-left">
                 <p className="font-semibold text-foreground">{t('landing.clients.testimonial.author')}</p>
