@@ -46,28 +46,28 @@ export const StatsSection = () => {
   const stats = [
     {
       icon: Calendar,
-      value: 10000,
+      value: 5000,
       suffix: "+",
       label: t('landing.stats.interviewsCompleted'),
       description: t('landing.stats.descriptions.interviews'),
     },
     {
       icon: Users,
-      value: 500,
+      value: 20,
       suffix: "+",
       label: t('landing.stats.activeClients'),
       description: t('landing.stats.descriptions.clients'),
     },
     {
       icon: Award,
-      value: 150,
+      value: 50,
       suffix: "+",
       label: t('landing.stats.interviewers'),
       description: t('landing.stats.descriptions.interviewers'),
     },
     {
       icon: Timer,
-      value: 24,
+      value: 12,
       suffix: "h",
       label: t('landing.stats.sla'),
       description: t('landing.stats.descriptions.sla'),
@@ -102,7 +102,7 @@ export const StatsSection = () => {
         </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr items-stretch">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -111,7 +111,7 @@ export const StatsSection = () => {
               transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
               className="relative group"
             >
-              <div className="bg-card rounded-2xl border border-border p-8 text-center hover:border-accent/30 hover:shadow-xl transition-all duration-300 h-full">
+              <div className="bg-card rounded-2xl border border-border p-8 text-center hover:border-accent/30 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
                 {/* Icon */}
                 <div className="w-14 h-14 rounded-2xl bg-accent/10 mx-auto mb-6 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
                   <stat.icon className="w-7 h-7 text-accent" />
@@ -123,12 +123,12 @@ export const StatsSection = () => {
                 </p>
 
                 {/* Label */}
-                <p className="text-lg font-semibold text-foreground mb-1">
+                <p className="text-lg font-semibold text-foreground mb-1 min-h-[3rem] leading-snug">
                   {stat.label}
                 </p>
 
                 {/* Description */}
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground min-h-[2.5rem] leading-relaxed">
                   {stat.description}
                 </p>
 
