@@ -51,8 +51,8 @@ export const HeroSection = () => {
             </motion.div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
-              {t('landing.hero.title').split('.')[0]}.{" "}
-              <span className="text-accent">{t('landing.hero.title').split('.')[1]}.</span>
+              {t('landing.hero.titlePrimary')}{" "}
+              <span className="text-accent">{t('landing.hero.titleAccent')}</span>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
@@ -111,29 +111,29 @@ export const HeroSection = () => {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
                     <div>
-                      <p className="font-semibold text-foreground">Senior React Developer</p>
-                      <p className="text-sm text-muted-foreground">Interview scheduled</p>
+                      <p className="font-semibold text-foreground">{t('landing.hero.preview.cards.first.title')}</p>
+                      <p className="text-sm text-muted-foreground">{t('landing.hero.preview.cards.first.subtitle')}</p>
                     </div>
                     <span className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full font-medium">
-                      Today 2:00 PM
+                      {t('landing.hero.preview.cards.first.badge')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                     <div>
-                      <p className="font-semibold text-foreground">Backend Engineer</p>
-                      <p className="text-sm text-muted-foreground">Evaluation complete</p>
+                      <p className="font-semibold text-foreground">{t('landing.hero.preview.cards.second.title')}</p>
+                      <p className="text-sm text-muted-foreground">{t('landing.hero.preview.cards.second.subtitle')}</p>
                     </div>
                     <span className="px-3 py-1 bg-success/15 text-success text-sm rounded-full font-medium">
-                      Strong Hire
+                      {t('landing.hero.preview.cards.second.badge')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                     <div>
-                      <p className="font-semibold text-foreground">DevOps Specialist</p>
-                      <p className="text-sm text-muted-foreground">Report pending</p>
+                      <p className="font-semibold text-foreground">{t('landing.hero.preview.cards.third.title')}</p>
+                      <p className="text-sm text-muted-foreground">{t('landing.hero.preview.cards.third.subtitle')}</p>
                     </div>
                     <span className="px-3 py-1 bg-accent/10 text-accent text-sm rounded-full font-medium">
-                      In Progress
+                      {t('landing.hero.preview.cards.third.badge')}
                     </span>
                   </div>
                 </div>

@@ -20,7 +20,8 @@
     "filter": "Filter",
     "sort": "Sort",
     "viewDetails": "View Details",
-    "close": "Close"
+    "close": "Close",
+    "toggleThemeAria": "Toggle theme"
   },
   "languages": {
     "en": "English",
@@ -92,7 +93,9 @@
   },
   "landing": {
     "hero": {
-      "title": "Technical Interviews. Done Right",
+      "title": "Technical Interviews. Done Right.",
+      "titlePrimary": "Technical Interviews.",
+      "titleAccent": "Done Right.",
       "subtitle": "Scale your hiring with expert technical interviews. Get standardized evaluations, AI-powered insights, and comprehensive reports in hours, not weeks.",
       "cta": "Let's Build Your Dream Team",
       "learnMore": "Learn More",
@@ -101,11 +104,32 @@
         "expert": "Expert Technical Interviewers",
         "aiPowered": "AI-Powered Question Generation",
         "reports": "Detailed PDF Reports"
+      },
+      "preview": {
+        "cards": {
+          "first": {
+            "title": "Senior React Developer",
+            "subtitle": "Interview scheduled",
+            "badge": "Today 2:00 PM"
+          },
+          "second": {
+            "title": "Backend Engineer",
+            "subtitle": "Evaluation complete",
+            "badge": "Strong Hire"
+          },
+          "third": {
+            "title": "DevOps Specialist",
+            "subtitle": "Report pending",
+            "badge": "In Progress"
+          }
+        }
       }
     },
     "about": {
       "label": "About Lation",
       "title": "Transforming How Companies Hire Technical Talent",
+      "titlePrimary": "Transforming How Companies",
+      "titleAccent": "Hire Technical Talent",
       "description1": "Lation bridges the gap between companies and top technical talent through standardized, expert-led interview processes. We combine human expertise with AI-driven insights to deliver the most accurate candidate evaluations.",
       "description2": "Our platform supports recruiters and hiring managers with comprehensive technical assessments, detailed PDF reports, and data-driven recommendations that help you make confident hiring decisions.",
       "features": {
@@ -130,6 +154,8 @@
     "services": {
       "label": "What We Offer",
       "title": "Complete Interview Solutions",
+      "titlePrimary": "Complete Interview",
+      "titleAccent": "Solutions",
       "subtitle": "End-to-end technical interview services designed to help you hire the best talent efficiently.",
       "items": {
         "interviews": {
@@ -197,6 +223,8 @@
     },
     "contact": {
       "title": "Let's Start a Conversation",
+      "titlePrimary": "Let's Start a",
+      "titleAccent": "Conversation",
       "subtitle": "Curious about how Lation can revolutionize your hiring? Drop us a message and our team will reach out to discuss your specific needs.",
       "form": {
         "title": "Get in Touch",
@@ -253,7 +281,7 @@
           "cookies": "Cookies"
         }
       },
-      "copyright": "Lation. All rights reserved.",
+      "copyright": "{{year}} Lation. All rights reserved.",
       "madeWith": "Made with",
       "forHiring": "for better hiring"
     }

@@ -20,11 +20,12 @@
     "filter": "Filtrar",
     "sort": "Ordenar",
     "viewDetails": "Ver Detalhes",
-    "close": "Fechar"
+    "close": "Fechar",
+    "toggleThemeAria": "Alternar tema"
   },
   "languages": {
-    "en": "English",
-    "es": "Español",
+    "en": "Inglês",
+    "es": "Espanhol",
     "pt": "Português"
   },
   "dashboard": {
@@ -92,22 +93,45 @@
   },
   "landing": {
     "hero": {
-      "title": "Entrevistas Técnicas. Feitas Corretamente",
-      "subtitle": "Dimensione sua contratação com entrevistas técnicas especializadas. Obtenha avaliações padronizadas, insights alimentados por IA e relatórios abrangentes em horas, não em semanas.",
-      "cta": "Vamos Construir Seu Time dos Sonhos",
-      "learnMore": "Saiba Mais",
-      "trustedBy": "Confiado por 500+ Empresas",
+      "title": "Entrevistas técnicas. Bem feitas.",
+      "titlePrimary": "Entrevistas técnicas.",
+      "titleAccent": "Bem feitas.",
+      "subtitle": "Escale sua contratação com entrevistas técnicas especializadas. Obtenha avaliações padronizadas, insights alimentados por IA e relatórios completos em horas, não em semanas.",
+      "cta": "Vamos construir seu time dos sonhos",
+      "learnMore": "Saiba mais",
+      "trustedBy": "Com a confiança de 500+ empresas",
       "features": {
-        "expert": "Entrevistadores Técnicos Especialistas",
-        "aiPowered": "Geração de Perguntas Alimentada por IA",
-        "reports": "Relatórios PDF Detalhados"
+        "expert": "Entrevistadores técnicos especialistas",
+        "aiPowered": "Geração de perguntas alimentada por IA",
+        "reports": "Relatórios PDF detalhados"
+      },
+      "preview": {
+        "cards": {
+          "first": {
+            "title": "Desenvolvedor React Sênior",
+            "subtitle": "Entrevista agendada",
+            "badge": "Hoje 14:00"
+          },
+          "second": {
+            "title": "Engenheiro de backend",
+            "subtitle": "Avaliação concluída",
+            "badge": "Forte contratação"
+          },
+          "third": {
+            "title": "Especialista em DevOps",
+            "subtitle": "Relatório pendente",
+            "badge": "Em andamento"
+          }
+        }
       }
     },
     "about": {
       "label": "Sobre a Lation",
-      "title": "Transformando como as Empresas Contratam Talento Técnico",
-      "description1": "A Lation preenche a lacuna entre empresas e talentos técnicos de primeira linha através de processos de entrevista padronizados e liderados por especialistas. Combinamos experiência humana com insights alimentados por IA para fornecer as avaliações de candidatos mais precisas.",
-      "description2": "Nossa plataforma apoia recrutadores e gerentes de contratação com avaliações técnicas abrangentes, relatórios PDF detalhados e recomendações baseadas em dados que ajudam você a tomar decisões de contratação confiantes.",
+      "title": "Transformando como as empresas contratam talento técnico",
+      "titlePrimary": "Transformando como as empresas",
+      "titleAccent": "contratam talento técnico",
+      "description1": "A Lation preenche a lacuna entre empresas e talentos técnicos de primeira linha por meio de processos de entrevista padronizados e liderados por especialistas. Combinamos experiência humana com insights alimentados por IA para fornecer as avaliações de candidatos mais precisas.",
+      "description2": "Nossa plataforma apoia recrutadores e gerentes de contratação com avaliações técnicas abrangentes, relatórios PDF detalhados e recomendações baseadas em dados que ajudam você a tomar decisões de contratação com confiança.",
       "features": {
         "fast": {
           "title": "Ultraveloz",
@@ -118,23 +142,25 @@
           "description": "Nossos entrevistadores técnicos certificados têm anos de experiência na indústria em várias pilhas de tecnologia e domínios."
         },
         "ai": {
-          "title": "Insights Alimentados por IA",
+          "title": "Insights alimentados por IA",
           "description": "Aproveite a inteligência artificial para gerar perguntas direcionadas e fornecer avaliações padronizadas e imparciais."
         },
         "scalable": {
           "title": "Processo Escalável",
-          "description": "Seja contratando um engenheiro ou construindo uma equipe, nossa plataforma escala com suas necessidades sem esforço."
+          "description": "Seja contratando um engenheiro ou construindo uma equipe, nossa plataforma escala sem esforço de acordo com suas necessidades."
         }
       }
     },
     "services": {
-      "label": "O Que Oferecemos",
-      "title": "Soluções Completas de Entrevistas",
-      "subtitle": "Serviços de entrevistas técnicas de ponta a ponta projetados para ajudá-lo a contratar o melhor talento de forma eficiente.",
+      "label": "O que oferecemos",
+      "title": "Soluções completas de entrevistas",
+      "titlePrimary": "Soluções completas de",
+      "titleAccent": "entrevistas",
+      "subtitle": "Serviços de entrevistas técnicas de ponta a ponta projetados para ajudar você a contratar o melhor talento de forma eficiente.",
       "items": {
         "interviews": {
           "title": "Entrevistas Técnicas",
-          "description": "Entrevistas técnicas lideradas por especialistas adaptadas aos seus requisitos de trabalho. Nossos entrevistadores avaliam habilidades de codificação, design de sistema e capacidades de resolução de problemas.",
+          "description": "Entrevistas técnicas lideradas por especialistas adaptadas aos seus requisitos de trabalho. Nossos entrevistadores avaliam habilidades de codificação, design de sistemas e capacidades de resolução de problemas.",
           "features": [
             "Sessões de codificação ao vivo",
             "Discussões de design de sistema",
@@ -171,9 +197,9 @@
       }
     },
     "stats": {
-      "label": "Nosso Impacto",
-      "title": "Números Que Falam",
-      "subtitle": "Confiado por centenas de empresas em todo o mundo para fornecer entrevistas técnicas excepcionais.",
+      "label": "Nosso impacto",
+      "title": "Números que falam",
+      "subtitle": "Com a confiança de centenas de empresas em todo o mundo para fornecer entrevistas técnicas excepcionais.",
       "interviewsCompleted": "Entrevistas Concluídas",
       "activeClients": "Clientes Ativos",
       "interviewers": "Entrevistadores Certificados",
@@ -186,29 +212,31 @@
       }
     },
     "clients": {
-      "label": "Confiado por Líderes",
-      "title": "Empresas Que Confiam em Nós",
+      "label": "Com a confiança de líderes",
+      "title": "Empresas que confiam em nós",
       "subtitle": "De startups a empresas, as principais empresas confiam na Lation para suas necessidades de contratação técnica.",
       "testimonial": {
-        "quote": "A Lation transformou nosso processo de contratação. Seus entrevistadores especialistas e relatórios detalhados nos ajudaram a tomar decisões confiantes e contratar os melhores talentos mais rápido do que nunca.",
+        "quote": "A Lation transformou nosso processo de contratação. Seus entrevistadores especialistas e relatórios detalhados nos ajudaram a tomar decisões seguras e contratar os melhores talentos mais rápido do que nunca.",
         "author": "Jane Doe",
         "position": "VP de Engenharia, TechCorp"
       }
     },
     "contact": {
-      "title": "Vamos Iniciar uma Conversa",
+      "title": "Vamos iniciar uma conversa",
+      "titlePrimary": "Vamos iniciar uma",
+      "titleAccent": "conversa",
       "subtitle": "Curioso sobre como a Lation pode revolucionar sua contratação? Envie-nos uma mensagem e nossa equipe entrará em contato para discutir suas necessidades específicas.",
       "form": {
-        "title": "Entre em Contato",
-        "name": "Seu Nome",
+        "title": "Entre em contato",
+        "name": "Seu nome",
         "namePlaceholder": "João Silva",
-        "email": "Endereço de E-mail",
+        "email": "Endereço de e-mail",
         "emailPlaceholder": "joao@empresa.com",
-        "company": "Nome da Empresa",
+        "company": "Nome da empresa",
         "companyPlaceholder": "Sua Empresa Ltda.",
-        "message": "Sua Mensagem",
-        "messagePlaceholder": "Conte-nos sobre suas necessidades de contratação, tamanho da equipe ou qualquer dúvida que você tenha...",
-        "submit": "Enviar Mensagem",
+        "message": "Sua mensagem",
+        "messagePlaceholder": "Conte-nos sobre suas necessidades de contratação, o tamanho da sua equipe ou qualquer dúvida que você tenha...",
+        "submit": "Enviar mensagem",
         "sending": "Enviando...",
         "privacy": "Ao enviar, você concorda com nossa política de privacidade. Nunca compartilharemos suas informações.",
         "success": "Mensagem enviada com sucesso! Entraremos em contato em breve."
@@ -253,9 +281,9 @@
           "cookies": "Cookies"
         }
       },
-      "copyright": "Lation. Todos os direitos reservados.",
+      "copyright": "{{year}} Lation. Todos os direitos reservados.",
       "madeWith": "Feito com",
-      "forHiring": "para melhor contratação"
+      "forHiring": "para uma contratação melhor"
     }
   }
 }

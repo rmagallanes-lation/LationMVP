@@ -76,8 +76,8 @@ export const ContactSection = () => {
             </motion.div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground dark:text-foreground mb-6 leading-tight">
-              {t('landing.contact.title').split('Conversation')[0]} <br />
-              <span className="text-accent">Conversation</span>
+              {t('landing.contact.titlePrimary')} <br />
+              <span className="text-accent">{t('landing.contact.titleAccent')}</span>
             </h2>
 
             <p className="text-lg md:text-xl text-primary-foreground/80 dark:text-muted-foreground mb-10 leading-relaxed">
