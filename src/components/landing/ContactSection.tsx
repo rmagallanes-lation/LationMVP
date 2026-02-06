@@ -18,18 +18,55 @@ export const ContactSection = () => {
     email: "",
     company: "",
     message: "",
+    website: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
 
-    // Simulate submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const honeypot = formData.website.trim();
+    if (honeypot) {
+      toast.success(t('landing.contact.form.success'));
+      setFormData({ name: "", email: "", company: "", message: "", website: "" });
+      setIsSubmitting(false);
+      return;
+    }
 
-    toast.success(t('landing.contact.form.success'));
-    setFormData({ name: "", email: "", company: "", message: "" });
-    setIsSubmitting(false);
+    const payload = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      company: formData.company.trim() || undefined,
+      message: formData.message.trim(),
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      toast.error(t('landing.contact.form.error'));
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const apiBase = import.meta.env.VITE_API_URL ?? "";
+      const url = `${apiBase.replace(/\/$/, "")}/api/contact`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`contact_submit_failed_${response.status}`);
+      }
+
+      toast.success(t('landing.contact.form.success'));
+      setFormData({ name: "", email: "", company: "", message: "", website: "" });
+    } catch {
+      toast.error(t('landing.contact.form.error'));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -125,6 +162,17 @@ export const ContactSection = () => {
               </h3>
 
               <div className="space-y-5">
+                <div className="absolute left-[-9999px]" aria-hidden="true">
+                  <label htmlFor="website">Website</label>
+                  <Input
+                    id="website"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-foreground/80 dark:text-muted-foreground mb-2">

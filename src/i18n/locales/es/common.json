@@ -226,21 +226,22 @@
       "titlePrimary": "Iniciemos una",
       "titleAccent": "conversación",
       "subtitle": "¿Tiene curiosidad sobre cómo Lation puede revolucionar su contratación? Envíenos un mensaje y nuestro equipo se pondrá en contacto para conversar sobre sus necesidades específicas.",
-      "form": {
-        "title": "Póngase en contacto",
-        "name": "Su nombre",
-        "namePlaceholder": "Juan Pérez",
-        "email": "Correo electrónico",
-        "emailPlaceholder": "juan@empresa.com",
-        "company": "Nombre de la empresa",
-        "companyPlaceholder": "Su Empresa S.A.",
-        "message": "Su mensaje",
-        "messagePlaceholder": "Cuéntenos sobre sus necesidades de contratación, el tamaño de su equipo o cualquier pregunta que tenga...",
-        "submit": "Enviar mensaje",
-        "sending": "Enviando...",
-        "privacy": "Al enviar, acepta nuestra política de privacidad. Nunca compartiremos su información.",
-        "success": "¡Mensaje enviado con éxito! Nos pondremos en contacto pronto."
-      },
+    "form": {
+      "title": "Póngase en contacto",
+      "name": "Su nombre",
+      "namePlaceholder": "Juan Pérez",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "juan@empresa.com",
+      "company": "Nombre de la empresa",
+      "companyPlaceholder": "Su Empresa S.A.",
+      "message": "Su mensaje",
+      "messagePlaceholder": "Cuéntenos sobre sus necesidades de contratación, el tamaño de su equipo o cualquier pregunta que tenga...",
+      "submit": "Enviar mensaje",
+      "sending": "Enviando...",
+      "privacy": "Al enviar, acepta nuestra política de privacidad. Nunca compartiremos su información.",
+      "success": "¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.",
+      "error": "Algo salió mal. Por favor, inténtelo de nuevo."
+    },
       "email": {
         "label": "Envíenos un correo a",
         "address": "hello@lation.io"
