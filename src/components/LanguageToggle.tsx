@@ -9,14 +9,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { motion } from 'framer-motion';
 
-const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'es', name: 'Español', flag: '🇪🇸' },
-    { code: 'pt', name: 'Português', flag: '🇧🇷' },
-];
-
 export const LanguageToggle = () => {
     const { i18n, t } = useTranslation();
+
+    const languages = [
+        { code: 'en', name: t('languages.en'), flag: '🇺🇸' },
+        { code: 'es', name: t('languages.es'), flag: '🇪🇸' },
+        { code: 'pt', name: t('languages.pt'), flag: '🇧🇷' },
+    ];
 
     const changeLanguage = (languageCode: string) => {
         i18n.changeLanguage(languageCode);

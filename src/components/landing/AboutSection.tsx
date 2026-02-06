@@ -49,8 +49,8 @@ export const AboutSection = () => {
               {t('landing.about.label')}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
-              {t('landing.about.title').split('Hire')[0]}{" "}
-              <span className="text-accent">Hire{t('landing.about.title').split('Hire')[1]}</span>
+              {t('landing.about.titlePrimary')}{" "}
+              <span className="text-accent">{t('landing.about.titleAccent')}</span>
             </h2>
             <p className="text-lg text-muted-foreground mb-6">
               {t('landing.about.description1')}
