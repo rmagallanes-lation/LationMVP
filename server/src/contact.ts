@@ -35,11 +35,15 @@ router.post('/', async (req, res) => {
 
     const parsed = ContactSchema.parse(req.body);
     const n8nUrl = process.env.N8N_WEBHOOK_URL || 'http://localhost:5678';
+    const n8nSecret = process.env.N8N_WEBHOOK_SECRET;
 
     // Forward payload to n8n webhook
     const response = await fetch(n8nUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(n8nSecret ? { 'x-form-secret': n8nSecret } : {}),
+      },
       body: JSON.stringify(parsed),
     });
 

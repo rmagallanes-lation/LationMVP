@@ -5,6 +5,7 @@ Minimal Express + TypeScript backend for forwarding contact form submissions to 
 Environment variables (see `.env.example`):
 - `PORT` - backend port (default 3001)
 - `N8N_WEBHOOK_URL` - the n8n webhook URL to forward contact form data to
+- `N8N_WEBHOOK_SECRET` - optional shared secret sent as `x-form-secret`
 - `FRONTEND_URL` - allowed CORS origin for frontend
 
 Run locally (requires Node 18+):
