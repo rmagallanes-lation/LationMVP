@@ -26,6 +26,25 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+type EvaluationRecommendation = "strong_hire" | "hire" | "no_hire";
+
+type EvaluationData = {
+  recordingLink: string;
+  technicalScore: number;
+  communicationScore: number;
+  problemSolvingScore: number;
+  comments: string;
+  recommendation: EvaluationRecommendation;
+};
+
+const scoreItems = [
+  { label: "Technical Skills", key: "technicalScore" },
+  { label: "Communication", key: "communicationScore" },
+  { label: "Problem Solving", key: "problemSolvingScore" },
+] as const;
+
+type ScoreKey = (typeof scoreItems)[number]["key"];
+
 // Mock data for interviewer dashboard
 const pendingRequests = [
   {
@@ -81,7 +100,7 @@ const completedInterviews = [
 const InterviewerDashboard = () => {
   const [selectedRequest, setSelectedRequest] = useState<number | null>(null);
   const [showEvaluation, setShowEvaluation] = useState(false);
-  const [evaluationData, setEvaluationData] = useState({
+  const [evaluationData, setEvaluationData] = useState<EvaluationData>({
     recordingLink: "",
     technicalScore: 4,
     communicationScore: 4,
@@ -90,12 +109,12 @@ const InterviewerDashboard = () => {
     recommendation: "hire",
   });
 
-  const handleAcceptRequest = (id: number) => {
+  const handleAcceptRequest = (_id: number) => {
     toast.success("Interview request accepted! AI is generating questions...");
     // In real app, this would trigger AI question generation
   };
 
-  const handleRejectRequest = (id: number) => {
+  const handleRejectRequest = (_id: number) => {
     toast.info("Interview request declined.");
   };
 
@@ -410,11 +429,7 @@ const InterviewerDashboard = () => {
               </div>
 
               <div className="grid sm:grid-cols-3 gap-4">
-                {[
-                  { label: "Technical Skills", key: "technicalScore" },
-                  { label: "Communication", key: "communicationScore" },
-                  { label: "Problem Solving", key: "problemSolvingScore" },
-                ].map((item) => (
+                {scoreItems.map((item) => (
                   <div key={item.key} className="space-y-2">
                     <Label>{item.label}</Label>
                     <div className="flex gap-1">
@@ -422,12 +437,12 @@ const InterviewerDashboard = () => {
                         <button
                           key={score}
                           onClick={() =>
-                            setEvaluationData({
-                              ...evaluationData,
+                            setEvaluationData((prev) => ({
+                              ...prev,
                               [item.key]: score,
-                            })
+                            }))
                           }
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${(evaluationData as any)[item.key] >= score
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${evaluationData[item.key] >= score
                               ? "bg-primary text-primary-foreground"
                               : "bg-muted text-muted-foreground hover:bg-muted/80"
                             }`}

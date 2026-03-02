@@ -54,9 +54,9 @@ router.post('/', async (req, res) => {
     }
 
     return res.status(200).json({ ok: true });
-  } catch (err: any) {
-    if (err.name === 'ZodError') {
-      return res.status(400).json({ error: 'validation_error', detail: err.errors });
+  } catch (err: unknown) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ error: 'validation_error', detail: err.issues });
     }
     console.error(err);
     return res.status(500).json({ error: 'internal_error' });
