@@ -1,43 +1,12 @@
 import { Link } from "react-router-dom";
-import { Linkedin, Twitter, Github, Mail } from "lucide-react";
 import lationLogoDark from "@/assets/lation-logo-dark.png";
 import { useTranslation } from "react-i18next";
-
-const socialLinks = [
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Mail, href: "mailto:hello@lation.io", label: "Email" },
-];
+import { getFooterLinks, getFooterSocialLinks } from "@/components/landing/landing-content";
 
 export const Footer = () => {
   const { t } = useTranslation();
-
-  const footerLinks = {
-    product: [
-      { label: t('landing.footer.columns.product.features'), href: "#services" },
-      { label: t('landing.footer.columns.product.enterprises'), href: "#contact" },
-      { label: t('landing.footer.columns.product.api'), href: "#" },
-    ],
-    company: [
-      { label: t('landing.footer.columns.company.about'), href: "#about" },
-      { label: t('landing.footer.columns.company.careers'), href: "#" },
-      { label: t('landing.footer.columns.company.blog'), href: "#" },
-      { label: t('landing.footer.columns.company.press'), href: "#" },
-    ],
-    resources: [
-      { label: t('landing.footer.columns.resources.documentation'), href: "#" },
-      { label: t('landing.footer.columns.resources.helpCenter'), href: "#" },
-      { label: t('landing.footer.columns.resources.contact'), href: "#contact" },
-      { label: t('landing.footer.columns.resources.status'), href: "#" },
-    ],
-    legal: [
-      { label: t('landing.footer.columns.legal.privacy'), href: "#" },
-      { label: t('landing.footer.columns.legal.terms'), href: "#" },
-      { label: t('landing.footer.columns.legal.security'), href: "#" },
-      { label: t('landing.footer.columns.legal.cookies'), href: "#" },
-    ],
-  };
+  const footerLinks = getFooterLinks(t);
+  const socialLinks = getFooterSocialLinks();
 
   return (
     <footer className="bg-black text-primary-foreground pt-16 pb-8">

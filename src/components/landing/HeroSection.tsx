@@ -2,9 +2,18 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { SectionContainer } from "@/components/landing/Section";
+import {
+  getHeroFeatures,
+  getHeroPreviewCards,
+  heroFloatingBadge,
+  heroFloatingStat,
+} from "@/components/landing/landing-content";
 
 export const HeroSection = () => {
   const { t } = useTranslation();
+  const features = getHeroFeatures(t);
+  const previewCards = getHeroPreviewCards(t);
 
   const handleScrollToContact = () => {
     const contactSection = document.getElementById('contact');
@@ -22,7 +31,7 @@ export const HeroSection = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-secondary/30 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
+      <SectionContainer className="relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <motion.div
@@ -52,11 +61,7 @@ export const HeroSection = () => {
 
             {/* Features List */}
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-10">
-              {[
-                t('landing.hero.features.expert'),
-                t('landing.hero.features.aiPowered'),
-                t('landing.hero.features.reports')
-              ].map((feature, index) => (
+              {features.map((feature, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 10 }}
@@ -100,33 +105,22 @@ export const HeroSection = () => {
                   <div className="w-3 h-3 rounded-full bg-primary" />
                 </div>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
-                    <div>
-                      <p className="font-semibold text-foreground">{t('landing.hero.preview.cards.first.title')}</p>
-                      <p className="text-sm text-muted-foreground">{t('landing.hero.preview.cards.first.subtitle')}</p>
+                  {previewCards.map((card) => (
+                    <div
+                      key={card.title}
+                      className={`flex items-center justify-between p-4 rounded-lg ${card.cardClassName}`}
+                    >
+                      <div>
+                        <p className="font-semibold text-foreground">{card.title}</p>
+                        <p className="text-sm text-muted-foreground">{card.subtitle}</p>
+                      </div>
+                      <span
+                        className={`px-3 py-1 text-sm rounded-full font-medium ${card.badgeClassName}`}
+                      >
+                        {card.badge}
+                      </span>
                     </div>
-                    <span className="px-3 py-1 bg-primary/10 dark:bg-accent/15 text-primary dark:text-accent text-sm rounded-full font-medium">
-                      {t('landing.hero.preview.cards.first.badge')}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div>
-                      <p className="font-semibold text-foreground">{t('landing.hero.preview.cards.second.title')}</p>
-                      <p className="text-sm text-muted-foreground">{t('landing.hero.preview.cards.second.subtitle')}</p>
-                    </div>
-                    <span className="px-3 py-1 bg-success/15 text-success text-sm rounded-full font-medium">
-                      {t('landing.hero.preview.cards.second.badge')}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
-                    <div>
-                      <p className="font-semibold text-foreground">{t('landing.hero.preview.cards.third.title')}</p>
-                      <p className="text-sm text-muted-foreground">{t('landing.hero.preview.cards.third.subtitle')}</p>
-                    </div>
-                    <span className="px-3 py-1 bg-accent/10 text-accent text-sm rounded-full font-medium">
-                      {t('landing.hero.preview.cards.third.badge')}
-                    </span>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -137,8 +131,8 @@ export const HeroSection = () => {
                 transition={{ duration: 0.5, delay: 0.8 }}
                 className="absolute -bottom-6 -left-6 bg-card rounded-xl shadow-lg border border-accent/20 p-4"
               >
-                <p className="text-3xl font-bold text-accent">98%</p>
-                <p className="text-sm text-muted-foreground">Accuracy Rate</p>
+                <p className="text-3xl font-bold text-accent">{heroFloatingStat.value}</p>
+                <p className="text-sm text-muted-foreground">{heroFloatingStat.label}</p>
               </motion.div>
 
               {/* Floating Badge */}
@@ -148,13 +142,13 @@ export const HeroSection = () => {
                 transition={{ duration: 0.4, delay: 1 }}
                 className="absolute -top-4 -right-4 bg-accent text-accent-foreground rounded-xl shadow-lg p-3"
               >
-                <p className="text-sm font-semibold">24h</p>
-                <p className="text-xs opacity-90">Avg. SLA</p>
+                <p className="text-sm font-semibold">{heroFloatingBadge.value}</p>
+                <p className="text-xs opacity-90">{heroFloatingBadge.label}</p>
               </motion.div>
             </div>
           </motion.div>
         </div>
-      </div>
+      </SectionContainer>
 
       {/* Scroll Indicator */}
       <motion.div

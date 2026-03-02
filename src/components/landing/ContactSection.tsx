@@ -4,10 +4,12 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Mail, MessageSquare, Sparkles } from "lucide-react";
+import { Send, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { createClient } from "@supabase/supabase-js";
+import { Section, SectionContainer } from "@/components/landing/Section";
+import { getContactCards } from "@/components/landing/landing-content";
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -17,6 +19,7 @@ const supabase = createClient(
 
 export const ContactSection = () => {
   const { t } = useTranslation();
+  const contactCards = getContactCards(t);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,9 +84,10 @@ export const ContactSection = () => {
   };
 
   return (
-    <section
+    <Section
       id="contact"
-      className="py-24 bg-gradient-section text-foreground dark:bg-gradient-section dark:text-foreground relative overflow-hidden"
+      tone="gradient"
+      className="text-foreground dark:text-foreground"
     >
       {/* Background Elements */}
       <div className="absolute inset-0">
@@ -92,7 +96,7 @@ export const ContactSection = () => {
         <div className="absolute top-1/2 right-0 w-64 h-64 bg-primary/5 dark:bg-primary-foreground/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10" ref={ref}>
+      <SectionContainer className="relative z-10" ref={ref}>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Content */}
           <motion.div
@@ -121,36 +125,63 @@ export const ContactSection = () => {
 
             {/* Contact Options */}
             <div className="space-y-4">
-              <motion.a
-                href="mailto:hello@lation.io"
-                initial={{ opacity: 0, y: 10 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: 0.4 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-accent/10 hover:bg-accent/20 transition-colors group cursor-pointer"
-              >
-                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center group-hover:bg-accent/30 transition-colors">
-                  <Mail className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">{t('landing.contact.email.label')}</p>
-                  <p className="font-semibold text-foreground dark:text-foreground">hello@lation.io</p>
-                </div>
-              </motion.a>
+              {contactCards.map((card, index) => {
+                const interactionClasses = card.interactive
+                  ? "hover:bg-accent/20 transition-colors group cursor-pointer"
+                  : "";
+                const iconHoverClasses = card.interactive ? "group-hover:bg-accent/30" : "";
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: 0.5 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-accent/10"
-              >
-                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center">
-                  <MessageSquare className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">{t('landing.contact.response.label')}</p>
-                  <p className="font-semibold text-foreground dark:text-foreground">{t('landing.contact.response.time')}</p>
-                </div>
-              </motion.div>
+                if (card.href) {
+                  return (
+                    <motion.a
+                      key={card.label}
+                      href={card.href}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : {}}
+                      transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                      className={`flex items-center gap-4 p-4 rounded-xl bg-accent/10 ${interactionClasses}`}
+                    >
+                      <div
+                        className={`w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center transition-colors ${iconHoverClasses}`}
+                      >
+                        <card.icon className="w-5 h-5 text-accent" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                          {card.label}
+                        </p>
+                        <p className="font-semibold text-foreground dark:text-foreground">
+                          {card.value}
+                        </p>
+                      </div>
+                    </motion.a>
+                  );
+                }
+
+                return (
+                  <motion.div
+                    key={card.label}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
+                    className={`flex items-center gap-4 p-4 rounded-xl bg-accent/10 ${interactionClasses}`}
+                  >
+                    <div
+                      className={`w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center transition-colors ${iconHoverClasses}`}
+                    >
+                      <card.icon className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                        {card.label}
+                      </p>
+                      <p className="font-semibold text-foreground dark:text-foreground">
+                        {card.value}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
 
@@ -267,7 +298,7 @@ export const ContactSection = () => {
             </form>
           </motion.div>
         </div>
-      </div>
-    </section>
+      </SectionContainer>
+    </Section>
   );
 };
