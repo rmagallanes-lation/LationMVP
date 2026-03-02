@@ -7,6 +7,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Send, Mail, MessageSquare, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize Supabase client
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 export const ContactSection = () => {
   const { t } = useTranslation();
@@ -26,6 +33,7 @@ export const ContactSection = () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
+    // Honeypot check for spam
     const honeypot = formData.website.trim();
     if (honeypot) {
       toast.success(t('landing.contact.form.success'));
@@ -34,35 +42,34 @@ export const ContactSection = () => {
       return;
     }
 
-    const payload = {
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      company: formData.company.trim() || undefined,
-      message: formData.message.trim(),
-    };
-
-    if (!payload.name || !payload.email || !payload.message) {
+    // Validate required fields
+    if (!formData.name.trim() || !formData.email.trim()) {
       toast.error(t('landing.contact.form.error'));
       setIsSubmitting(false);
       return;
     }
 
     try {
-      const apiBase = import.meta.env.VITE_API_URL ?? "";
-      const url = `${apiBase.replace(/\/$/, "")}/api/contact`;
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const { error } = await supabase
+        .from('leads')
+        .insert({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          company: formData.company.trim() || null,
+          message: formData.message.trim() || null,
+          source: 'landing-page',
+          status: 'new'
+        });
 
-      if (!response.ok) {
-        throw new Error(`contact_submit_failed_${response.status}`);
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
       }
 
       toast.success(t('landing.contact.form.success'));
       setFormData({ name: "", email: "", company: "", message: "", website: "" });
-    } catch {
+    } catch (error) {
+      console.error('Error submitting lead:', error);
       toast.error(t('landing.contact.form.error'));
     } finally {
       setIsSubmitting(false);
@@ -162,6 +169,7 @@ export const ContactSection = () => {
               </h3>
 
               <div className="space-y-5">
+                {/* Honeypot field - hidden from users, catches bots */}
                 <div className="absolute left-[-9999px]" aria-hidden="true">
                   <label htmlFor="website">Website</label>
                   <Input
@@ -173,6 +181,7 @@ export const ContactSection = () => {
                     autoComplete="off"
                   />
                 </div>
+
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-foreground/80 dark:text-muted-foreground mb-2">
