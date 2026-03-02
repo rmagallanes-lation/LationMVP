@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { FileText, Brain, Video, BarChart } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Section, SectionContainer, SectionGrid, SectionHeader } from "@/components/landing/Section";
 
 export const ServicesSection = () => {
   const { t } = useTranslation();
@@ -37,29 +38,26 @@ export const ServicesSection = () => {
   ];
 
   return (
-    <section id="services" className="py-24 bg-background relative">
-      <div className="container mx-auto px-4 md:px-6" ref={ref}>
+    <Section id="services">
+      <SectionContainer ref={ref}>
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider mb-4 block">
-            {t('landing.services.label')}
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            {t('landing.services.titlePrimary')}{" "}
-            <span className="text-accent">{t('landing.services.titleAccent')}</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('landing.services.subtitle')}
-          </p>
+          <SectionHeader
+            label={t('landing.services.label')}
+            title={t('landing.services.titlePrimary')}
+            titleAccent={t('landing.services.titleAccent')}
+            subtitle={t('landing.services.subtitle')}
+            align="center"
+          />
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <SectionGrid className="md:grid-cols-2">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
@@ -75,9 +73,7 @@ export const ServicesSection = () => {
                 </div>
 
                 {/* Content */}
-                <h3 className="text-xl font-bold text-foreground mb-3">
-                  {service.title}
-                </h3>
+                <h3 className="text-xl font-bold text-foreground mb-3">{service.title}</h3>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
                   {service.description}
                 </p>
@@ -85,7 +81,10 @@ export const ServicesSection = () => {
                 {/* Features */}
                 <ul className="space-y-2">
                   {service.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <li
+                      key={feature}
+                      className="flex items-center gap-3 text-sm text-muted-foreground"
+                    >
                       <div className="w-1.5 h-1.5 rounded-full bg-accent" />
                       {feature}
                     </li>
@@ -97,8 +96,8 @@ export const ServicesSection = () => {
               </div>
             </motion.div>
           ))}
-        </div>
-      </div>
-    </section>
+        </SectionGrid>
+      </SectionContainer>
+    </Section>
   );
 };

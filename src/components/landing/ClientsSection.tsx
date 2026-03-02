@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { Section, SectionContainer, SectionHeader } from "@/components/landing/Section";
 
 export const ClientsSection = () => {
   const { t } = useTranslation();
@@ -21,24 +22,22 @@ export const ClientsSection = () => {
   ];
 
   return (
-    <section id="clients" className="py-24 bg-secondary/30 relative overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6" ref={ref}>
+    <Section id="clients" tone="muted">
+      <SectionContainer ref={ref}>
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <span className="text-primary dark:text-accent font-semibold text-sm uppercase tracking-wider mb-4 block">
-            {t('landing.clients.label')}
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            {t('landing.clients.title')}
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('landing.clients.subtitle')}
-          </p>
+          <SectionHeader
+            label={t('landing.clients.label')}
+            title={t('landing.clients.title')}
+            subtitle={t('landing.clients.subtitle')}
+            align="center"
+            labelClassName="text-primary dark:text-accent"
+          />
         </motion.div>
 
         {/* Logo Carousel */}
@@ -69,7 +68,9 @@ export const ClientsSection = () => {
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <span className="text-primary dark:text-accent font-bold text-sm">{client.initial}</span>
+                      <span className="text-primary dark:text-accent font-bold text-sm">
+                        {client.initial}
+                      </span>
                     </div>
                     <span className="font-semibold text-foreground">{client.name}</span>
                   </div>
@@ -101,13 +102,17 @@ export const ClientsSection = () => {
                 <span className="text-primary dark:text-accent font-bold">JD</span>
               </div>
               <div className="text-left">
-                <p className="font-semibold text-foreground">{t('landing.clients.testimonial.author')}</p>
-                <p className="text-sm text-muted-foreground">{t('landing.clients.testimonial.position')}</p>
+                <p className="font-semibold text-foreground">
+                  {t('landing.clients.testimonial.author')}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {t('landing.clients.testimonial.position')}
+                </p>
               </div>
             </div>
           </div>
         </motion.div>
-      </div>
-    </section>
+      </SectionContainer>
+    </Section>
   );
 };

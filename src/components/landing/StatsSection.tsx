@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Users, Calendar, Award, Timer } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Section, SectionContainer, SectionGrid, SectionHeader } from "@/components/landing/Section";
 
 const CountUpAnimation = ({ target, suffix }: { target: number; suffix: string }) => {
   const [count, setCount] = useState(0);
@@ -75,34 +76,31 @@ export const StatsSection = () => {
   ];
 
   return (
-    <section id="stats" className="py-24 bg-gradient-section relative overflow-hidden">
+    <Section id="stats" tone="gradient">
       {/* Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-accent/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10" ref={ref}>
+      <SectionContainer ref={ref} className="relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <span className="text-accent font-semibold text-sm uppercase tracking-wider mb-4 block">
-            {t('landing.stats.label')}
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            {t('landing.stats.title')}
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('landing.stats.subtitle')}
-          </p>
+          <SectionHeader
+            label={t('landing.stats.label')}
+            title={t('landing.stats.title')}
+            subtitle={t('landing.stats.subtitle')}
+            align="center"
+          />
         </motion.div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr items-stretch">
+        <SectionGrid className="md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr items-stretch">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -137,8 +135,8 @@ export const StatsSection = () => {
               </div>
             </motion.div>
           ))}
-        </div>
-      </div>
-    </section>
+        </SectionGrid>
+      </SectionContainer>
+    </Section>
   );
 };

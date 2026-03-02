@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Zap, Shield, BarChart3, Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Section, SectionContainer } from "@/components/landing/Section";
 
 export const AboutSection = () => {
   const { t } = useTranslation();
@@ -33,11 +34,11 @@ export const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="py-24 bg-background relative overflow-hidden">
+    <Section id="about">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
-      <div className="container mx-auto px-4 md:px-6" ref={ref}>
+      <SectionContainer ref={ref}>
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <motion.div
@@ -88,7 +89,7 @@ export const AboutSection = () => {
             ))}
           </motion.div>
         </div>
-      </div>
-    </section>
+      </SectionContainer>
+    </Section>
   );
 };
