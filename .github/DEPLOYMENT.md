@@ -47,6 +47,18 @@ VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
 4. Push your changes to main/master branch
 5. The workflow will automatically build and deploy to Cloudflare Pages
 
+### Contact Form Env Checklist
+
+If the landing contact form shows `Temporarily Unavailable`, verify:
+
+1. GitHub Actions secrets exist:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+2. Cloudflare Pages environment variables are set for both `Preview` and `Production`.
+3. Vercel project environment variables are also set for `Preview` and `Production` if Vercel deployments are being used.
+4. After changing any env var, trigger a new deployment; env updates are not applied retroactively to already-built artifacts.
+5. Optional for preview/local debugging: set `VITE_SHOW_CONTACT_CONFIG_HINT=true` to show technical config details in the contact alert.
+
 ## Full Deployment (Frontend + Backend)
 
 The `deploy.yml` workflow includes both frontend and backend deployment. This requires additional secrets for server deployment.

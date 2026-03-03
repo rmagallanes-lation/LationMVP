@@ -26,6 +26,8 @@ export const ContactSection = () => {
     []
   );
   const contactFormAvailable = supabase !== null;
+  const showTechnicalConfigHint =
+    import.meta.env.DEV || import.meta.env.VITE_SHOW_CONTACT_CONFIG_HINT === "true";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -223,7 +225,7 @@ export const ContactSection = () => {
                   </AlertTitle>
                   <AlertDescription className="text-amber-800/90 dark:text-amber-100/90">
                     <p>{t('landing.contact.form.disabledMessage')}</p>
-                    {supabaseConfigError && (
+                    {supabaseConfigError && showTechnicalConfigHint && (
                       <p className="mt-1 text-xs">
                         {t('landing.contact.form.disabledAdminHint', { error: supabaseConfigError })}
                       </p>

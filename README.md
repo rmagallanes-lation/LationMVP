@@ -313,8 +313,15 @@ Cloudflare Pages is a great option for deploying this project. Follow the steps 
 - **Build command**: `bun install --save-text-lockfile && npm run build`
 - **Output directory**: `dist`
 
-#### 3. Environment Variables (Optional)
-If your project requires environment variables, add them in the **Environment Variables** section of the Cloudflare Pages settings.
+#### 3. Environment Variables (Required for Contact Form)
+Add these in Cloudflare Pages **Environment Variables** for both Preview and Production:
+
+```bash
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
+```
+
+If you deploy through GitHub Actions, add the same keys to repository secrets as well.
 
 #### 4. Deploy
 - Save the settings and trigger a deployment.
@@ -326,6 +333,16 @@ If your project requires environment variables, add them in the **Environment Va
 - **Output directory issues**: Ensure the `dist` folder is generated during the build process.
 
 For more details, refer to the [Cloudflare Pages Documentation](https://developers.cloudflare.com/pages/).
+
+### Contact Form Quick Check (All Platforms)
+
+If Contact appears as `Temporarily Unavailable`:
+
+1. Ensure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set in the active deploy platform (Vercel/Cloudflare).
+2. Ensure the same keys are set in GitHub Actions secrets when using workflow-based deploys.
+3. Redeploy after changing variables.
+4. Recheck the live page: submit button should return to `Send Message`.
+5. Optional: enable technical hint in non-production by setting `VITE_SHOW_CONTACT_CONFIG_HINT=true`.
 
 ## 🤝 Contributing
 

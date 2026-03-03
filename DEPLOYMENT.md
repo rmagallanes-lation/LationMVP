@@ -242,6 +242,26 @@ from origin 'https://lation.com.mx' has been blocked by CORS policy
 | `N8N_WEBHOOK_SECRET` | Shared secret header | `change-me` |
 | `PORT` | Backend port | `3001` |
 
+## Contact Form Env Checklist
+
+Use this checklist whenever contact submission is disabled in the UI.
+
+1. Set both frontend Supabase variables:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+2. Configure all active frontend targets:
+   - Vercel: Project Settings -> Environment Variables (`Preview` + `Production`, and `Development` for parity)
+   - Cloudflare Pages: Project -> Settings -> Environment variables (`Preview` + `Production`)
+   - GitHub Actions Secrets (if deploying via workflows): `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+3. Redeploy after updating variables:
+   - Vercel: redeploy latest preview and production deployment
+   - Cloudflare Pages / GitHub Actions: trigger a new deployment run
+4. Verify on the live page:
+   - Contact button should show `Send Message` (not `Temporarily Unavailable`)
+   - No contact configuration warning should be visible to users in production
+5. Optional debug hint for non-production:
+   - Set `VITE_SHOW_CONTACT_CONFIG_HINT=true` in preview/local builds to show technical config details in the alert.
+
 ---
 
-**Last Updated:** February 7, 2026
+**Last Updated:** March 3, 2026
