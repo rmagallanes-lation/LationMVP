@@ -13,6 +13,32 @@ import { getContactCards } from "@/components/landing/landing-content";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { isSupabaseConfigured, runtimeConfig, supabaseConfigError } from "@/lib/runtime-config";
 
+type LeadNotificationPayload = {
+  name: string;
+  email: string;
+  company: string | null;
+  message: string | null;
+};
+
+async function sendLeadNotification(payload: LeadNotificationPayload) {
+  try {
+    const response = await fetch("/api/send-notification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const detail = await response.text();
+      console.warn("Lead notification request failed", { status: response.status, detail });
+    }
+  } catch (error) {
+    console.warn("Lead notification request threw an error", error);
+  }
+}
+
 export const ContactSection = () => {
   const { t } = useTranslation();
   const contactCards = getContactCards(t);
@@ -71,13 +97,20 @@ export const ContactSection = () => {
     }
 
     try {
+      const leadPayload: LeadNotificationPayload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company: formData.company.trim() || null,
+        message: formData.message.trim() || null,
+      };
+
       const { error } = await supabase
         .from('leads')
         .insert({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          company: formData.company.trim() || null,
-          message: formData.message.trim() || null,
+          name: leadPayload.name,
+          email: leadPayload.email,
+          company: leadPayload.company,
+          message: leadPayload.message,
           source: 'landing-page',
           status: 'new'
         });
@@ -86,6 +119,8 @@ export const ContactSection = () => {
         console.error('Supabase error:', error);
         throw error;
       }
+
+      await sendLeadNotification(leadPayload);
 
       toast.success(t('landing.contact.form.success'));
       setFormData({ name: "", email: "", company: "", message: "", website: "" });
