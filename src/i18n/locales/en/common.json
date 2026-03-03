@@ -240,7 +240,12 @@
       "sending": "Sending...",
       "privacy": "By submitting, you agree to our privacy policy. We'll never share your information.",
       "success": "Message sent successfully! We'll get back to you soon.",
-      "error": "Something went wrong. Please try again."
+      "error": "Something went wrong. Please try again.",
+      "unavailable": "Temporarily Unavailable",
+      "disabledTitle": "Contact form temporarily unavailable",
+      "disabledMessage": "We're currently unable to receive new contact requests from this page. Please try again later.",
+      "disabledToast": "Contact form is temporarily unavailable.",
+      "disabledAdminHint": "Configuration details: {{error}}"
     },
       "email": {
         "label": "Email us at",

@@ -1,27 +1,31 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Sparkles } from "lucide-react";
+import { AlertTriangle, Send, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { createClient } from "@supabase/supabase-js";
 import { Section, SectionContainer } from "@/components/landing/Section";
 import { getContactCards } from "@/components/landing/landing-content";
-
-// Initialize Supabase client
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { isSupabaseConfigured, runtimeConfig, supabaseConfigError } from "@/lib/runtime-config";
 
 export const ContactSection = () => {
   const { t } = useTranslation();
   const contactCards = getContactCards(t);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const supabase = useMemo(
+    () =>
+      isSupabaseConfigured && runtimeConfig.supabaseUrl && runtimeConfig.supabaseAnonKey
+        ? createClient(runtimeConfig.supabaseUrl, runtimeConfig.supabaseAnonKey)
+        : null,
+    []
+  );
+  const contactFormAvailable = supabase !== null;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -31,10 +35,22 @@ export const ContactSection = () => {
     website: "",
   });
 
+  useEffect(() => {
+    if (!contactFormAvailable && supabaseConfigError) {
+      console.warn(supabaseConfigError);
+    }
+  }, [contactFormAvailable]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
     setIsSubmitting(true);
+
+    if (!supabase) {
+      toast.error(t('landing.contact.form.disabledToast'));
+      setIsSubmitting(false);
+      return;
+    }
 
     // Honeypot check for spam
     const honeypot = formData.website.trim();
@@ -199,7 +215,24 @@ export const ContactSection = () => {
                 {t('landing.contact.form.title')}
               </h3>
 
-              <div className="space-y-5">
+              {!contactFormAvailable && (
+                <Alert className="mb-6 border-amber-500/40 bg-amber-500/10">
+                  <AlertTriangle className="h-4 w-4 !text-amber-700 dark:!text-amber-300" />
+                  <AlertTitle className="text-amber-900 dark:text-amber-100">
+                    {t('landing.contact.form.disabledTitle')}
+                  </AlertTitle>
+                  <AlertDescription className="text-amber-800/90 dark:text-amber-100/90">
+                    <p>{t('landing.contact.form.disabledMessage')}</p>
+                    {supabaseConfigError && (
+                      <p className="mt-1 text-xs">
+                        {t('landing.contact.form.disabledAdminHint', { error: supabaseConfigError })}
+                      </p>
+                    )}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <fieldset disabled={!contactFormAvailable} className="space-y-5 disabled:opacity-70">
                 {/* Honeypot field - hidden from users, catches bots */}
                 <div className="absolute left-[-9999px]" aria-hidden="true">
                   <label htmlFor="website">Website</label>
@@ -278,11 +311,13 @@ export const ContactSection = () => {
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !contactFormAvailable}
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                 >
                   {isSubmitting ? (
                     t('landing.contact.form.sending')
+                  ) : !contactFormAvailable ? (
+                    t('landing.contact.form.unavailable')
                   ) : (
                     <>
                       {t('landing.contact.form.submit')}
@@ -290,7 +325,7 @@ export const ContactSection = () => {
                     </>
                   )}
                 </Button>
-              </div>
+              </fieldset>
 
               <p className="text-xs text-muted-foreground dark:text-muted-foreground text-center mt-6">
                 {t('landing.contact.form.privacy')}

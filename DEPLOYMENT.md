@@ -57,6 +57,8 @@
 5. Click **Environment variables** and add:
    ```
    VITE_API_URL = https://api.lation.com.mx
+   VITE_SUPABASE_URL = https://your-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY = sb_publishable_xxx
    ```
 6. Click **Save and Deploy**
 
@@ -89,6 +91,8 @@ Edit `.env`:
 ```bash
 # ===== PRODUCTION (lation.com.mx) =====
 VITE_API_URL=https://api.lation.com.mx
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
 FRONTEND_URL=https://lation.com.mx
 N8N_WEBHOOK_URL=https://n8n.lation.com.mx/webhook/contact
 N8N_WEBHOOK_SECRET=change-me
@@ -231,6 +235,8 @@ from origin 'https://lation.com.mx' has been blocked by CORS policy
 | Variable | Purpose | Example |
 |----------|---------|---------|
 | `VITE_API_URL` | Frontend API endpoint | `https://api.lation.com.mx` |
+| `VITE_SUPABASE_URL` | Frontend Supabase project URL | `https://your-project-id.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | Frontend Supabase publishable/anon key | `sb_publishable_xxx` |
 | `FRONTEND_URL` | Backend CORS allowed origin | `https://lation.com.mx` |
 | `N8N_WEBHOOK_URL` | Backend n8n webhook URL | `https://n8n.lation.com.mx/webhook/contact` |
 | `N8N_WEBHOOK_SECRET` | Shared secret header | `change-me` |

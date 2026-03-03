@@ -14,6 +14,8 @@ Add these secrets to your GitHub repository:
 CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
 CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
 VITE_API_URL=https://api.lation.com.mx
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
 ```
 
 ### How to Get Cloudflare Credentials
@@ -32,6 +34,10 @@ VITE_API_URL=https://api.lation.com.mx
 
 3. **Frontend API URL**:
    - Set to your production backend URL: `https://api.lation.com.mx`
+
+4. **Supabase frontend variables**:
+   - `VITE_SUPABASE_URL`: your Supabase project URL
+   - `VITE_SUPABASE_ANON_KEY`: your Supabase publishable/anon key
 
 ### Setup Steps
 

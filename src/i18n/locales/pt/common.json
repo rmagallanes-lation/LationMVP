@@ -240,7 +240,12 @@
       "sending": "Enviando...",
       "privacy": "Ao enviar, você concorda com nossa política de privacidade. Nunca compartilharemos suas informações.",
       "success": "Mensagem enviada com sucesso! Entraremos em contato em breve.",
-      "error": "Algo deu errado. Tente novamente."
+      "error": "Algo deu errado. Tente novamente.",
+      "unavailable": "Temporariamente indisponível",
+      "disabledTitle": "Formulário de contato temporariamente indisponível",
+      "disabledMessage": "No momento, não podemos receber novos contatos por esta página. Tente novamente mais tarde.",
+      "disabledToast": "O formulário de contato está temporariamente indisponível.",
+      "disabledAdminHint": "Detalhes de configuração: {{error}}"
     },
       "email": {
         "label": "Envie-nos um e-mail para",

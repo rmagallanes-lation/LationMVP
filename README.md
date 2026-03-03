@@ -57,7 +57,7 @@ A modern, full-featured interview scheduling and management platform built for t
 
 ## Backend Integration (n8n) — Contact Form
 
-This project includes a minimal backend in `server/` that forwards contact form submissions to an n8n webhook. Use this when you want the frontend contact form to be processed by your n8n workflows (for example, to save to Google Sheets, send emails, or push to a CRM).
+This project includes a minimal backend in `server/` that forwards contact form submissions to an n8n webhook. The landing-page contact form currently writes directly to Supabase from the frontend, so frontend Supabase env vars are also required in environments where the form should be enabled.
 
 Steps to run locally:
 
@@ -71,13 +71,20 @@ npm install
 npm run dev
 ```
 
-3. Ensure `VITE_API_URL` is set in your frontend environment (for example, in `.env.local`) to point to the backend, e.g.:
+3. Ensure Supabase frontend variables are set (for example, in `.env.local`):
+
+```
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
+```
+
+4. If you need backend routes for n8n forwarding, also set:
 
 ```
 VITE_API_URL=http://localhost:3001
 ```
 
-4. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. The frontend will POST to `${VITE_API_URL}/api/contact`.
+5. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Supabase variables are not configured, the app now keeps rendering and disables only contact submission.
 
 Docker (optional):
 
@@ -367,4 +374,3 @@ For questions, bug reports, or feature requests, please open an issue on GitHub.
 - UI components from [shadcn/ui](https://ui.shadcn.com/)
 - Icons by [Lucide](https://lucide.dev/)
 - Styling with [Tailwind CSS](https://tailwindcss.com/)
-
