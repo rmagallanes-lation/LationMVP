@@ -59,6 +59,16 @@ If the landing contact form shows `Temporarily Unavailable`, verify:
 4. After changing any env var, trigger a new deployment; env updates are not applied retroactively to already-built artifacts.
 5. Optional for preview/local debugging: set `VITE_SHOW_CONTACT_CONFIG_HINT=true` to show technical config details in the contact alert.
 
+### Vercel Resend Env Checklist (Vercel-only Notification Route)
+
+If `/api/send-notification` is enabled on Vercel, verify:
+
+1. `RESEND_API_KEY` is set in Vercel env vars.
+2. `RESEND_FROM_EMAIL` is set to a verified Resend sender.
+3. `RESEND_NOTIFICATION_TO` is set as a comma-separated recipient list.
+4. Deployments are re-triggered after env changes.
+5. Contact submission still succeeds even if notification delivery fails (non-blocking policy).
+
 ## Full Deployment (Frontend + Backend)
 
 The `deploy.yml` workflow includes both frontend and backend deployment. This requires additional secrets for server deployment.

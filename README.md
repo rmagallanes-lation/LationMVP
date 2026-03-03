@@ -86,6 +86,23 @@ VITE_API_URL=http://localhost:3001
 
 5. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Supabase variables are not configured, the app now keeps rendering and disables only contact submission.
 
+### Vercel Resend Notifications (Optional)
+
+When deployed on Vercel, the project can send a notification email after a lead is saved using `/api/send-notification` and Resend.
+
+Required Vercel environment variables:
+
+```bash
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+RESEND_FROM_EMAIL=Lation Leads <leads@lation.com.mx>
+RESEND_NOTIFICATION_TO=ops@lation.com.mx,founder@lation.com.mx
+```
+
+Behavior:
+- Lead save to Supabase is the source of truth for success.
+- Email notification is non-blocking (if it fails, user still sees success and failure is logged).
+- Non-Vercel deployments can return `404` for `/api/send-notification`; this is logged as a warning only.
+
 Docker (optional):
 
 ```
@@ -343,6 +360,7 @@ If Contact appears as `Temporarily Unavailable`:
 3. Redeploy after changing variables.
 4. Recheck the live page: submit button should return to `Send Message`.
 5. Optional: enable technical hint in non-production by setting `VITE_SHOW_CONTACT_CONFIG_HINT=true`.
+6. For Vercel email notifications, verify `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_NOTIFICATION_TO` are set, then redeploy.
 
 ## 🤝 Contributing
 

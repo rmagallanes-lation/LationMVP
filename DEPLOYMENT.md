@@ -237,6 +237,9 @@ from origin 'https://lation.com.mx' has been blocked by CORS policy
 | `VITE_API_URL` | Frontend API endpoint | `https://api.lation.com.mx` |
 | `VITE_SUPABASE_URL` | Frontend Supabase project URL | `https://your-project-id.supabase.co` |
 | `VITE_SUPABASE_ANON_KEY` | Frontend Supabase publishable/anon key | `sb_publishable_xxx` |
+| `RESEND_API_KEY` | Vercel serverless API key for Resend (Vercel-only email notifications) | `re_xxxxxxxxxxxxx` |
+| `RESEND_FROM_EMAIL` | Sender address used by Resend route (Vercel-only) | `Lation Leads <leads@lation.com.mx>` |
+| `RESEND_NOTIFICATION_TO` | Comma-separated recipients for lead notifications (Vercel-only) | `ops@lation.com.mx,founder@lation.com.mx` |
 | `FRONTEND_URL` | Backend CORS allowed origin | `https://lation.com.mx` |
 | `N8N_WEBHOOK_URL` | Backend n8n webhook URL | `https://n8n.lation.com.mx/webhook/contact` |
 | `N8N_WEBHOOK_SECRET` | Shared secret header | `change-me` |
@@ -261,6 +264,15 @@ Use this checklist whenever contact submission is disabled in the UI.
    - No contact configuration warning should be visible to users in production
 5. Optional debug hint for non-production:
    - Set `VITE_SHOW_CONTACT_CONFIG_HINT=true` in preview/local builds to show technical config details in the alert.
+6. If using Vercel email notifications (`/api/send-notification`), also set:
+   - `RESEND_API_KEY`
+   - `RESEND_FROM_EMAIL`
+   - `RESEND_NOTIFICATION_TO`
+7. Verify Vercel notification flow:
+   - Submit a lead from the site
+   - Confirm lead row is stored in Supabase
+   - Confirm notification email is delivered to each configured recipient
+   - If email fails, ensure user still sees successful submission (non-blocking behavior)
 
 ---
 
