@@ -14,7 +14,7 @@ export const supabaseConfigError = isSupabaseConfigured
 
 export const isDemoMode = import.meta.env.VITE_DEMO_MODE === "true";
 
-export const leadTableName = isDemoMode ? "lead_demo" : "leads";
+export const leadTableName = isDemoMode ? "leads_demo" : "leads";
 
 export const runtimeConfig = {
   supabaseUrl,
