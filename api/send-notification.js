@@ -30,12 +30,13 @@ function parsePayload(body) {
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const company = typeof body.company === "string" ? body.company.trim() : "";
   const message = typeof body.message === "string" ? body.message.trim() : "";
+  const isDemoMode = body.isDemoMode === true;
 
   if (!name) return { error: "name_required" };
   if (!email || !isValidEmail(email)) return { error: "email_invalid" };
   if (!message) return { error: "message_required" };
 
-  return { name, email, company, message };
+  return { name, email, company, message, isDemoMode };
 }
 
 function parseRecipients(value) {
@@ -82,7 +83,7 @@ export default async function handler(req, res) {
     const { error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL,
       to: recipients,
-      subject: `New Lead: ${parsed.name} (${parsed.company || "No company"})`,
+      subject: `${parsed.isDemoMode ? "[DEMO] " : ""}New Lead: ${parsed.name} (${parsed.company || "No company"})`,
       html: `
         <h2>New Lead Submission</h2>
         <p><strong>Name:</strong> ${safeName}</p>

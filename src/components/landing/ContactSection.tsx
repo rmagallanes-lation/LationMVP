@@ -11,13 +11,14 @@ import { createClient } from "@supabase/supabase-js";
 import { Section, SectionContainer } from "@/components/landing/Section";
 import { getContactCards } from "@/components/landing/landing-content";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { isSupabaseConfigured, leadTableName, runtimeConfig, supabaseConfigError } from "@/lib/runtime-config";
+import { isDemoMode, isSupabaseConfigured, leadTableName, runtimeConfig, supabaseConfigError } from "@/lib/runtime-config";
 
 type LeadNotificationPayload = {
   name: string;
   email: string;
   company: string | null;
   message: string | null;
+  isDemoMode: boolean;
 };
 
 async function sendLeadNotification(payload: LeadNotificationPayload) {
@@ -102,6 +103,7 @@ export const ContactSection = () => {
         email: formData.email.trim(),
         company: formData.company.trim() || null,
         message: formData.message.trim() || null,
+        isDemoMode,
       };
 
       const { error } = await supabase

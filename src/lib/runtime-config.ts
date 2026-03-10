@@ -12,7 +12,7 @@ export const supabaseConfigError = isSupabaseConfigured
   ? null
   : `Missing frontend configuration: ${missingSupabaseConfig.join(", ")}`;
 
-const isDemoMode = import.meta.env.VITE_DEMO_MODE === "true";
+export const isDemoMode = import.meta.env.VITE_DEMO_MODE === "true";
 
 export const leadTableName = isDemoMode ? "lead_demo" : "leads";
 
