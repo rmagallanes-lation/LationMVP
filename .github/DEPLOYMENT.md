@@ -16,6 +16,7 @@ CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
 VITE_API_URL=https://api.lation.com.mx
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
 ```
 
 ### How to Get Cloudflare Credentials
@@ -52,22 +53,22 @@ VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
 If the landing contact form shows `Temporarily Unavailable`, verify:
 
 1. GitHub Actions secrets exist:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
+   - `VITE_TURNSTILE_SITE_KEY`
 2. Cloudflare Pages environment variables are set for both `Preview` and `Production`.
 3. Vercel project environment variables are also set for `Preview` and `Production` if Vercel deployments are being used.
 4. After changing any env var, trigger a new deployment; env updates are not applied retroactively to already-built artifacts.
 5. Optional for preview/local debugging: set `VITE_SHOW_CONTACT_CONFIG_HINT=true` to show technical config details in the contact alert.
 
-### Vercel Resend Env Checklist (Vercel-only Notification Route)
+### Vercel Lead Route Env Checklist (`/api/lead`)
 
-If `/api/send-notification` is enabled on Vercel, verify:
+If `/api/lead` is enabled on Vercel, verify:
 
-1. `RESEND_API_KEY` is set in Vercel env vars.
-2. `RESEND_FROM_EMAIL` is set to a verified Resend sender.
-3. `RESEND_NOTIFICATION_TO` is set as a comma-separated recipient list.
-4. Deployments are re-triggered after env changes.
-5. Contact submission still succeeds even if notification delivery fails (non-blocking policy).
+1. `SUPABASE_SERVICE_ROLE_KEY` is set in Vercel env vars.
+2. `CF_TURNSTILE_SECRET` is set in Vercel env vars.
+3. `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` are set.
+4. `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_NOTIFICATION_TO` are set if email notifications are desired.
+5. Deployments are re-triggered after env changes.
+6. `/api/send-notification` now returns `410` (retired public route).
 
 ## Full Deployment (Frontend + Backend)
 
@@ -122,6 +123,10 @@ Create a `.env` file on your server:
 ```bash
 PORT=3001
 FRONTEND_URL=https://lation.com.mx
+ALLOWED_ORIGINS=https://lation.com.mx,https://www.lation.com.mx
+CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
+UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
 N8N_WEBHOOK_URL=https://n8n.lation.com.mx/webhook/contact
 ```
 
@@ -180,6 +185,6 @@ If you need to deploy manually without GitHub Actions:
 ## Security Notes
 
 - Use GitHub secrets to never expose sensitive information
-- Rotate your API tokens regularly
+- Rotate secrets every 90 days (`SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, `N8N_WEBHOOK_SECRET`)
 - Use read-only tokens where possible
 - Limit SSH key permissions to only necessary directories

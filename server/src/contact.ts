@@ -1,66 +1,104 @@
-import { Router } from 'express';
-import { z } from 'zod';
+import { Router } from "express";
+import { z } from "zod";
+import {
+  enforceRateLimit,
+  extractRequestIp,
+  getRequestId,
+  hashIdentifier,
+  logSecurityEvent,
+  verifyTurnstileToken,
+} from "./security";
 
 const router = Router();
+const routePath = "/api/contact";
+const rateWindowSeconds = 10 * 60;
+const maxRequestsPerWindow = 5;
 
 const ContactSchema = z.object({
-  name: z.string().min(1).max(100),
-  email: z.string().email(),
-  company: z.string().max(100).optional(),
-  message: z.string().min(1).max(2000),
+  name: z.string().trim().min(1).max(100),
+  email: z.string().trim().email(),
+  company: z.string().trim().max(100).optional().default(""),
+  message: z.string().trim().min(1).max(2000),
+  website: z.string().trim().max(200).optional().default(""),
+  turnstileToken: z.string().trim().min(1),
 });
 
-// Simple in-memory rate limiter (per IP): max 5 submissions per 10 minutes
-const rateWindowMs = 10 * 60 * 1000; // 10 minutes
-const maxRequestsPerWindow = 5;
-const ipMap = new Map<string, { count: number; firstTs: number }>();
+router.post("/", async (req, res) => {
+  const requestId = getRequestId(req.headers["x-request-id"]);
+  const ip = extractRequestIp(req);
+  const ipHash = hashIdentifier(ip);
+  const isProduction = process.env.NODE_ENV === "production";
 
-router.post('/', async (req, res) => {
+  const parsed = ContactSchema.safeParse(req.body);
+  if (!parsed.success) {
+    logSecurityEvent("warn", routePath, 400, "validation_error", requestId, ipHash);
+    return res.status(400).json({ error: "validation_error" });
+  }
+
+  const rateLimit = await enforceRateLimit({
+    key: `contact:${ipHash}`,
+    limit: maxRequestsPerWindow,
+    windowSeconds: rateWindowSeconds,
+    isProduction,
+  });
+
+  if (!rateLimit.ok) {
+    const statusCode = rateLimit.error === "service_unavailable" ? 503 : 429;
+    const errorCode = rateLimit.error || "rate_limited";
+    res.setHeader("Retry-After", String(rateLimit.retryAfter ?? rateWindowSeconds));
+    logSecurityEvent("warn", routePath, statusCode, errorCode, requestId, ipHash);
+    return res.status(statusCode).json({ error: errorCode });
+  }
+
+  if (parsed.data.website) {
+    logSecurityEvent("info", routePath, 200, "ok", requestId, ipHash);
+    return res.status(200).json({ ok: true });
+  }
+
+  const turnstileResult = await verifyTurnstileToken(parsed.data.turnstileToken, ip);
+  if (!turnstileResult.ok) {
+    const statusCode = turnstileResult.reason === "service_unavailable" ? 503 : 403;
+    logSecurityEvent("warn", routePath, statusCode, turnstileResult.reason, requestId, ipHash);
+    return res.status(statusCode).json({ error: turnstileResult.reason });
+  }
+
+  const n8nUrl = process.env.N8N_WEBHOOK_URL || "http://localhost:5678";
+  const n8nSecret = process.env.N8N_WEBHOOK_SECRET;
+  const timeoutMs = 5000;
+  const abortController = new AbortController();
+  const timeout = setTimeout(() => abortController.abort(), timeoutMs);
+
   try {
-    const ip = (req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '') as string;
-
-    const record = ipMap.get(ip) || { count: 0, firstTs: Date.now() };
-    const now = Date.now();
-    if (now - record.firstTs > rateWindowMs) {
-      record.count = 0;
-      record.firstTs = now;
-    }
-
-    record.count += 1;
-    ipMap.set(ip, record);
-
-    if (record.count > maxRequestsPerWindow) {
-      return res.status(429).json({ error: 'rate_limited' });
-    }
-
-    const parsed = ContactSchema.parse(req.body);
-    const n8nUrl = process.env.N8N_WEBHOOK_URL || 'http://localhost:5678';
-    const n8nSecret = process.env.N8N_WEBHOOK_SECRET;
-
-    // Forward payload to n8n webhook
     const response = await fetch(n8nUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        ...(n8nSecret ? { 'x-form-secret': n8nSecret } : {}),
+        "Content-Type": "application/json",
+        ...(n8nSecret ? { "x-form-secret": n8nSecret } : {}),
       },
-      body: JSON.stringify(parsed),
+      body: JSON.stringify({
+        name: parsed.data.name,
+        email: parsed.data.email,
+        company: parsed.data.company || "",
+        message: parsed.data.message,
+      }),
+      signal: abortController.signal,
     });
 
+    clearTimeout(timeout);
+
     if (!response.ok) {
-      const text = await response.text();
-      console.error('n8n error:', text);
-      return res.status(502).json({ error: 'n8n_forward_error', detail: text });
+      logSecurityEvent("error", routePath, 502, "upstream_error", requestId, ipHash);
+      return res.status(502).json({ error: "service_unavailable" });
     }
 
+    logSecurityEvent("info", routePath, 200, "ok", requestId, ipHash);
     return res.status(200).json({ ok: true });
-  } catch (err: unknown) {
-    if (err instanceof z.ZodError) {
-      return res.status(400).json({ error: 'validation_error', detail: err.issues });
-    }
-    console.error(err);
-    return res.status(500).json({ error: 'internal_error' });
+  } catch {
+    clearTimeout(timeout);
+    logSecurityEvent("error", routePath, 502, "upstream_error", requestId, ipHash);
+    return res.status(502).json({ error: "service_unavailable" });
   }
 });
 
 export default router;
+

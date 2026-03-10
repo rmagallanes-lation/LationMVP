@@ -57,7 +57,9 @@ A modern, full-featured interview scheduling and management platform built for t
 
 ## Backend Integration (n8n) — Contact Form
 
-This project includes a minimal backend in `server/` that forwards contact form submissions to an n8n webhook. The landing-page contact form currently writes directly to Supabase from the frontend, so frontend Supabase env vars are also required in environments where the form should be enabled.
+This project includes two hardened contact ingestion paths:
+- `POST /api/lead` (Vercel serverless): validates input, verifies Turnstile, enforces Redis-backed rate limiting, writes to Supabase using service-role credentials, and triggers non-blocking Resend notifications.
+- `POST /api/contact` (Express backend): validates input, verifies Turnstile, enforces Redis-backed rate limiting, and forwards to n8n with a timeout and shared secret header.
 
 Steps to run locally:
 
@@ -71,11 +73,16 @@ npm install
 npm run dev
 ```
 
-3. Ensure Supabase frontend variables are set (for example, in `.env.local`):
+3. Set required frontend and server variables:
 
 ```
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
+CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+ALLOWED_ORIGINS=http://localhost:5173
 ```
 
 4. If you need backend routes for n8n forwarding, also set:
@@ -84,11 +91,11 @@ VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
 VITE_API_URL=http://localhost:3001
 ```
 
-5. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Supabase variables are not configured, the app now keeps rendering and disables only contact submission.
+5. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Turnstile config is missing, the app keeps rendering and disables only contact submission.
 
 ### Vercel Resend Notifications (Optional)
 
-When deployed on Vercel, the project can send a notification email after a lead is saved using `/api/send-notification` and Resend.
+When deployed on Vercel, `/api/lead` can send a notification email after a lead is saved.
 
 Required Vercel environment variables:
 
@@ -100,8 +107,8 @@ RESEND_NOTIFICATION_TO=ops@lation.com.mx,founder@lation.com.mx
 
 Behavior:
 - Lead save to Supabase is the source of truth for success.
-- Email notification is non-blocking (if it fails, user still sees success and failure is logged).
-- Non-Vercel deployments can return `404` for `/api/send-notification`; this is logged as a warning only.
+- Email notification is non-blocking (if it fails, user still sees success and only operational metadata is logged).
+- `/api/send-notification` is retired and now returns `410`.
 
 Docker (optional):
 
@@ -113,7 +120,7 @@ docker compose up --build
 Notes:
 - The backend will forward validated JSON to the `N8N_WEBHOOK_URL` environment variable (defaults to `http://localhost:5678`).
 - If n8n runs on your host and the backend runs in Docker, set `N8N_WEBHOOK_URL=http://host.docker.internal:5678` so the container can reach host n8n.
-- The backend performs schema validation (Zod) and a simple in-memory rate limiter (5 requests per 10 minutes per IP). Adjust in `server/src/contact.ts` as needed.
+- The backend performs schema validation (Zod), Turnstile verification, and rate limiting (5 requests per 10 minutes per IP hash).
 
 Integration test & curl examples
 
@@ -122,7 +129,7 @@ Quick curl test (replace values as needed):
 ```bash
 curl -X POST http://localhost:3001/api/contact \
    -H "Content-Type: application/json" \
-   -d '{"name":"Acme Corp","email":"hello@acme.test","company":"Acme","message":"Hello from curl"}'
+   -d '{"name":"Acme Corp","email":"hello@acme.test","company":"Acme","message":"Hello from curl","turnstileToken":"token","website":""}'
 ```
 
 Expected responses:
@@ -135,14 +142,14 @@ If you prefer a small Node-based smoke test, run this from the repo root (requir
 
 ```bash
 # from repo root
-node -e "(async()=>{const res=await fetch('http://localhost:3001/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Test',email:'test@example.com',company:'Acme',message:'Hello'})});console.log(await res.text());})()"
+node -e "(async()=>{const res=await fetch('http://localhost:3001/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Test',email:'test@example.com',company:'Acme',message:'Hello',turnstileToken:'token',website:''})});console.log(await res.text());})()"
 ```
 
 Security & production notes
 
-- Use a persistent datastore and proper rate limiting for production (the current in-memory limiter is temporary).
-- Protect the backend with a secret or token before exposing `N8N_WEBHOOK_URL` in production; you can add a shared secret header that n8n checks.
-- Consider adding CAPTCHA on the frontend or verifying an HMAC signature from the frontend for stronger spam protection.
+- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, and `N8N_WEBHOOK_SECRET` server-side only.
+- Rotate sensitive secrets every 90 days.
+- Apply the migration in `supabase/migrations/20260309120000_harden_leads_rls.sql` to enforce RLS and column constraints for `public.leads`.
 
 
 ## 📋 Available Scripts
@@ -336,6 +343,7 @@ Add these in Cloudflare Pages **Environment Variables** for both Preview and Pro
 ```bash
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
 ```
 
 If you deploy through GitHub Actions, add the same keys to repository secrets as well.
@@ -355,12 +363,13 @@ For more details, refer to the [Cloudflare Pages Documentation](https://develope
 
 If Contact appears as `Temporarily Unavailable`:
 
-1. Ensure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set in the active deploy platform (Vercel/Cloudflare).
-2. Ensure the same keys are set in GitHub Actions secrets when using workflow-based deploys.
+1. Ensure `VITE_TURNSTILE_SITE_KEY` is set in the active deploy platform (Vercel/Cloudflare).
+2. Ensure the same key is set in GitHub Actions secrets when using workflow-based deploys.
 3. Redeploy after changing variables.
 4. Recheck the live page: submit button should return to `Send Message`.
 5. Optional: enable technical hint in non-production by setting `VITE_SHOW_CONTACT_CONFIG_HINT=true`.
-6. For Vercel email notifications, verify `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_NOTIFICATION_TO` are set, then redeploy.
+6. For Vercel lead ingestion, verify server-side secrets are set: `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.
+7. For Vercel email notifications, verify `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_NOTIFICATION_TO` are set, then redeploy.
 
 ## 🤝 Contributing
 
