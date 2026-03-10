@@ -40,7 +40,7 @@ export async function sendLeadNotification(payload, requestId) {
     const { error } = await resend.emails.send({
       from: fromEmail,
       to: recipients,
-      subject: `New Lead: ${payload.name} (${payload.company || "No company"})`,
+      subject: `${process.env.VITE_DEMO_MODE === "true" ? "[DEMO] " : ""}New Lead: ${payload.name} (${payload.company || "No company"})`,
       html: `
         <h2>New Lead Submission</h2>
         <p><strong>Name:</strong> ${safeName}</p>

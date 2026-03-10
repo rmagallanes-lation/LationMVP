@@ -90,7 +90,9 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: "service_unavailable" });
   }
 
-  const { error } = await supabase.from("leads").insert({
+  const isDemo = process.env.VITE_DEMO_MODE === "true";
+  const targetTable = isDemo ? "leads_demo" : "leads";
+  const { error } = await supabase.from(targetTable).insert({
     name: parsedPayload.value.name,
     email: parsedPayload.value.email,
     company: parsedPayload.value.company,

@@ -11,6 +11,10 @@ export const contactConfigError = isContactFormConfigured
   ? null
   : `Missing frontend configuration: ${missingContactConfig.join(", ")}`;
 
+export const isDemoMode = import.meta.env.VITE_DEMO_MODE === "true";
+
+export const leadTableName = isDemoMode ? "leads_demo" : "leads";
+
 export const runtimeConfig = {
   turnstileSiteKey,
   apiUrl,
