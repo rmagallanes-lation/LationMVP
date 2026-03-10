@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
-import { sendLeadNotification } from "./_lib/notify";
-import { enforceRateLimit } from "./_lib/rate-limit";
+import { sendLeadNotification } from "./_lib/notify.js";
+import { enforceRateLimit } from "./_lib/rate-limit.js";
 import {
   createRequestContext,
   getAllowedOrigins,
@@ -9,7 +9,7 @@ import {
   logEvent,
   validateLeadPayload,
   verifyTurnstileToken,
-} from "./_lib/security";
+} from "./_lib/security.js";
 
 const RATE_LIMIT = 5;
 const RATE_WINDOW_SECONDS = 10 * 60;
