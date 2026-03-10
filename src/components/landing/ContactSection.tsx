@@ -11,7 +11,7 @@ import { createClient } from "@supabase/supabase-js";
 import { Section, SectionContainer } from "@/components/landing/Section";
 import { getContactCards } from "@/components/landing/landing-content";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { isSupabaseConfigured, runtimeConfig, supabaseConfigError } from "@/lib/runtime-config";
+import { isSupabaseConfigured, leadTableName, runtimeConfig, supabaseConfigError } from "@/lib/runtime-config";
 
 type LeadNotificationPayload = {
   name: string;
@@ -105,7 +105,7 @@ export const ContactSection = () => {
       };
 
       const { error } = await supabase
-        .from('leads')
+        .from(leadTableName)
         .insert({
           name: leadPayload.name,
           email: leadPayload.email,
