@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import contactRouter from "./contact";
+import leadRouter from "./lead";
 import { getAllowedOrigins } from "./security";
 
 dotenv.config();
@@ -43,6 +44,7 @@ app.use(
 );
 app.use(express.json({ limit: "10kb" }));
 
+app.use("/api/lead", leadRouter);
 app.use("/api/contact", contactRouter);
 app.get("/_health", (_req, res) => res.json({ status: "ok" }));
 
@@ -61,4 +63,3 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-

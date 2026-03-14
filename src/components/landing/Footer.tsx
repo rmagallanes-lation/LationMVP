@@ -78,9 +78,21 @@ export const Footer = () => {
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-150">
-                    {link.label}
-                  </a>
+                  {link.href.startsWith("/") ? (
+                    <Link
+                      to={link.href}
+                      className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-150"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-150"
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

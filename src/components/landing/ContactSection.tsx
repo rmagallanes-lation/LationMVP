@@ -1,16 +1,17 @@
 import { useInView } from "framer-motion";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertTriangle, Send } from "lucide-react";
+import { AlertTriangle, Send, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Section, SectionContainer } from "@/components/landing/Section";
 import { getContactCards } from "@/components/landing/landing-content";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { contactConfigError, isContactFormConfigured, runtimeConfig } from "@/lib/runtime-config";
-import { TurnstileWidget } from "@/components/landing/TurnstileWidget";
+import { TurnstileWidget, type TurnstileStatus } from "@/components/landing/TurnstileWidget";
 
 function resolveLeadEndpoint() {
   const apiUrl = runtimeConfig.apiUrl?.trim();
@@ -19,6 +20,19 @@ function resolveLeadEndpoint() {
   }
 
   return `${apiUrl.replace(/\/+$/, "")}/api/contact`;
+}
+
+async function extractApiErrorCode(response: Response) {
+  try {
+    const payload = await response.json();
+    if (payload && typeof payload === "object" && typeof payload.error === "string") {
+      return payload.error;
+    }
+  } catch {
+    // no-op
+  }
+
+  return "";
 }
 
 export const ContactSection = () => {
@@ -31,6 +45,7 @@ export const ContactSection = () => {
     import.meta.env.DEV || import.meta.env.VITE_SHOW_CONTACT_CONFIG_HINT === "true";
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileStatus, setTurnstileStatus] = useState<TurnstileStatus>("idle");
   const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
   const leadEndpoint = resolveLeadEndpoint();
   const [formData, setFormData] = useState({
@@ -45,35 +60,56 @@ export const ContactSection = () => {
     setTurnstileToken(token);
   }, []);
 
+  const isCaptchaReady = contactFormAvailable && turnstileStatus === "ready" && Boolean(turnstileToken);
+
+  const turnstileStatusText = useMemo(() => {
+    if (!contactFormAvailable) {
+      return "";
+    }
+
+    if (turnstileStatus === "ready") {
+      return t("landing.contact.form.captchaReady");
+    }
+
+    if (turnstileStatus === "expired") {
+      return t("landing.contact.form.captchaExpired");
+    }
+
+    if (turnstileStatus === "error") {
+      return t("landing.contact.form.captchaError");
+    }
+
+    return t("landing.contact.form.captchaLoading");
+  }, [contactFormAvailable, t, turnstileStatus]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
     setIsSubmitting(true);
 
     if (!contactFormAvailable) {
-      toast.error(t('landing.contact.form.disabledToast'));
+      toast.error(t("landing.contact.form.disabledToast"));
       setIsSubmitting(false);
       return;
     }
 
-    // Honeypot check for spam
+    // Honeypot check for spam.
     const honeypot = formData.website.trim();
     if (honeypot) {
-      toast.success(t('landing.contact.form.success'));
+      toast.success(t("landing.contact.form.success"));
       setFormData({ name: "", email: "", company: "", message: "", website: "" });
       setIsSubmitting(false);
       return;
     }
 
-    // Validate required fields
     if (!formData.name.trim() || !formData.email.trim()) {
-      toast.error(t('landing.contact.form.error'));
+      toast.error(t("landing.contact.form.error"));
       setIsSubmitting(false);
       return;
     }
 
-    if (!turnstileToken) {
-      toast.error(t('landing.contact.form.error'));
+    if (!isCaptchaReady) {
+      toast.error(t("landing.contact.form.captchaRequired"));
       setIsSubmitting(false);
       return;
     }
@@ -97,18 +133,34 @@ export const ContactSection = () => {
       });
 
       if (!response.ok) {
+        const errorCode = await extractApiErrorCode(response);
         if (response.status === 403 || response.status === 429) {
           setTurnstileResetSignal((current) => current + 1);
         }
-        throw new Error("lead_submission_failed");
+
+        if (response.status === 429 || errorCode === "rate_limited") {
+          toast.error(t("landing.contact.form.rateLimited"));
+        } else if (response.status === 503 || errorCode === "service_unavailable") {
+          toast.error(t("landing.contact.form.verificationUnavailable"));
+        } else if (
+          response.status === 403 ||
+          errorCode === "bot_verification_failed" ||
+          errorCode === "invalid_turnstile_action" ||
+          errorCode === "invalid_turnstile_hostname"
+        ) {
+          toast.error(t("landing.contact.form.verificationFailed"));
+        } else {
+          toast.error(t("landing.contact.form.error"));
+        }
+
+        return;
       }
 
-      toast.success(t('landing.contact.form.success'));
+      toast.success(t("landing.contact.form.success"));
       setFormData({ name: "", email: "", company: "", message: "", website: "" });
       setTurnstileResetSignal((current) => current + 1);
-    } catch (error) {
-      void error;
-      toast.error(t('landing.contact.form.error'));
+    } catch {
+      toast.error(t("landing.contact.form.error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -122,18 +174,13 @@ export const ContactSection = () => {
     <Section id="contact" tone="muted">
       <SectionContainer ref={ref}>
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Left Content */}
-          <div
-            style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease" }}
-          >
+          <div style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease" }}>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 leading-tight">
-              {t('landing.contact.titlePrimary')}{" "}
-              <span className="text-accent">{t('landing.contact.titleAccent')}</span>
+              {t("landing.contact.titlePrimary")}{" "}
+              <span className="text-accent">{t("landing.contact.titleAccent")}</span>
             </h2>
 
-            <p className="text-base text-muted-foreground mb-8">
-              {t('landing.contact.subtitle')}
-            </p>
+            <p className="text-base text-muted-foreground mb-8">{t("landing.contact.subtitle")}</p>
 
             <div className="space-y-3">
               {contactCards.map((card) => {
@@ -177,29 +224,21 @@ export const ContactSection = () => {
             </div>
           </div>
 
-          {/* Right Content - Form */}
-          <div
-            style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease 75ms" }}
-          >
-            <form
-              onSubmit={handleSubmit}
-              className="bg-card rounded-lg p-7 border border-border"
-            >
-              <p className="text-lg font-bold text-foreground mb-5">
-                {t('landing.contact.form.title')}
-              </p>
+          <div style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease 75ms" }}>
+            <form onSubmit={handleSubmit} className="bg-card rounded-lg p-7 border border-border">
+              <p className="text-lg font-bold text-foreground mb-5">{t("landing.contact.form.title")}</p>
 
               {!contactFormAvailable && (
                 <Alert className="mb-5 border-amber-500/40 bg-amber-500/10">
                   <AlertTriangle className="h-4 w-4 !text-amber-700 dark:!text-amber-300" />
                   <AlertTitle className="text-amber-900 dark:text-amber-100">
-                    {t('landing.contact.form.disabledTitle')}
+                    {t("landing.contact.form.disabledTitle")}
                   </AlertTitle>
                   <AlertDescription className="text-amber-800/90 dark:text-amber-100/90">
-                    <p>{t('landing.contact.form.disabledMessage')}</p>
+                    <p>{t("landing.contact.form.disabledMessage")}</p>
                     {contactConfigError && showTechnicalConfigHint && (
                       <p className="mt-1 text-xs">
-                        {t('landing.contact.form.disabledAdminHint', { error: contactConfigError })}
+                        {t("landing.contact.form.disabledAdminHint", { error: contactConfigError })}
                       </p>
                     )}
                   </AlertDescription>
@@ -207,7 +246,6 @@ export const ContactSection = () => {
               )}
 
               <fieldset disabled={!contactFormAvailable} className="space-y-4 disabled:opacity-70">
-                {/* Honeypot field - hidden from users, catches bots */}
                 <div className="absolute left-[-9999px]" aria-hidden="true">
                   <label htmlFor="website">Website</label>
                   <Input
@@ -223,20 +261,20 @@ export const ContactSection = () => {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1.5">
-                      {t('landing.contact.form.name')}
+                      {t("landing.contact.form.name")}
                     </label>
                     <Input
                       id="name"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder={t('landing.contact.form.namePlaceholder')}
+                      placeholder={t("landing.contact.form.namePlaceholder")}
                       required
                     />
                   </div>
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
-                      {t('landing.contact.form.email')}
+                      {t("landing.contact.form.email")}
                     </label>
                     <Input
                       id="email"
@@ -244,7 +282,7 @@ export const ContactSection = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder={t('landing.contact.form.emailPlaceholder')}
+                      placeholder={t("landing.contact.form.emailPlaceholder")}
                       required
                     />
                   </div>
@@ -252,27 +290,27 @@ export const ContactSection = () => {
 
                 <div>
                   <label htmlFor="company" className="block text-sm font-medium text-foreground mb-1.5">
-                    {t('landing.contact.form.company')}
+                    {t("landing.contact.form.company")}
                   </label>
                   <Input
                     id="company"
                     name="company"
                     value={formData.company}
                     onChange={handleChange}
-                    placeholder={t('landing.contact.form.companyPlaceholder')}
+                    placeholder={t("landing.contact.form.companyPlaceholder")}
                   />
                 </div>
 
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium text-foreground mb-1.5">
-                    {t('landing.contact.form.message')}
+                    {t("landing.contact.form.message")}
                   </label>
                   <Textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    placeholder={t('landing.contact.form.messagePlaceholder')}
+                    placeholder={t("landing.contact.form.messagePlaceholder")}
                     rows={4}
                     required
                     className="resize-none"
@@ -280,26 +318,54 @@ export const ContactSection = () => {
                 </div>
 
                 {runtimeConfig.turnstileSiteKey && (
-                  <TurnstileWidget
-                    siteKey={runtimeConfig.turnstileSiteKey}
-                    onTokenChange={handleTurnstileTokenChange}
-                    resetSignal={turnstileResetSignal}
-                  />
+                  <>
+                    <TurnstileWidget
+                      siteKey={runtimeConfig.turnstileSiteKey}
+                      action="contact_form"
+                      onTokenChange={handleTurnstileTokenChange}
+                      onStateChange={setTurnstileStatus}
+                      resetSignal={turnstileResetSignal}
+                    />
+                    <p className="text-xs text-muted-foreground">{turnstileStatusText}</p>
+                  </>
                 )}
+
+                <div className="rounded-lg border border-border/60 bg-muted/40 p-4">
+                  <div className="flex items-start gap-2">
+                    <ShieldCheck className="h-4 w-4 text-accent mt-0.5" />
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">
+                        {t("landing.contact.form.security.title")}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {t("landing.contact.form.security.description")}
+                      </p>
+                      <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                        <li>{t("landing.contact.form.security.items.turnstile")}</li>
+                        <li>{t("landing.contact.form.security.items.rateLimit")}</li>
+                        <li>{t("landing.contact.form.security.items.honeypot")}</li>
+                        <li>{t("landing.contact.form.security.items.originChecks")}</li>
+                      </ul>
+                      <Link to="/security" className="inline-block mt-2 text-xs text-accent hover:underline">
+                        {t("landing.contact.form.security.link")}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
 
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={isSubmitting || !contactFormAvailable || !turnstileToken}
+                  disabled={isSubmitting || !contactFormAvailable || !isCaptchaReady}
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
                 >
                   {isSubmitting ? (
-                    t('landing.contact.form.sending')
+                    t("landing.contact.form.sending")
                   ) : !contactFormAvailable ? (
-                    t('landing.contact.form.unavailable')
+                    t("landing.contact.form.unavailable")
                   ) : (
                     <>
-                      {t('landing.contact.form.submit')}
+                      {t("landing.contact.form.submit")}
                       <Send className="w-4 h-4 ml-2" />
                     </>
                   )}
@@ -307,7 +373,10 @@ export const ContactSection = () => {
               </fieldset>
 
               <p className="text-xs text-muted-foreground text-center mt-5">
-                {t('landing.contact.form.privacy')}
+                {t("landing.contact.form.privacy")}{" "}
+                <Link to="/security" className="text-accent hover:underline">
+                  {t("landing.contact.form.security.linkShort")}
+                </Link>
               </p>
             </form>
           </div>

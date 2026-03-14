@@ -13,6 +13,7 @@ import {
 
 const RATE_LIMIT = 5;
 const RATE_WINDOW_SECONDS = 10 * 60;
+const ALLOWED_LEAD_TABLES = new Set(["leads", "leads_demo", "leads_dev"]);
 
 function getSupabaseAdminClient() {
   const supabaseUrl = process.env.SUPABASE_URL?.trim() || process.env.VITE_SUPABASE_URL?.trim();
@@ -28,6 +29,23 @@ function getSupabaseAdminClient() {
       persistSession: false,
     },
   });
+}
+
+function resolveLeadTargetTable() {
+  const configuredTable = process.env.LEADS_TARGET_TABLE?.trim();
+  if (configuredTable) {
+    if (!ALLOWED_LEAD_TABLES.has(configuredTable)) {
+      return { ok: false, error: "invalid_target_table" };
+    }
+
+    return { ok: true, value: configuredTable };
+  }
+
+  if (process.env.VITE_DEMO_MODE === "true") {
+    return { ok: true, value: "leads_demo" };
+  }
+
+  return { ok: true, value: "leads" };
 }
 
 export default async function handler(req, res) {
@@ -77,7 +95,12 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  const turnstileResult = await verifyTurnstileToken(parsedPayload.value.turnstileToken, context.ip);
+  const requestHost = Array.isArray(req.headers.host) ? req.headers.host[0] : req.headers.host;
+  const turnstileResult = await verifyTurnstileToken(
+    parsedPayload.value.turnstileToken,
+    context.ip,
+    requestHost || ""
+  );
   if (!turnstileResult.ok) {
     const statusCode = turnstileResult.reason === "service_unavailable" ? 503 : 403;
     logEvent("warn", context, statusCode, turnstileResult.reason);
@@ -90,8 +113,13 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: "service_unavailable" });
   }
 
-  const isDemo = process.env.VITE_DEMO_MODE === "true";
-  const targetTable = isDemo ? "leads_demo" : "leads";
+  const targetTableResult = resolveLeadTargetTable();
+  if (!targetTableResult.ok) {
+    logEvent("error", context, 503, targetTableResult.error);
+    return res.status(503).json({ error: "service_unavailable" });
+  }
+
+  const targetTable = targetTableResult.value;
   const { error } = await supabase.from(targetTable).insert({
     name: parsedPayload.value.name,
     email: parsedPayload.value.email,
@@ -111,4 +139,3 @@ export default async function handler(req, res) {
   logEvent("info", context, 200, "ok");
   return res.status(200).json({ ok: true });
 }
-

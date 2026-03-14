@@ -1,6 +1,8 @@
 import { createHash, randomUUID } from "node:crypto";
 
 const MAX_BODY_BYTES = 10 * 1024;
+const DEFAULT_TURNSTILE_ACTION = "contact_form";
+const DEFAULT_TURNSTILE_TIMEOUT_MS = 5000;
 const DEFAULT_ALLOWED_ORIGINS = [
   "https://lation.com.mx",
   "https://www.lation.com.mx",
@@ -15,6 +17,65 @@ function parseAllowedOrigins(rawValue) {
     .map((value) => value.trim())
     .filter(Boolean);
   return values.length > 0 ? values : DEFAULT_ALLOWED_ORIGINS;
+}
+
+function parseCsv(rawValue) {
+  if (!rawValue) return [];
+  return rawValue
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+}
+
+function normalizeHostname(value) {
+  if (!value || typeof value !== "string") return "";
+  let candidate = value.trim();
+  if (!candidate) return "";
+
+  if (!candidate.includes("://")) {
+    candidate = `https://${candidate}`;
+  }
+
+  try {
+    return new URL(candidate).hostname.toLowerCase().replace(/\.$/, "");
+  } catch {
+    return "";
+  }
+}
+
+function resolveTurnstileExpectedAction() {
+  return process.env.CF_TURNSTILE_EXPECTED_ACTION?.trim() || DEFAULT_TURNSTILE_ACTION;
+}
+
+function resolveTurnstileTimeoutMs() {
+  const raw = Number(process.env.CF_TURNSTILE_VERIFY_TIMEOUT_MS);
+  if (!Number.isFinite(raw)) return DEFAULT_TURNSTILE_TIMEOUT_MS;
+  return Math.min(Math.max(raw, 1000), 15000);
+}
+
+function resolveTurnstileHostnames(requestHost) {
+  const explicitHostnames = parseCsv(process.env.CF_TURNSTILE_ALLOWED_HOSTNAMES)
+    .map((value) => normalizeHostname(value))
+    .filter(Boolean);
+  if (explicitHostnames.length > 0) {
+    return explicitHostnames;
+  }
+
+  const origins = parseAllowedOrigins(process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL);
+  const hostnames = origins
+    .map((origin) => normalizeHostname(origin))
+    .filter(Boolean);
+
+  const requestHostname = normalizeHostname(requestHost || "");
+  if (requestHostname) {
+    hostnames.push(requestHostname);
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    hostnames.push("localhost", "127.0.0.1");
+  }
+
+  return [...new Set(hostnames)];
 }
 
 export function getAllowedOrigins() {
@@ -136,11 +197,17 @@ export function validateLeadPayload(rawBody) {
   };
 }
 
-export async function verifyTurnstileToken(token, ip) {
+export async function verifyTurnstileToken(token, ip, requestHost = "") {
   const secret = process.env.CF_TURNSTILE_SECRET?.trim();
   if (!secret) {
     return { ok: false, reason: "service_unavailable" };
   }
+
+  const expectedAction = resolveTurnstileExpectedAction();
+  const expectedHostnames = resolveTurnstileHostnames(requestHost);
+  const timeoutMs = resolveTurnstileTimeoutMs();
+  const abortController = new AbortController();
+  const timeout = setTimeout(() => abortController.abort(), timeoutMs);
 
   try {
     const body = new URLSearchParams({
@@ -154,6 +221,7 @@ export async function verifyTurnstileToken(token, ip) {
     const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
       body,
+      signal: abortController.signal,
     });
 
     if (!response.ok) {
@@ -161,13 +229,26 @@ export async function verifyTurnstileToken(token, ip) {
     }
 
     const parsed = await response.json();
-    if (parsed?.success === true) {
-      return { ok: true };
+    if (parsed?.success !== true) {
+      return { ok: false, reason: "bot_verification_failed" };
     }
 
-    return { ok: false, reason: "bot_verification_failed" };
+    const action = typeof parsed.action === "string" ? parsed.action.trim() : "";
+    if (expectedAction && action !== expectedAction) {
+      return { ok: false, reason: "invalid_turnstile_action" };
+    }
+
+    const hostname = normalizeHostname(
+      typeof parsed.hostname === "string" ? parsed.hostname : ""
+    );
+    if (expectedHostnames.length > 0 && (!hostname || !expectedHostnames.includes(hostname))) {
+      return { ok: false, reason: "invalid_turnstile_hostname" };
+    }
+
+    return { ok: true };
   } catch {
     return { ok: false, reason: "service_unavailable" };
+  } finally {
+    clearTimeout(timeout);
   }
 }
-

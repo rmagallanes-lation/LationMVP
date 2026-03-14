@@ -57,7 +57,7 @@
 5. Click **Environment variables** and add:
    ```
    VITE_API_URL = https://api.lation.com.mx
-   VITE_SUPABASE_URL = https://your-project-id.supabase.co
+   VITE_SUPABASE_URL = https://ymsjdxihduwlywcuwrld.supabase.co
    VITE_SUPABASE_ANON_KEY = sb_publishable_xxx
    VITE_TURNSTILE_SITE_KEY = 0x4AAAAAAAxxxxxxxxxxxxxx
    ```
@@ -92,20 +92,55 @@ Edit `.env`:
 ```bash
 # ===== PRODUCTION (lation.com.mx) =====
 VITE_API_URL=https://api.lation.com.mx
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
 VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
-SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+LEADS_TARGET_TABLE=leads
 CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
+CF_TURNSTILE_EXPECTED_ACTION=contact_form
+CF_TURNSTILE_ALLOWED_HOSTNAMES=lation.com.mx,www.lation.com.mx
+CF_TURNSTILE_VERIFY_TIMEOUT_MS=5000
 UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
 UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+INTERNAL_CRAWL_API_KEY=change-me
+CF_BROWSER_RENDERING_ACCOUNT_ID=your-cloudflare-account-id
+CF_BROWSER_RENDERING_API_TOKEN=your-cloudflare-browser-rendering-token
 ALLOWED_ORIGINS=https://lation.com.mx,https://www.lation.com.mx
 FRONTEND_URL=https://lation.com.mx
 N8N_WEBHOOK_URL=https://n8n.lation.com.mx/webhook/contact
 N8N_WEBHOOK_SECRET=change-me
 PORT=3001
 ```
+
+If you deploy the `DEV` branch on Vercel Preview, keep `VITE_API_URL` unset so the branch uses the local `POST /api/lead` serverless path instead of the external Express `/api/contact` backend.
+
+Add these Vercel Preview variables for `DEV`:
+
+```bash
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
+VITE_SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
+SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+LEADS_TARGET_TABLE=leads_dev
+CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
+CF_TURNSTILE_EXPECTED_ACTION=contact_form
+CF_TURNSTILE_ALLOWED_HOSTNAMES=localhost,127.0.0.1,<your-dev-preview-host>
+CF_TURNSTILE_VERIFY_TIMEOUT_MS=5000
+UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+RESEND_FROM_EMAIL=Lation Leads <leads@lation.com.mx>
+RESEND_NOTIFICATION_TO=ops@lation.com.mx,founder@lation.com.mx
+```
+
+Notes:
+- `https://ymsjdxihduwlywcuwrld.supabase.co/leads_dev` is not an API key and not a direct table endpoint for this architecture.
+- The correct split is `SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co` plus `LEADS_TARGET_TABLE=leads_dev`.
+- Hosted builds now fail early when `VITE_TURNSTILE_SITE_KEY` is missing. If `VITE_API_URL` is unset and `/api/lead` is active, hosted builds also require the server-side lead env set above.
+- Resend subjects are prefixed with `[DEV]` when `LEADS_TARGET_TABLE=leads_dev`.
 
 Then start the backend:
 
@@ -209,6 +244,21 @@ curl -X POST https://api.lation.com.mx/api/contact \
 # Expected response: {"ok":true}
 ```
 
+### Test Internal Crawl API
+```bash
+curl -X POST https://lation.com.mx/api/crawl \
+  -H "Content-Type: application/json" \
+  -H "x-internal-api-key: $INTERNAL_CRAWL_API_KEY" \
+  -d '{"url":"https://blog.cloudflare.com/","limit":25,"maxDepth":2,"outputFormat":"markdown"}'
+
+# Expected response: {"jobId":"...","status":"queued","pollUrl":"/api/crawl?jobId=..."}
+```
+
+```bash
+curl "https://lation.com.mx/api/crawl?jobId=<job-id>" \
+  -H "x-internal-api-key: $INTERNAL_CRAWL_API_KEY"
+```
+
 ## Troubleshooting
 
 ### Backend Can't Reach n8n (502 Error)
@@ -245,14 +295,21 @@ from origin 'https://lation.com.mx' has been blocked by CORS policy
 | Variable | Purpose | Example |
 |----------|---------|---------|
 | `VITE_API_URL` | Frontend API endpoint | `https://api.lation.com.mx` |
-| `VITE_SUPABASE_URL` | Frontend Supabase project URL | `https://your-project-id.supabase.co` |
+| `VITE_SUPABASE_URL` | Frontend Supabase project URL | `https://ymsjdxihduwlywcuwrld.supabase.co` |
 | `VITE_SUPABASE_ANON_KEY` | Frontend Supabase publishable/anon key | `sb_publishable_xxx` |
 | `VITE_TURNSTILE_SITE_KEY` | Frontend Turnstile widget site key | `0x4AAAAAAAxxxxxxxxxxxxxx` |
-| `SUPABASE_URL` | Server-side Supabase URL used by `/api/lead` | `https://your-project-id.supabase.co` |
+| `SUPABASE_URL` | Server-side Supabase URL used by `/api/lead` | `https://ymsjdxihduwlywcuwrld.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-side Supabase service role key used by `/api/lead` | `eyJ...` |
+| `LEADS_TARGET_TABLE` | Server-side lead table selector: `leads`, `leads_demo`, or `leads_dev` | `leads_dev` |
 | `CF_TURNSTILE_SECRET` | Server-side Turnstile verification secret | `0x4AAAAAAAxxxxxxxxxxxxxx-secret` |
+| `CF_TURNSTILE_EXPECTED_ACTION` | Expected Turnstile action checked server-side | `contact_form` |
+| `CF_TURNSTILE_ALLOWED_HOSTNAMES` | Allowed hostnames for Turnstile token hostname verification | `lation.com.mx,www.lation.com.mx` |
+| `CF_TURNSTILE_VERIFY_TIMEOUT_MS` | Turnstile verification timeout in milliseconds | `5000` |
 | `UPSTASH_REDIS_REST_URL` | Upstash Redis REST endpoint for distributed rate limiting | `https://your-instance.upstash.io` |
 | `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST auth token | `A...` |
+| `INTERNAL_CRAWL_API_KEY` | Shared key required by internal `/api/crawl` endpoint | `change-me` |
+| `CF_BROWSER_RENDERING_ACCOUNT_ID` | Cloudflare account id used for Browser Rendering crawl | `your-cloudflare-account-id` |
+| `CF_BROWSER_RENDERING_API_TOKEN` | Cloudflare API token with Browser Rendering crawl permissions | `your-cloudflare-browser-rendering-token` |
 | `ALLOWED_ORIGINS` | Exact origin allow-list for API requests | `https://lation.com.mx,https://www.lation.com.mx` |
 | `RESEND_API_KEY` | Resend API key for non-blocking lead notifications | `re_xxxxxxxxxxxxx` |
 | `RESEND_FROM_EMAIL` | Sender address used by lead notifications | `Lation Leads <leads@lation.com.mx>` |
@@ -281,22 +338,30 @@ Use this checklist whenever contact submission is disabled in the UI.
 5. Optional debug hint for non-production:
    - Set `VITE_SHOW_CONTACT_CONFIG_HINT=true` in preview/local builds to show technical config details in the alert.
 6. If using Vercel `/api/lead`, also set server-side secrets:
+   - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
+   - `LEADS_TARGET_TABLE`
    - `CF_TURNSTILE_SECRET`
+   - `CF_TURNSTILE_EXPECTED_ACTION`
+   - `CF_TURNSTILE_ALLOWED_HOSTNAMES`
    - `UPSTASH_REDIS_REST_URL`
    - `UPSTASH_REDIS_REST_TOKEN`
 7. If using Vercel email notifications, also set:
    - `RESEND_API_KEY`
    - `RESEND_FROM_EMAIL`
    - `RESEND_NOTIFICATION_TO`
-8. Verify Vercel notification flow:
+8. If using internal Cloudflare crawl jobs, also set:
+   - `INTERNAL_CRAWL_API_KEY`
+   - `CF_BROWSER_RENDERING_ACCOUNT_ID`
+   - `CF_BROWSER_RENDERING_API_TOKEN`
+9. Verify Vercel notification flow:
    - Submit a lead from the site
    - Confirm lead row is stored in Supabase
    - Confirm notification email is delivered to each configured recipient
    - If email fails, ensure user still sees successful submission (non-blocking behavior)
-9. Rotate `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, and `N8N_WEBHOOK_SECRET` every 90 days.
-10. Apply `supabase/migrations/20260309120000_harden_leads_rls.sql` to enforce RLS and input-length constraints on `public.leads`.
+10. Rotate `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, `N8N_WEBHOOK_SECRET`, `INTERNAL_CRAWL_API_KEY`, and `CF_BROWSER_RENDERING_API_TOKEN` every 90 days.
+11. Apply `supabase/migrations/20260309120000_harden_leads_rls.sql` and `supabase/migrations/20260313213000_align_leads_tables_rls.sql` to enforce RLS and input-length constraints on `public.leads`, `public.leads_demo`, and `public.leads_dev`.
 
 ---
 
-**Last Updated:** March 9, 2026
+**Last Updated:** March 13, 2026

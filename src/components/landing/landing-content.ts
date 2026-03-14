@@ -111,7 +111,7 @@ const getFooterLinks = (t: TFunction): FooterLinks => ({
   legal: [
     { label: t("landing.footer.columns.legal.privacy"), href: "#" },
     { label: t("landing.footer.columns.legal.terms"), href: "#" },
-    { label: t("landing.footer.columns.legal.security"), href: "#" },
+    { label: t("landing.footer.columns.legal.security"), href: "/security" },
     { label: t("landing.footer.columns.legal.cookies"), href: "#" },
   ],
 });

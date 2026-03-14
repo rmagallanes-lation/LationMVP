@@ -226,27 +226,47 @@
       "titlePrimary": "Iniciemos una",
       "titleAccent": "conversación",
       "subtitle": "¿Tiene curiosidad sobre cómo Lation puede revolucionar su contratación? Envíenos un mensaje y nuestro equipo se pondrá en contacto para conversar sobre sus necesidades específicas.",
-    "form": {
-      "title": "Póngase en contacto",
-      "name": "Su nombre",
-      "namePlaceholder": "Juan Pérez",
-      "email": "Correo electrónico",
-      "emailPlaceholder": "juan@empresa.com",
-      "company": "Nombre de la empresa",
-      "companyPlaceholder": "Su Empresa S.A.",
-      "message": "Su mensaje",
-      "messagePlaceholder": "Cuéntenos sobre sus necesidades de contratación, el tamaño de su equipo o cualquier pregunta que tenga...",
-      "submit": "Enviar mensaje",
-      "sending": "Enviando...",
-      "privacy": "Al enviar, acepta nuestra política de privacidad. Nunca compartiremos su información.",
-      "success": "¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.",
-      "error": "Algo salió mal. Por favor, inténtelo de nuevo.",
-      "unavailable": "Temporalmente no disponible",
-      "disabledTitle": "Formulario de contacto temporalmente no disponible",
-      "disabledMessage": "En este momento no podemos recibir nuevas solicitudes desde esta página. Por favor, inténtelo más tarde.",
-      "disabledToast": "El formulario de contacto no está disponible temporalmente.",
-      "disabledAdminHint": "Detalles de configuración: {{error}}"
-    },
+      "form": {
+        "title": "Póngase en contacto",
+        "name": "Su nombre",
+        "namePlaceholder": "Juan Pérez",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "juan@empresa.com",
+        "company": "Nombre de la empresa",
+        "companyPlaceholder": "Su Empresa S.A.",
+        "message": "Su mensaje",
+        "messagePlaceholder": "Cuéntenos sobre sus necesidades de contratación, el tamaño de su equipo o cualquier pregunta que tenga...",
+        "submit": "Enviar mensaje",
+        "sending": "Enviando...",
+        "privacy": "Al enviar, acepta nuestra política de privacidad. Nunca compartiremos su información.",
+        "success": "¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.",
+        "error": "Algo salió mal. Por favor, inténtelo de nuevo.",
+        "unavailable": "Temporalmente no disponible",
+        "disabledTitle": "Formulario de contacto temporalmente no disponible",
+        "disabledMessage": "En este momento no podemos recibir nuevas solicitudes desde esta página. Por favor, inténtelo más tarde.",
+        "disabledToast": "El formulario de contacto no está disponible temporalmente.",
+        "disabledAdminHint": "Detalles de configuración: {{error}}",
+        "captchaLoading": "Ejecutando la verificación de Cloudflare Turnstile...",
+        "captchaReady": "Verificación completada. Ya puede enviar el formulario.",
+        "captchaExpired": "La verificación expiró. Complétela de nuevo.",
+        "captchaError": "No se pudo cargar la verificación. Actualice e intente nuevamente.",
+        "captchaRequired": "Complete el desafío de verificación de Cloudflare.",
+        "rateLimited": "Demasiadas solicitudes. Espere unos minutos e inténtelo de nuevo.",
+        "verificationFailed": "La verificación de seguridad falló. Reintente el desafío.",
+        "verificationUnavailable": "La verificación de seguridad no está disponible temporalmente. Inténtelo en breve.",
+        "security": {
+          "title": "Envío protegido por Cloudflare",
+          "description": "Este formulario usa controles en capas de Cloudflare antes de aceptar solicitudes de contacto.",
+          "items": {
+            "turnstile": "Desafío Turnstile con validación de acción y hostname",
+            "rateLimit": "Rate limiting por IP para frenar ráfagas y abuso",
+            "honeypot": "Campo honeypot invisible para atrapar bots automatizados",
+            "originChecks": "Lista permitida de orígenes antes del procesamiento"
+          },
+          "link": "Revisar detalles completos de seguridad",
+          "linkShort": "Detalles de seguridad"
+        }
+      },
       "email": {
         "label": "Envíenos un correo a",
         "address": "hello@lation.io"
@@ -290,6 +310,35 @@
       "copyright": "{{year}} Lation. Todos los derechos reservados.",
       "madeWith": "Hecho con",
       "forHiring": "para una mejor contratación"
+    },
+    "securityPage": {
+      "badge": "Seguridad",
+      "title": "Controles de seguridad con Cloudflare",
+      "description": "Esta página explica cómo Lation protege los envíos de contacto y gobierna flujos internos de rastreo con controles respaldados por Cloudflare.",
+      "items": {
+        "turnstile": {
+          "title": "Verificación anti-bots con Turnstile",
+          "description": "Cada envío requiere Cloudflare Turnstile y la verificación del servidor valida éxito del token, acción esperada y hostname."
+        },
+        "rateLimit": {
+          "title": "Límites contra abuso y ráfagas",
+          "description": "Las solicitudes se limitan por huella de IP con Redis distribuido en producción y respaldo en memoria en desarrollo."
+        },
+        "honeypot": {
+          "title": "Trampa para formularios automatizados",
+          "description": "Un campo honeypot oculto descarta envíos automatizados sin afectar la experiencia de usuarios reales."
+        },
+        "originChecks": {
+          "title": "Validación estricta de origen",
+          "description": "Las APIs de contacto solo aceptan orígenes configurados en producción para bloquear abuso cross-origin y tráfico suplantado."
+        },
+        "crawlGovernance": {
+          "title": "Gobernanza interna del rastreo",
+          "description": "El endpoint interno /api/crawl está protegido por clave, exige HTTPS y rechaza destinos localhost/red privada antes de llamar a Cloudflare Browser Rendering."
+        }
+      },
+      "footnoteTitle": "Nota operativa",
+      "footnoteDescription": "Los controles de seguridad se monitorean con logs estructurados y pueden reforzarse con políticas de entorno según evolucione el riesgo."
     }
   }
 }

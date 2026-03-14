@@ -7,6 +7,7 @@ declare global {
         container: HTMLElement,
         options: {
           sitekey: string;
+          action?: string;
           callback: (token: string) => void;
           "error-callback"?: () => void;
           "expired-callback"?: () => void;
@@ -18,16 +19,26 @@ declare global {
   }
 }
 
+export type TurnstileStatus = "idle" | "loading" | "ready" | "expired" | "error";
+
 type TurnstileWidgetProps = {
   siteKey: string;
   onTokenChange: (token: string | null) => void;
+  onStateChange?: (status: TurnstileStatus) => void;
   resetSignal: number;
+  action?: string;
 };
 
 const SCRIPT_ID = "cloudflare-turnstile-script";
 const SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 
-export function TurnstileWidget({ siteKey, onTokenChange, resetSignal }: TurnstileWidgetProps) {
+export function TurnstileWidget({
+  siteKey,
+  onTokenChange,
+  onStateChange,
+  resetSignal,
+  action = "contact_form",
+}: TurnstileWidgetProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const widgetIdRef = useRef<string | null>(null);
 
@@ -36,6 +47,7 @@ export function TurnstileWidget({ siteKey, onTokenChange, resetSignal }: Turnsti
       return;
     }
 
+    onStateChange?.("loading");
     let cancelled = false;
 
     const renderWidget = () => {
@@ -51,9 +63,19 @@ export function TurnstileWidget({ siteKey, onTokenChange, resetSignal }: Turnsti
       containerRef.current.innerHTML = "";
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
-        callback: (token) => onTokenChange(token),
-        "expired-callback": () => onTokenChange(null),
-        "error-callback": () => onTokenChange(null),
+        action,
+        callback: (token) => {
+          onTokenChange(token);
+          onStateChange?.("ready");
+        },
+        "expired-callback": () => {
+          onTokenChange(null);
+          onStateChange?.("expired");
+        },
+        "error-callback": () => {
+          onTokenChange(null);
+          onStateChange?.("error");
+        },
       });
     };
 
@@ -63,6 +85,14 @@ export function TurnstileWidget({ siteKey, onTokenChange, resetSignal }: Turnsti
         renderWidget();
       } else {
         existingScript.addEventListener("load", renderWidget, { once: true });
+        existingScript.addEventListener(
+          "error",
+          () => {
+            onTokenChange(null);
+            onStateChange?.("error");
+          },
+          { once: true }
+        );
       }
     } else {
       const script = document.createElement("script");
@@ -71,6 +101,14 @@ export function TurnstileWidget({ siteKey, onTokenChange, resetSignal }: Turnsti
       script.async = true;
       script.defer = true;
       script.addEventListener("load", renderWidget, { once: true });
+      script.addEventListener(
+        "error",
+        () => {
+          onTokenChange(null);
+          onStateChange?.("error");
+        },
+        { once: true }
+      );
       document.head.appendChild(script);
     }
 
@@ -81,7 +119,7 @@ export function TurnstileWidget({ siteKey, onTokenChange, resetSignal }: Turnsti
         widgetIdRef.current = null;
       }
     };
-  }, [siteKey, onTokenChange]);
+  }, [action, onStateChange, onTokenChange, siteKey]);
 
   useEffect(() => {
     if (!widgetIdRef.current || !window.turnstile) {
@@ -89,8 +127,8 @@ export function TurnstileWidget({ siteKey, onTokenChange, resetSignal }: Turnsti
     }
     window.turnstile.reset(widgetIdRef.current);
     onTokenChange(null);
-  }, [resetSignal, onTokenChange]);
+    onStateChange?.("loading");
+  }, [resetSignal, onStateChange, onTokenChange]);
 
   return <div ref={containerRef} className="min-h-16" />;
 }
-

@@ -226,27 +226,47 @@
       "titlePrimary": "Vamos iniciar uma",
       "titleAccent": "conversa",
       "subtitle": "Curioso sobre como a Lation pode revolucionar sua contratação? Envie-nos uma mensagem e nossa equipe entrará em contato para discutir suas necessidades específicas.",
-    "form": {
-      "title": "Entre em contato",
-      "name": "Seu nome",
-      "namePlaceholder": "João Silva",
-      "email": "Endereço de e-mail",
-      "emailPlaceholder": "joao@empresa.com",
-      "company": "Nome da empresa",
-      "companyPlaceholder": "Sua Empresa Ltda.",
-      "message": "Sua mensagem",
-      "messagePlaceholder": "Conte-nos sobre suas necessidades de contratação, o tamanho da sua equipe ou qualquer dúvida que você tenha...",
-      "submit": "Enviar mensagem",
-      "sending": "Enviando...",
-      "privacy": "Ao enviar, você concorda com nossa política de privacidade. Nunca compartilharemos suas informações.",
-      "success": "Mensagem enviada com sucesso! Entraremos em contato em breve.",
-      "error": "Algo deu errado. Tente novamente.",
-      "unavailable": "Temporariamente indisponível",
-      "disabledTitle": "Formulário de contato temporariamente indisponível",
-      "disabledMessage": "No momento, não podemos receber novos contatos por esta página. Tente novamente mais tarde.",
-      "disabledToast": "O formulário de contato está temporariamente indisponível.",
-      "disabledAdminHint": "Detalhes de configuração: {{error}}"
-    },
+      "form": {
+        "title": "Entre em contato",
+        "name": "Seu nome",
+        "namePlaceholder": "João Silva",
+        "email": "Endereço de e-mail",
+        "emailPlaceholder": "joao@empresa.com",
+        "company": "Nome da empresa",
+        "companyPlaceholder": "Sua Empresa Ltda.",
+        "message": "Sua mensagem",
+        "messagePlaceholder": "Conte-nos sobre suas necessidades de contratação, o tamanho da sua equipe ou qualquer dúvida que você tenha...",
+        "submit": "Enviar mensagem",
+        "sending": "Enviando...",
+        "privacy": "Ao enviar, você concorda com nossa política de privacidade. Nunca compartilharemos suas informações.",
+        "success": "Mensagem enviada com sucesso! Entraremos em contato em breve.",
+        "error": "Algo deu errado. Tente novamente.",
+        "unavailable": "Temporariamente indisponível",
+        "disabledTitle": "Formulário de contato temporariamente indisponível",
+        "disabledMessage": "No momento, não podemos receber novos contatos por esta página. Tente novamente mais tarde.",
+        "disabledToast": "O formulário de contato está temporariamente indisponível.",
+        "disabledAdminHint": "Detalhes de configuração: {{error}}",
+        "captchaLoading": "Executando a verificação do Cloudflare Turnstile...",
+        "captchaReady": "Verificação concluída. Você já pode enviar o formulário.",
+        "captchaExpired": "A verificação expirou. Complete novamente.",
+        "captchaError": "Falha ao carregar a verificação. Atualize e tente outra vez.",
+        "captchaRequired": "Conclua o desafio de verificação da Cloudflare.",
+        "rateLimited": "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
+        "verificationFailed": "A verificação de segurança falhou. Refaça o desafio.",
+        "verificationUnavailable": "A verificação de segurança está temporariamente indisponível. Tente em instantes.",
+        "security": {
+          "title": "Envio protegido pela Cloudflare",
+          "description": "Este formulário usa controles em camadas da Cloudflare antes de aceitar solicitações de contato.",
+          "items": {
+            "turnstile": "Desafio Turnstile com validação de ação e hostname",
+            "rateLimit": "Rate limiting por IP para bloquear picos e abuso",
+            "honeypot": "Campo honeypot invisível para capturar bots automatizados",
+            "originChecks": "Lista de origens permitidas antes do processamento"
+          },
+          "link": "Revisar detalhes completos de segurança",
+          "linkShort": "Detalhes de segurança"
+        }
+      },
       "email": {
         "label": "Envie-nos um e-mail para",
         "address": "hello@lation.io"
@@ -290,6 +310,35 @@
       "copyright": "{{year}} Lation. Todos os direitos reservados.",
       "madeWith": "Feito com",
       "forHiring": "para uma contratação melhor"
+    },
+    "securityPage": {
+      "badge": "Segurança",
+      "title": "Controles de segurança com Cloudflare",
+      "description": "Esta página explica como a Lation protege envios de contato e governa fluxos internos de crawl com controles baseados na Cloudflare.",
+      "items": {
+        "turnstile": {
+          "title": "Verificação anti-bot com Turnstile",
+          "description": "Cada envio exige Cloudflare Turnstile e a validação no servidor verifica sucesso do token, ação esperada e hostname."
+        },
+        "rateLimit": {
+          "title": "Limites contra abuso e picos",
+          "description": "As requisições são limitadas por impressão de IP com Redis distribuído em produção e fallback em memória no desenvolvimento."
+        },
+        "honeypot": {
+          "title": "Armadilha para formulários automatizados",
+          "description": "Um campo honeypot oculto descarta envios automatizados sem prejudicar a experiência de usuários reais."
+        },
+        "originChecks": {
+          "title": "Validação rígida de origem",
+          "description": "As APIs de contato aceitam apenas origens configuradas em produção para bloquear abuso cross-origin e tráfego forjado."
+        },
+        "crawlGovernance": {
+          "title": "Governança interna de crawl",
+          "description": "O endpoint interno /api/crawl é protegido por chave, exige HTTPS e rejeita destinos localhost/rede privada antes de chamar o Cloudflare Browser Rendering."
+        }
+      },
+      "footnoteTitle": "Nota operacional",
+      "footnoteDescription": "Os controles de segurança são monitorados com logs estruturados e podem ser reforçados por políticas de ambiente conforme o risco evolui."
     }
   }
 }

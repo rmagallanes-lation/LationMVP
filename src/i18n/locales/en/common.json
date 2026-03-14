@@ -226,27 +226,47 @@
       "titlePrimary": "Let's Start a",
       "titleAccent": "Conversation",
       "subtitle": "Curious about how Lation can revolutionize your hiring? Drop us a message and our team will reach out to discuss your specific needs.",
-    "form": {
-      "title": "Get in Touch",
-      "name": "Your Name",
-      "namePlaceholder": "John Doe",
-      "email": "Email Address",
-      "emailPlaceholder": "john@company.com",
-      "company": "Company Name",
-      "companyPlaceholder": "Your Company Inc.",
-      "message": "Your Message",
-      "messagePlaceholder": "Tell us about your hiring needs, team size, or any questions you have...",
-      "submit": "Send Message",
-      "sending": "Sending...",
-      "privacy": "By submitting, you agree to our privacy policy. We'll never share your information.",
-      "success": "Message sent successfully! We'll get back to you soon.",
-      "error": "Something went wrong. Please try again.",
-      "unavailable": "Temporarily Unavailable",
-      "disabledTitle": "Contact form temporarily unavailable",
-      "disabledMessage": "We're currently unable to receive new contact requests from this page. Please try again later.",
-      "disabledToast": "Contact form is temporarily unavailable.",
-      "disabledAdminHint": "Configuration details: {{error}}"
-    },
+      "form": {
+        "title": "Get in Touch",
+        "name": "Your Name",
+        "namePlaceholder": "John Doe",
+        "email": "Email Address",
+        "emailPlaceholder": "john@company.com",
+        "company": "Company Name",
+        "companyPlaceholder": "Your Company Inc.",
+        "message": "Your Message",
+        "messagePlaceholder": "Tell us about your hiring needs, team size, or any questions you have...",
+        "submit": "Send Message",
+        "sending": "Sending...",
+        "privacy": "By submitting, you agree to our privacy policy. We'll never share your information.",
+        "success": "Message sent successfully! We'll get back to you soon.",
+        "error": "Something went wrong. Please try again.",
+        "unavailable": "Temporarily Unavailable",
+        "disabledTitle": "Contact form temporarily unavailable",
+        "disabledMessage": "We're currently unable to receive new contact requests from this page. Please try again later.",
+        "disabledToast": "Contact form is temporarily unavailable.",
+        "disabledAdminHint": "Configuration details: {{error}}",
+        "captchaLoading": "Running Cloudflare Turnstile verification...",
+        "captchaReady": "Verification passed. You can submit the form.",
+        "captchaExpired": "Verification expired. Please complete it again.",
+        "captchaError": "Verification failed to load. Refresh and try again.",
+        "captchaRequired": "Please complete the Cloudflare verification challenge.",
+        "rateLimited": "Too many requests. Please wait a few minutes and try again.",
+        "verificationFailed": "Security verification failed. Please retry the challenge.",
+        "verificationUnavailable": "Security verification is temporarily unavailable. Please try again shortly.",
+        "security": {
+          "title": "Cloudflare-protected submission",
+          "description": "This form uses layered Cloudflare controls before contact requests are accepted.",
+          "items": {
+            "turnstile": "Turnstile challenge with action and hostname validation",
+            "rateLimit": "IP-based rate limiting to stop bursts and abuse",
+            "honeypot": "Invisible honeypot field to trap automated bots",
+            "originChecks": "Origin allow-list enforcement before processing"
+          },
+          "link": "Review full security details",
+          "linkShort": "Security details"
+        }
+      },
       "email": {
         "label": "Email us at",
         "address": "hello@lation.io"
@@ -290,6 +310,35 @@
       "copyright": "{{year}} Lation. All rights reserved.",
       "madeWith": "Made with",
       "forHiring": "for better hiring"
+    },
+    "securityPage": {
+      "badge": "Security",
+      "title": "Cloudflare Security Controls",
+      "description": "This page explains how Lation protects contact submissions and governs internal crawl workflows with Cloudflare-backed controls.",
+      "items": {
+        "turnstile": {
+          "title": "Turnstile bot verification",
+          "description": "Every contact submission requires Cloudflare Turnstile, and server verification checks token success, expected action, and hostname."
+        },
+        "rateLimit": {
+          "title": "Abuse and burst throttling",
+          "description": "Requests are rate-limited per IP fingerprint using distributed Redis limits in production and memory fallback in development."
+        },
+        "honeypot": {
+          "title": "Automated form trap",
+          "description": "A hidden honeypot field quietly drops scripted submissions while keeping the user experience clean for real users."
+        },
+        "originChecks": {
+          "title": "Strict origin validation",
+          "description": "Contact APIs only accept configured origins in production to block cross-origin abuse and reduce spoofed browser traffic."
+        },
+        "crawlGovernance": {
+          "title": "Internal crawl governance",
+          "description": "The internal /api/crawl endpoint is key-protected, HTTPS-only, and rejects localhost/private-network targets before calling Cloudflare Browser Rendering crawl jobs."
+        }
+      },
+      "footnoteTitle": "Operational note",
+      "footnoteDescription": "Security controls are monitored through structured request logs and can be tightened with environment-level policies as threat patterns evolve."
     }
   }
 }
