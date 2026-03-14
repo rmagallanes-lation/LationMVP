@@ -6,8 +6,8 @@ type SectionTone = "default" | "muted" | "gradient" | "accent";
 const toneClasses: Record<SectionTone, string> = {
   default: "bg-background",
   muted: "bg-secondary/30",
-  gradient: "bg-gradient-section",
-  accent: "bg-accent/10",
+  gradient: "bg-secondary/20",
+  accent: "bg-accent/5",
 };
 
 type SectionProps = {
@@ -21,7 +21,7 @@ const Section = ({ id, tone = "default", className, children }: SectionProps) =>
   return (
     <section
       id={id}
-      className={cn("py-24 relative overflow-hidden", toneClasses[tone], className)}
+      className={cn("py-20 relative", toneClasses[tone], className)}
     >
       {children}
     </section>
@@ -65,23 +65,23 @@ const SectionHeader = ({
   const alignment = align === "center" ? "text-center" : "text-left";
 
   return (
-    <div className={cn("space-y-4", alignment, className)}>
+    <div className={cn("space-y-3", alignment, className)}>
       {label ? (
         <span
           className={cn(
-            "font-semibold text-sm uppercase tracking-wider block",
+            "text-sm font-medium block",
             labelClassName ?? "text-accent",
           )}
         >
           {label}
         </span>
       ) : null}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+      <h2 className="text-3xl md:text-4xl font-bold text-foreground">
         {title}
         {titleAccent ? <span className="text-accent"> {titleAccent}</span> : null}
       </h2>
       {subtitle ? (
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{subtitle}</p>
+        <p className="text-base text-muted-foreground max-w-2xl mx-auto">{subtitle}</p>
       ) : null}
     </div>
   );
@@ -90,7 +90,7 @@ const SectionHeader = ({
 type SectionGridProps = React.HTMLAttributes<HTMLDivElement>;
 
 const SectionGrid = ({ className, ...props }: SectionGridProps) => {
-  return <div className={cn("grid gap-8", className)} {...props} />;
+  return <div className={cn("grid gap-6", className)} {...props} />;
 };
 
 export { Section, SectionContainer, SectionHeader, SectionGrid };

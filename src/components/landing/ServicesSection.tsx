@@ -1,6 +1,5 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { useInView } from "framer-motion";
 import { FileText, Brain, Video, BarChart } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Section, SectionContainer, SectionGrid, SectionHeader } from "@/components/landing/Section";
@@ -38,14 +37,11 @@ export const ServicesSection = () => {
   ];
 
   return (
-    <Section id="services">
+    <Section id="services" tone="muted">
       <SectionContainer ref={ref}>
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
+        <div
+          className="mb-12"
+          style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease" }}
         >
           <SectionHeader
             label={t('landing.services.label')}
@@ -54,47 +50,38 @@ export const ServicesSection = () => {
             subtitle={t('landing.services.subtitle')}
             align="center"
           />
-        </motion.div>
+        </div>
 
-        {/* Services Grid */}
-        <SectionGrid className="md:grid-cols-2">
-          {services.map((service, index) => (
-            <motion.div
+        <SectionGrid
+          className="md:grid-cols-2"
+          style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease 75ms" }}
+        >
+          {services.map((service) => (
+            <div
               key={service.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              className="group relative"
+              className="bg-card rounded-lg border border-border p-7 hover:border-accent/30 transition-colors duration-150 h-full"
             >
-              <div className="bg-card rounded-2xl border border-border p-8 hover:border-accent/30 hover:shadow-xl transition-all duration-300 h-full">
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-primary-foreground transition-all duration-300">
-                  <service.icon className="w-7 h-7 text-accent group-hover:text-primary-foreground transition-colors" />
-                </div>
-
-                {/* Content */}
-                <h3 className="text-xl font-bold text-foreground mb-3">{service.title}</h3>
-                <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {service.description}
-                </p>
-
-                {/* Features */}
-                <ul className="space-y-2">
-                  {service.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-center gap-3 text-sm text-muted-foreground"
-                    >
-                      <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Hover gradient */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              <div className="w-10 h-10 rounded bg-accent/10 flex items-center justify-center mb-5">
+                <service.icon className="w-5 h-5 text-accent" />
               </div>
-            </motion.div>
+
+              <h3 className="text-lg font-bold text-foreground mb-2">{service.title}</h3>
+              <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
+                {service.description}
+              </p>
+
+              <ul className="space-y-2">
+                {service.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-center gap-3 text-sm text-muted-foreground"
+                  >
+                    <div className="w-1 h-1 rounded-full bg-accent flex-shrink-0" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </SectionGrid>
       </SectionContainer>

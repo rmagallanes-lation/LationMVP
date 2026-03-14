@@ -1,10 +1,9 @@
-import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertTriangle, Send, Sparkles } from "lucide-react";
+import { AlertTriangle, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Section, SectionContainer } from "@/components/landing/Section";
@@ -120,123 +119,78 @@ export const ContactSection = () => {
   };
 
   return (
-    <Section
-      id="contact"
-      tone="gradient"
-      className="text-foreground dark:text-foreground"
-    >
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 dark:bg-primary-foreground/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 right-0 w-64 h-64 bg-primary/5 dark:bg-primary-foreground/5 rounded-full blur-3xl" />
-      </div>
-
-      <SectionContainer className="relative z-10" ref={ref}>
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <Section id="contact" tone="muted">
+      <SectionContainer ref={ref}>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
+          <div
+            style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease" }}
           >
-            {/* Icon */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={isInView ? { scale: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="w-16 h-16 rounded-2xl bg-accent/20 mb-8 flex items-center justify-center"
-            >
-              <Sparkles className="w-8 h-8 text-accent" />
-            </motion.div>
-
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground dark:text-foreground mb-6 leading-tight">
-              {t('landing.contact.titlePrimary')} <br />
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 leading-tight">
+              {t('landing.contact.titlePrimary')}{" "}
               <span className="text-accent">{t('landing.contact.titleAccent')}</span>
             </h2>
 
-            <p className="text-lg md:text-xl text-muted-foreground dark:text-muted-foreground mb-10 leading-relaxed">
+            <p className="text-base text-muted-foreground mb-8">
               {t('landing.contact.subtitle')}
             </p>
 
-            {/* Contact Options */}
-            <div className="space-y-4">
-              {contactCards.map((card, index) => {
+            <div className="space-y-3">
+              {contactCards.map((card) => {
                 const interactionClasses = card.interactive
-                  ? "hover:bg-accent/20 transition-colors group cursor-pointer"
+                  ? "hover:border-accent/40 transition-colors duration-150 group cursor-pointer"
                   : "";
-                const iconHoverClasses = card.interactive ? "group-hover:bg-accent/30" : "";
 
                 if (card.href) {
                   return (
-                    <motion.a
+                    <a
                       key={card.label}
                       href={card.href}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={isInView ? { opacity: 1, y: 0 } : {}}
-                      transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                      className={`flex items-center gap-4 p-4 rounded-xl bg-accent/10 ${interactionClasses}`}
+                      className={`flex items-center gap-4 p-4 rounded-lg border border-border bg-card ${interactionClasses}`}
                     >
-                      <div
-                        className={`w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center transition-colors ${iconHoverClasses}`}
-                      >
-                        <card.icon className="w-5 h-5 text-accent" />
+                      <div className="w-9 h-9 rounded bg-accent/10 flex items-center justify-center flex-shrink-0">
+                        <card.icon className="w-4 h-4 text-accent" />
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                          {card.label}
-                        </p>
-                        <p className="font-semibold text-foreground dark:text-foreground">
-                          {card.value}
-                        </p>
+                        <p className="text-xs text-muted-foreground">{card.label}</p>
+                        <p className="text-sm font-semibold text-foreground">{card.value}</p>
                       </div>
-                    </motion.a>
+                    </a>
                   );
                 }
 
                 return (
-                  <motion.div
+                  <div
                     key={card.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                    className={`flex items-center gap-4 p-4 rounded-xl bg-accent/10 ${interactionClasses}`}
+                    className={`flex items-center gap-4 p-4 rounded-lg border border-border bg-card ${interactionClasses}`}
                   >
-                    <div
-                      className={`w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center transition-colors ${iconHoverClasses}`}
-                    >
-                      <card.icon className="w-5 h-5 text-accent" />
+                    <div className="w-9 h-9 rounded bg-accent/10 flex items-center justify-center flex-shrink-0">
+                      <card.icon className="w-4 h-4 text-accent" />
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                        {card.label}
-                      </p>
-                      <p className="font-semibold text-foreground dark:text-foreground">
-                        {card.value}
-                      </p>
+                      <p className="text-xs text-muted-foreground">{card.label}</p>
+                      <p className="text-sm font-semibold text-foreground">{card.value}</p>
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Content - Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <div
+            style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease 75ms" }}
           >
             <form
               onSubmit={handleSubmit}
-              className="bg-card/80 dark:bg-card/60 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-border dark:border-border"
+              className="bg-card rounded-lg p-7 border border-border"
             >
-              <h3 className="text-2xl font-bold text-foreground dark:text-foreground mb-6">
+              <p className="text-lg font-bold text-foreground mb-5">
                 {t('landing.contact.form.title')}
-              </h3>
+              </p>
 
               {!contactFormAvailable && (
-                <Alert className="mb-6 border-amber-500/40 bg-amber-500/10">
+                <Alert className="mb-5 border-amber-500/40 bg-amber-500/10">
                   <AlertTriangle className="h-4 w-4 !text-amber-700 dark:!text-amber-300" />
                   <AlertTitle className="text-amber-900 dark:text-amber-100">
                     {t('landing.contact.form.disabledTitle')}
@@ -252,7 +206,7 @@ export const ContactSection = () => {
                 </Alert>
               )}
 
-              <fieldset disabled={!contactFormAvailable} className="space-y-5 disabled:opacity-70">
+              <fieldset disabled={!contactFormAvailable} className="space-y-4 disabled:opacity-70">
                 {/* Honeypot field - hidden from users, catches bots */}
                 <div className="absolute left-[-9999px]" aria-hidden="true">
                   <label htmlFor="website">Website</label>
@@ -266,9 +220,9 @@ export const ContactSection = () => {
                   />
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-5">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-foreground/80 dark:text-muted-foreground mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1.5">
                       {t('landing.contact.form.name')}
                     </label>
                     <Input
@@ -278,11 +232,10 @@ export const ContactSection = () => {
                       onChange={handleChange}
                       placeholder={t('landing.contact.form.namePlaceholder')}
                       required
-                      className="bg-background/80 dark:bg-background/60 border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-foreground/80 dark:text-muted-foreground mb-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
                       {t('landing.contact.form.email')}
                     </label>
                     <Input
@@ -293,13 +246,12 @@ export const ContactSection = () => {
                       onChange={handleChange}
                       placeholder={t('landing.contact.form.emailPlaceholder')}
                       required
-                      className="bg-background/80 dark:bg-background/60 border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-foreground/80 dark:text-muted-foreground mb-2">
+                  <label htmlFor="company" className="block text-sm font-medium text-foreground mb-1.5">
                     {t('landing.contact.form.company')}
                   </label>
                   <Input
@@ -308,12 +260,11 @@ export const ContactSection = () => {
                     value={formData.company}
                     onChange={handleChange}
                     placeholder={t('landing.contact.form.companyPlaceholder')}
-                    className="bg-background/80 dark:bg-background/60 border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-foreground/80 dark:text-muted-foreground mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-1.5">
                     {t('landing.contact.form.message')}
                   </label>
                   <Textarea
@@ -324,7 +275,7 @@ export const ContactSection = () => {
                     placeholder={t('landing.contact.form.messagePlaceholder')}
                     rows={4}
                     required
-                    className="bg-background/80 dark:bg-background/60 border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground focus:border-accent focus:ring-accent resize-none"
+                    className="resize-none"
                   />
                 </div>
 
@@ -340,7 +291,7 @@ export const ContactSection = () => {
                   type="submit"
                   size="lg"
                   disabled={isSubmitting || !contactFormAvailable || !turnstileToken}
-                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
                 >
                   {isSubmitting ? (
                     t('landing.contact.form.sending')
@@ -355,11 +306,11 @@ export const ContactSection = () => {
                 </Button>
               </fieldset>
 
-              <p className="text-xs text-muted-foreground dark:text-muted-foreground text-center mt-6">
+              <p className="text-xs text-muted-foreground text-center mt-5">
                 {t('landing.contact.form.privacy')}
               </p>
             </form>
-          </motion.div>
+          </div>
         </div>
       </SectionContainer>
     </Section>

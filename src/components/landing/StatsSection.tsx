@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { Users, Calendar, Award, Timer } from "lucide-react";
@@ -76,20 +75,11 @@ export const StatsSection = () => {
   ];
 
   return (
-    <Section id="stats" tone="gradient">
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-accent/5 rounded-full blur-3xl" />
-      </div>
-
-      <SectionContainer ref={ref} className="relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
+    <Section id="stats">
+      <SectionContainer ref={ref}>
+        <div
+          className="mb-12"
+          style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease" }}
         >
           <SectionHeader
             label={t('landing.stats.label')}
@@ -97,43 +87,33 @@ export const StatsSection = () => {
             subtitle={t('landing.stats.subtitle')}
             align="center"
           />
-        </motion.div>
+        </div>
 
-        {/* Stats Grid */}
-        <SectionGrid className="md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr items-stretch">
-          {stats.map((stat, index) => (
-            <motion.div
+        <SectionGrid
+          className="md:grid-cols-2 lg:grid-cols-4"
+          style={{ opacity: isInView ? 1 : 0, transition: "opacity 150ms ease 75ms" }}
+        >
+          {stats.map((stat) => (
+            <div
               key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              className="relative group"
+              className="bg-card rounded-lg border border-border p-6 text-center hover:border-accent/30 transition-colors duration-150 flex flex-col"
             >
-              <div className="bg-card rounded-2xl border border-border p-8 text-center hover:border-accent/30 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-2xl bg-accent/10 mx-auto mb-6 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                  <stat.icon className="w-7 h-7 text-accent" />
-                </div>
-
-                {/* Value */}
-                <p className="text-4xl md:text-5xl font-bold text-foreground mb-2">
-                  <CountUpAnimation target={stat.value} suffix={stat.suffix} />
-                </p>
-
-                {/* Label */}
-                <p className="text-lg font-semibold text-foreground mb-1 min-h-[3rem] leading-snug">
-                  {stat.label}
-                </p>
-
-                {/* Description */}
-                <p className="text-sm text-muted-foreground min-h-[2.5rem] leading-relaxed">
-                  {stat.description}
-                </p>
-
-                {/* Decorative gradient */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              <div className="w-10 h-10 rounded bg-accent/10 mx-auto mb-4 flex items-center justify-center">
+                <stat.icon className="w-5 h-5 text-accent" />
               </div>
-            </motion.div>
+
+              <p className="text-4xl font-bold text-foreground mb-1">
+                <CountUpAnimation target={stat.value} suffix={stat.suffix} />
+              </p>
+
+              <p className="text-sm font-semibold text-foreground mb-1 leading-snug">
+                {stat.label}
+              </p>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {stat.description}
+              </p>
+            </div>
           ))}
         </SectionGrid>
       </SectionContainer>
