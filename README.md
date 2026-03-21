@@ -55,95 +55,6 @@ A modern, full-featured interview scheduling and management platform built for t
    
    Navigate to `http://localhost:5173` (or the port shown in your terminal)
 
-## Backend Integration (n8n) — Contact Form
-
-This project includes a minimal backend in `server/` that forwards contact form submissions to an n8n webhook. The landing-page contact form currently writes directly to Supabase from the frontend, so frontend Supabase env vars are also required in environments where the form should be enabled.
-
-Steps to run locally:
-
-1. Create a `.env` file at project root (or set environment variables). Example values are in `.env.example`.
-
-2. Start the backend in dev mode:
-
-```bash
-cd server
-npm install
-npm run dev
-```
-
-3. Ensure Supabase frontend variables are set (for example, in `.env.local`):
-
-```
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
-```
-
-4. If you need backend routes for n8n forwarding, also set:
-
-```
-VITE_API_URL=http://localhost:3001
-```
-
-5. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Supabase variables are not configured, the app now keeps rendering and disables only contact submission.
-
-### Vercel Resend Notifications (Optional)
-
-When deployed on Vercel, the project can send a notification email after a lead is saved using `/api/send-notification` and Resend.
-
-Required Vercel environment variables:
-
-```bash
-RESEND_API_KEY=re_xxxxxxxxxxxxx
-RESEND_FROM_EMAIL=Lation Leads <leads@lation.com.mx>
-RESEND_NOTIFICATION_TO=ops@lation.com.mx,founder@lation.com.mx
-```
-
-Behavior:
-- Lead save to Supabase is the source of truth for success.
-- Email notification is non-blocking (if it fails, user still sees success and failure is logged).
-- Non-Vercel deployments can return `404` for `/api/send-notification`; this is logged as a warning only.
-
-Docker (optional):
-
-```
-# Ensure .env has N8N_WEBHOOK_URL configured (see .env.example)
-docker compose up --build
-```
-
-Notes:
-- The backend will forward validated JSON to the `N8N_WEBHOOK_URL` environment variable (defaults to `http://localhost:5678`).
-- If n8n runs on your host and the backend runs in Docker, set `N8N_WEBHOOK_URL=http://host.docker.internal:5678` so the container can reach host n8n.
-- The backend performs schema validation (Zod) and a simple in-memory rate limiter (5 requests per 10 minutes per IP). Adjust in `server/src/contact.ts` as needed.
-
-Integration test & curl examples
-
-Quick curl test (replace values as needed):
-
-```bash
-curl -X POST http://localhost:3001/api/contact \
-   -H "Content-Type: application/json" \
-   -d '{"name":"Acme Corp","email":"hello@acme.test","company":"Acme","message":"Hello from curl"}'
-```
-
-Expected responses:
-- `200 {"ok":true}` — forwarded to n8n successfully
-- `400` — validation error (invalid or missing fields)
-- `429` — rate limited
-- `502` — n8n forwarding error
-
-If you prefer a small Node-based smoke test, run this from the repo root (requires Node >=18):
-
-```bash
-# from repo root
-node -e "(async()=>{const res=await fetch('http://localhost:3001/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Test',email:'test@example.com',company:'Acme',message:'Hello'})});console.log(await res.text());})()"
-```
-
-Security & production notes
-
-- Use a persistent datastore and proper rate limiting for production (the current in-memory limiter is temporary).
-- Protect the backend with a secret or token before exposing `N8N_WEBHOOK_URL` in production; you can add a shared secret header that n8n checks.
-- Consider adding CAPTCHA on the frontend or verifying an HMAC signature from the frontend for stronger spam protection.
-
 
 ## 📋 Available Scripts
 
@@ -298,24 +209,9 @@ npm run preview
 
 ### Deployment Options
 
-**For lation.com.mx: Cloudflare Pages + Backend + n8n Tunnel**
+**Frontend:** Vercel or Cloudflare Pages (auto-deploys from GitHub)
 
-- **Frontend:** Cloudflare Pages (auto-deploys from GitHub)
-- **Backend:** Node.js/Express on same server (Docker)
-- **n8n:** Exposed via Cloudflare Tunnel (local workflow automation, publicly accessible)
-- **SSL/TLS:** Auto-issued by Cloudflare
-
-📖 **[See DEPLOYMENT.md for Complete Setup Guide →](./DEPLOYMENT.md)**
-
-This includes:
-- 7-step deployment walkthrough
-- Architecture diagram
-- Environment variable configuration
-- Cloudflare Tunnel setup for n8n
-- GitHub Actions CI/CD template
-- Troubleshooting and production checklist
-
-**Other platforms:** Vercel, Netlify, GitHub Pages, AWS S3+CloudFront also supported
+**Other platforms:** Netlify, GitHub Pages, AWS S3+CloudFront also supported
 
 ### Cloudflare Pages Deployment
 
