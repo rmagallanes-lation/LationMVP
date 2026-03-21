@@ -9,24 +9,24 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg hover:-translate-y-0.5",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md hover:shadow-lg",
         outline:
-          "border border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
+          "border-2 border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md",
         ghost: "text-foreground hover:bg-muted hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        accent: "bg-accent text-accent-foreground hover:bg-accent/90",
-        hero: "bg-accent text-primary hover:bg-accent/90",
-        "hero-outline": "border border-accent/40 bg-transparent text-foreground hover:border-accent hover:bg-accent/10",
+        accent: "bg-accent text-accent-foreground shadow-md hover:shadow-lg hover:-translate-y-0.5 hover:scale-[1.02] hover:brightness-110",
+        hero: "bg-accent text-primary shadow-lg hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] hover:brightness-110",
+        "hero-outline": "border-2 border-accent/30 bg-background/80 backdrop-blur-sm text-foreground hover:border-accent hover:bg-accent/10",
       },
       size: {
         default: "h-11 px-5 py-2",
         sm: "h-9 rounded-md px-4 text-xs",
         lg: "h-12 rounded-lg px-8 text-base",
-        xl: "h-14 rounded-lg px-10 text-lg",
+        xl: "h-14 rounded-xl px-10 text-lg",
         icon: "h-10 w-10",
       },
     },
