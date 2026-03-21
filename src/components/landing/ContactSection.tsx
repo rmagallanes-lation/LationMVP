@@ -1,42 +1,25 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertTriangle, Send, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { createClient } from "@supabase/supabase-js";
 import { Section, SectionContainer } from "@/components/landing/Section";
 import { getContactCards } from "@/components/landing/landing-content";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { isSupabaseConfigured, runtimeConfig, supabaseConfigError } from "@/lib/runtime-config";
+import { contactConfigError, isContactFormConfigured, runtimeConfig } from "@/lib/runtime-config";
+import { TurnstileWidget } from "@/components/landing/TurnstileWidget";
 
-type LeadNotificationPayload = {
-  name: string;
-  email: string;
-  company: string | null;
-  message: string | null;
-};
-
-async function sendLeadNotification(payload: LeadNotificationPayload) {
-  try {
-    const response = await fetch("/api/send-notification", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      const detail = await response.text();
-      console.warn("Lead notification request failed", { status: response.status, detail });
-    }
-  } catch (error) {
-    console.warn("Lead notification request threw an error", error);
+function resolveLeadEndpoint() {
+  const apiUrl = runtimeConfig.apiUrl?.trim();
+  if (!apiUrl) {
+    return "/api/lead";
   }
+
+  return `${apiUrl.replace(/\/+$/, "")}/api/contact`;
 }
 
 export const ContactSection = () => {
@@ -44,17 +27,13 @@ export const ContactSection = () => {
   const contactCards = getContactCards(t);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const supabase = useMemo(
-    () =>
-      isSupabaseConfigured && runtimeConfig.supabaseUrl && runtimeConfig.supabaseAnonKey
-        ? createClient(runtimeConfig.supabaseUrl, runtimeConfig.supabaseAnonKey)
-        : null,
-    []
-  );
-  const contactFormAvailable = supabase !== null;
+  const contactFormAvailable = isContactFormConfigured && Boolean(runtimeConfig.turnstileSiteKey);
   const showTechnicalConfigHint =
     import.meta.env.DEV || import.meta.env.VITE_SHOW_CONTACT_CONFIG_HINT === "true";
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileResetSignal, setTurnstileResetSignal] = useState(0);
+  const leadEndpoint = resolveLeadEndpoint();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -63,18 +42,16 @@ export const ContactSection = () => {
     website: "",
   });
 
-  useEffect(() => {
-    if (!contactFormAvailable && supabaseConfigError) {
-      console.warn(supabaseConfigError);
-    }
-  }, [contactFormAvailable]);
+  const handleTurnstileTokenChange = useCallback((token: string | null) => {
+    setTurnstileToken(token);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
     setIsSubmitting(true);
 
-    if (!supabase) {
+    if (!contactFormAvailable) {
       toast.error(t('landing.contact.form.disabledToast'));
       setIsSubmitting(false);
       return;
@@ -96,36 +73,42 @@ export const ContactSection = () => {
       return;
     }
 
+    if (!turnstileToken) {
+      toast.error(t('landing.contact.form.error'));
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const leadPayload: LeadNotificationPayload = {
+      const payload = {
         name: formData.name.trim(),
         email: formData.email.trim(),
-        company: formData.company.trim() || null,
-        message: formData.message.trim() || null,
+        company: formData.company.trim() || "",
+        message: formData.message.trim(),
+        website: formData.website.trim(),
+        turnstileToken,
       };
 
-      const { error } = await supabase
-        .from('leads')
-        .insert({
-          name: leadPayload.name,
-          email: leadPayload.email,
-          company: leadPayload.company,
-          message: leadPayload.message,
-          source: 'landing-page',
-          status: 'new'
-        });
+      const response = await fetch(leadEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      if (!response.ok) {
+        if (response.status === 403 || response.status === 429) {
+          setTurnstileResetSignal((current) => current + 1);
+        }
+        throw new Error("lead_submission_failed");
       }
-
-      await sendLeadNotification(leadPayload);
 
       toast.success(t('landing.contact.form.success'));
       setFormData({ name: "", email: "", company: "", message: "", website: "" });
+      setTurnstileResetSignal((current) => current + 1);
     } catch (error) {
-      console.error('Error submitting lead:', error);
+      void error;
       toast.error(t('landing.contact.form.error'));
     } finally {
       setIsSubmitting(false);
@@ -260,9 +243,9 @@ export const ContactSection = () => {
                   </AlertTitle>
                   <AlertDescription className="text-amber-800/90 dark:text-amber-100/90">
                     <p>{t('landing.contact.form.disabledMessage')}</p>
-                    {supabaseConfigError && showTechnicalConfigHint && (
+                    {contactConfigError && showTechnicalConfigHint && (
                       <p className="mt-1 text-xs">
-                        {t('landing.contact.form.disabledAdminHint', { error: supabaseConfigError })}
+                        {t('landing.contact.form.disabledAdminHint', { error: contactConfigError })}
                       </p>
                     )}
                   </AlertDescription>
@@ -345,10 +328,18 @@ export const ContactSection = () => {
                   />
                 </div>
 
+                {runtimeConfig.turnstileSiteKey && (
+                  <TurnstileWidget
+                    siteKey={runtimeConfig.turnstileSiteKey}
+                    onTokenChange={handleTurnstileTokenChange}
+                    resetSignal={turnstileResetSignal}
+                  />
+                )}
+
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={isSubmitting || !contactFormAvailable}
+                  disabled={isSubmitting || !contactFormAvailable || !turnstileToken}
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                 >
                   {isSubmitting ? (

@@ -55,6 +55,47 @@ A modern, full-featured interview scheduling and management platform built for t
    
    Navigate to `http://localhost:5173` (or the port shown in your terminal)
 
+## Contact Form — Local Setup
+
+1. Create a `.env` file at project root (or set environment variables). Example values are in `.env.example`.
+
+2. Set required frontend and server variables:
+
+```
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
+CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+ALLOWED_ORIGINS=http://localhost:5173
+```
+
+3. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Turnstile config is missing, the app keeps rendering and disables only contact submission.
+
+### Vercel Resend Notifications (Optional)
+
+When deployed on Vercel, `/api/lead` can send a notification email after a lead is saved.
+
+Required Vercel environment variables:
+
+```bash
+RESEND_API_KEY=re_xxxxxxxxxxxxx
+RESEND_FROM_EMAIL=Lation Leads <leads@lation.com.mx>
+RESEND_NOTIFICATION_TO=ops@lation.com.mx,founder@lation.com.mx
+```
+
+Behavior:
+- Lead save to Supabase is the source of truth for success.
+- Email notification is non-blocking (if it fails, user still sees success and only operational metadata is logged).
+- `/api/send-notification` is retired and now returns `410`.
+
+Security & production notes
+
+- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, and `INTERNAL_CRAWL_API_KEY` server-side only.
+- Rotate sensitive secrets every 90 days.
+- Apply the migration in `supabase/migrations/20260309120000_harden_leads_rls.sql` to enforce RLS and column constraints for `public.leads`.
+
 
 ## 📋 Available Scripts
 
@@ -232,6 +273,7 @@ Add these in Cloudflare Pages **Environment Variables** for both Preview and Pro
 ```bash
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
 ```
 
 If you deploy through GitHub Actions, add the same keys to repository secrets as well.
@@ -251,12 +293,13 @@ For more details, refer to the [Cloudflare Pages Documentation](https://develope
 
 If Contact appears as `Temporarily Unavailable`:
 
-1. Ensure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set in the active deploy platform (Vercel/Cloudflare).
-2. Ensure the same keys are set in GitHub Actions secrets when using workflow-based deploys.
+1. Ensure `VITE_TURNSTILE_SITE_KEY` is set in the active deploy platform (Vercel/Cloudflare).
+2. Ensure the same key is set in GitHub Actions secrets when using workflow-based deploys.
 3. Redeploy after changing variables.
 4. Recheck the live page: submit button should return to `Send Message`.
 5. Optional: enable technical hint in non-production by setting `VITE_SHOW_CONTACT_CONFIG_HINT=true`.
-6. For Vercel email notifications, verify `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_NOTIFICATION_TO` are set, then redeploy.
+6. For Vercel lead ingestion, verify server-side secrets are set: `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.
+7. For Vercel email notifications, verify `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_NOTIFICATION_TO` are set, then redeploy.
 
 ## 🤝 Contributing
 

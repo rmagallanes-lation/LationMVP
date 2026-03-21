@@ -59,6 +59,7 @@
    VITE_API_URL = https://api.lation.com.mx
    VITE_SUPABASE_URL = https://your-project-id.supabase.co
    VITE_SUPABASE_ANON_KEY = sb_publishable_xxx
+   VITE_TURNSTILE_SITE_KEY = 0x4AAAAAAAxxxxxxxxxxxxxx
    ```
 6. Click **Save and Deploy**
 
@@ -93,6 +94,13 @@ Edit `.env`:
 VITE_API_URL=https://api.lation.com.mx
 VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
+UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+ALLOWED_ORIGINS=https://lation.com.mx,https://www.lation.com.mx
 FRONTEND_URL=https://lation.com.mx
 N8N_WEBHOOK_URL=https://n8n.lation.com.mx/webhook/contact
 N8N_WEBHOOK_SECRET=change-me
@@ -193,7 +201,9 @@ curl -X POST https://api.lation.com.mx/api/contact \
     "name": "Test User",
     "email": "test@example.com",
     "company": "Acme Corp",
-    "message": "Testing end-to-end deployment"
+    "message": "Testing end-to-end deployment",
+    "turnstileToken": "token",
+    "website": ""
   }'
 
 # Expected response: {"ok":true}
@@ -237,9 +247,16 @@ from origin 'https://lation.com.mx' has been blocked by CORS policy
 | `VITE_API_URL` | Frontend API endpoint | `https://api.lation.com.mx` |
 | `VITE_SUPABASE_URL` | Frontend Supabase project URL | `https://your-project-id.supabase.co` |
 | `VITE_SUPABASE_ANON_KEY` | Frontend Supabase publishable/anon key | `sb_publishable_xxx` |
-| `RESEND_API_KEY` | Vercel serverless API key for Resend (Vercel-only email notifications) | `re_xxxxxxxxxxxxx` |
-| `RESEND_FROM_EMAIL` | Sender address used by Resend route (Vercel-only) | `Lation Leads <leads@lation.com.mx>` |
-| `RESEND_NOTIFICATION_TO` | Comma-separated recipients for lead notifications (Vercel-only) | `ops@lation.com.mx,founder@lation.com.mx` |
+| `VITE_TURNSTILE_SITE_KEY` | Frontend Turnstile widget site key | `0x4AAAAAAAxxxxxxxxxxxxxx` |
+| `SUPABASE_URL` | Server-side Supabase URL used by `/api/lead` | `https://your-project-id.supabase.co` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-side Supabase service role key used by `/api/lead` | `eyJ...` |
+| `CF_TURNSTILE_SECRET` | Server-side Turnstile verification secret | `0x4AAAAAAAxxxxxxxxxxxxxx-secret` |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST endpoint for distributed rate limiting | `https://your-instance.upstash.io` |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST auth token | `A...` |
+| `ALLOWED_ORIGINS` | Exact origin allow-list for API requests | `https://lation.com.mx,https://www.lation.com.mx` |
+| `RESEND_API_KEY` | Resend API key for non-blocking lead notifications | `re_xxxxxxxxxxxxx` |
+| `RESEND_FROM_EMAIL` | Sender address used by lead notifications | `Lation Leads <leads@lation.com.mx>` |
+| `RESEND_NOTIFICATION_TO` | Comma-separated recipients for lead notifications | `ops@lation.com.mx,founder@lation.com.mx` |
 | `FRONTEND_URL` | Backend CORS allowed origin | `https://lation.com.mx` |
 | `N8N_WEBHOOK_URL` | Backend n8n webhook URL | `https://n8n.lation.com.mx/webhook/contact` |
 | `N8N_WEBHOOK_SECRET` | Shared secret header | `change-me` |
@@ -249,13 +266,12 @@ from origin 'https://lation.com.mx' has been blocked by CORS policy
 
 Use this checklist whenever contact submission is disabled in the UI.
 
-1. Set both frontend Supabase variables:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
+1. Set the required frontend anti-bot variable:
+   - `VITE_TURNSTILE_SITE_KEY`
 2. Configure all active frontend targets:
    - Vercel: Project Settings -> Environment Variables (`Preview` + `Production`, and `Development` for parity)
    - Cloudflare Pages: Project -> Settings -> Environment variables (`Preview` + `Production`)
-   - GitHub Actions Secrets (if deploying via workflows): `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+   - GitHub Actions Secrets (if deploying via workflows): `VITE_TURNSTILE_SITE_KEY`
 3. Redeploy after updating variables:
    - Vercel: redeploy latest preview and production deployment
    - Cloudflare Pages / GitHub Actions: trigger a new deployment run
@@ -264,16 +280,23 @@ Use this checklist whenever contact submission is disabled in the UI.
    - No contact configuration warning should be visible to users in production
 5. Optional debug hint for non-production:
    - Set `VITE_SHOW_CONTACT_CONFIG_HINT=true` in preview/local builds to show technical config details in the alert.
-6. If using Vercel email notifications (`/api/send-notification`), also set:
+6. If using Vercel `/api/lead`, also set server-side secrets:
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `CF_TURNSTILE_SECRET`
+   - `UPSTASH_REDIS_REST_URL`
+   - `UPSTASH_REDIS_REST_TOKEN`
+7. If using Vercel email notifications, also set:
    - `RESEND_API_KEY`
    - `RESEND_FROM_EMAIL`
    - `RESEND_NOTIFICATION_TO`
-7. Verify Vercel notification flow:
+8. Verify Vercel notification flow:
    - Submit a lead from the site
    - Confirm lead row is stored in Supabase
    - Confirm notification email is delivered to each configured recipient
    - If email fails, ensure user still sees successful submission (non-blocking behavior)
+9. Rotate `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, and `N8N_WEBHOOK_SECRET` every 90 days.
+10. Apply `supabase/migrations/20260309120000_harden_leads_rls.sql` to enforce RLS and input-length constraints on `public.leads`.
 
 ---
 
-**Last Updated:** March 3, 2026
+**Last Updated:** March 9, 2026
