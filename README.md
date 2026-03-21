@@ -55,12 +55,7 @@ A modern, full-featured interview scheduling and management platform built for t
    
    Navigate to `http://localhost:5173` (or the port shown in your terminal)
 
-## Backend Integration (n8n) — Contact Form
-
-This project includes two hardened contact ingestion paths:
-- `POST /api/lead` (Vercel serverless): validates input, verifies Turnstile (success + action + hostname), enforces Redis-backed rate limiting, writes to Supabase using service-role credentials, and triggers non-blocking Resend notifications.
-- `POST /api/contact` (Express backend): validates input, verifies Turnstile (success + action + hostname), enforces Redis-backed rate limiting, and forwards to n8n with a timeout and shared secret header.
-- `POST /api/crawl` + `GET /api/crawl?jobId=...` (Vercel serverless, internal-only): starts and polls Cloudflare Browser Rendering crawl jobs behind `x-internal-api-key`.
+## Contact Form — Local Setup
 
 Lead storage is selected server-side with `LEADS_TARGET_TABLE`:
 - `leads` for production/default
@@ -71,15 +66,7 @@ Steps to run locally:
 
 1. Create a `.env` file at project root (or set environment variables). Example values are in `.env.example`.
 
-2. Start the backend in dev mode:
-
-```bash
-cd server
-npm install
-npm run dev
-```
-
-3. Set required frontend and server variables:
+2. Set required frontend and server variables:
 
 ```
 VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
@@ -98,13 +85,7 @@ CF_BROWSER_RENDERING_ACCOUNT_ID=your-cloudflare-account-id
 CF_BROWSER_RENDERING_API_TOKEN=your-cloudflare-browser-rendering-api-token
 ```
 
-4. Leave `VITE_API_URL` unset to use `/api/lead` through the local Vite proxy. Only set it when intentionally testing the external Express `/api/contact` path:
-
-```
-VITE_API_URL=http://localhost:3001
-```
-
-5. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Turnstile config is missing, the app keeps rendering and disables only contact submission.
+3. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Turnstile config is missing, the app keeps rendering and disables only contact submission.
 
 ### DEV Branch Setup
 
@@ -336,24 +317,9 @@ npm run preview
 
 ### Deployment Options
 
-**For lation.com.mx: Cloudflare Pages + Backend + n8n Tunnel**
+**Frontend:** Vercel or Cloudflare Pages (auto-deploys from GitHub)
 
-- **Frontend:** Cloudflare Pages (auto-deploys from GitHub)
-- **Backend:** Node.js/Express on same server (Docker)
-- **n8n:** Exposed via Cloudflare Tunnel (local workflow automation, publicly accessible)
-- **SSL/TLS:** Auto-issued by Cloudflare
-
-📖 **[See DEPLOYMENT.md for Complete Setup Guide →](./DEPLOYMENT.md)**
-
-This includes:
-- 7-step deployment walkthrough
-- Architecture diagram
-- Environment variable configuration
-- Cloudflare Tunnel setup for n8n
-- GitHub Actions CI/CD template
-- Troubleshooting and production checklist
-
-**Other platforms:** Vercel, Netlify, GitHub Pages, AWS S3+CloudFront also supported
+**Other platforms:** Netlify, GitHub Pages, AWS S3+CloudFront also supported
 
 ### Cloudflare Pages Deployment
 
