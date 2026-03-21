@@ -57,6 +57,13 @@ A modern, full-featured interview scheduling and management platform built for t
 
 ## Contact Form — Local Setup
 
+Lead storage is selected server-side with `LEADS_TARGET_TABLE`:
+- `leads` for production/default
+- `leads_demo` for demo environments
+- `leads_dev` for the `DEV` branch and its preview environments
+
+Steps to run locally:
+
 1. Create a `.env` file at project root (or set environment variables). Example values are in `.env.example`.
 
 2. Set required frontend and server variables:
@@ -64,14 +71,45 @@ A modern, full-featured interview scheduling and management platform built for t
 ```
 VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
 CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
-SUPABASE_URL=https://your-project-id.supabase.co
+CF_TURNSTILE_EXPECTED_ACTION=contact_form
+CF_TURNSTILE_ALLOWED_HOSTNAMES=localhost,127.0.0.1,lation.com.mx,www.lation.com.mx
+CF_TURNSTILE_VERIFY_TIMEOUT_MS=5000
+SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+LEADS_TARGET_TABLE=leads_dev
 UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
 UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
 ALLOWED_ORIGINS=http://localhost:5173
+INTERNAL_CRAWL_API_KEY=change-me
+CF_BROWSER_RENDERING_ACCOUNT_ID=your-cloudflare-account-id
+CF_BROWSER_RENDERING_API_TOKEN=your-cloudflare-browser-rendering-api-token
 ```
 
 3. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Turnstile config is missing, the app keeps rendering and disables only contact submission.
+
+### DEV Branch Setup
+
+For the `DEV` branch and Vercel Preview deployments:
+
+```bash
+VITE_SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_xxx
+VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
+SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key-here
+LEADS_TARGET_TABLE=leads_dev
+CF_TURNSTILE_SECRET=0x4AAAAAAAxxxxxxxxxxxxxx-secret
+CF_TURNSTILE_EXPECTED_ACTION=contact_form
+CF_TURNSTILE_ALLOWED_HOSTNAMES=localhost,127.0.0.1,<your-dev-preview-host>
+CF_TURNSTILE_VERIFY_TIMEOUT_MS=5000
+UPSTASH_REDIS_REST_URL=https://your-instance.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
+```
+
+Notes:
+- `https://ymsjdxihduwlywcuwrld.supabase.co/leads_dev` is not an API key and not a direct table endpoint for this app.
+- The correct split is `SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co` plus `LEADS_TARGET_TABLE=leads_dev`.
+- Hosted builds now fail if `VITE_TURNSTILE_SITE_KEY` is missing. When `VITE_API_URL` is unset and `/api/lead` is active, hosted builds also require the server-side lead env vars.
 
 ### Vercel Resend Notifications (Optional)
 
@@ -88,13 +126,41 @@ RESEND_NOTIFICATION_TO=ops@lation.com.mx,founder@lation.com.mx
 Behavior:
 - Lead save to Supabase is the source of truth for success.
 - Email notification is non-blocking (if it fails, user still sees success and only operational metadata is logged).
+- Subject prefixes are environment-aware: `[DEV]` for `leads_dev`, `[DEMO]` for `leads_demo`, and no prefix for `leads`.
 - `/api/send-notification` is retired and now returns `410`.
+
+### Internal Crawl API (Ops)
+
+Start a crawl job:
+
+```bash
+curl -X POST https://your-domain.com/api/crawl \
+  -H "Content-Type: application/json" \
+  -H "x-internal-api-key: $INTERNAL_CRAWL_API_KEY" \
+  -d '{
+    "url":"https://blog.cloudflare.com/",
+    "limit":25,
+    "maxDepth":2,
+    "outputFormat":"markdown"
+  }'
+```
+
+Expected response: `202` with `jobId` and `pollUrl`.
+
+Poll a crawl job:
+
+```bash
+curl "https://your-domain.com/api/crawl?jobId=<job-id>" \
+  -H "x-internal-api-key: $INTERNAL_CRAWL_API_KEY"
+```
+
+Expected response: `200` with normalized status and records summary.
 
 Security & production notes
 
-- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, and `INTERNAL_CRAWL_API_KEY` server-side only.
+- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, `INTERNAL_CRAWL_API_KEY`, and `CF_BROWSER_RENDERING_API_TOKEN` server-side only.
 - Rotate sensitive secrets every 90 days.
-- Apply the migration in `supabase/migrations/20260309120000_harden_leads_rls.sql` to enforce RLS and column constraints for `public.leads`.
+- Apply the migrations in `supabase/migrations/20260309120000_harden_leads_rls.sql` and `supabase/migrations/20260313213000_align_leads_tables_rls.sql` to enforce RLS and column constraints for `public.leads`, `public.leads_demo`, and `public.leads_dev`.
 
 
 ## 📋 Available Scripts
@@ -102,6 +168,7 @@ Security & production notes
 | Script | Description |
 |--------|-------------|
 | `npm run dev` | Start development server with hot-reload |
+| `npm run validate:contact-env` | Validate hosted contact-form env requirements |
 | `npm run build` | Build production bundle |
 | `npm run build:dev` | Build development bundle |
 | `npm run lint` | Run ESLint to check code quality |
@@ -271,7 +338,7 @@ Cloudflare Pages is a great option for deploying this project. Follow the steps 
 Add these in Cloudflare Pages **Environment Variables** for both Preview and Production:
 
 ```bash
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_URL=https://ymsjdxihduwlywcuwrld.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-or-publishable-key
 VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
 ```
@@ -298,8 +365,9 @@ If Contact appears as `Temporarily Unavailable`:
 3. Redeploy after changing variables.
 4. Recheck the live page: submit button should return to `Send Message`.
 5. Optional: enable technical hint in non-production by setting `VITE_SHOW_CONTACT_CONFIG_HINT=true`.
-6. For Vercel lead ingestion, verify server-side secrets are set: `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.
+6. For Vercel lead ingestion, verify server-side secrets are set: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `LEADS_TARGET_TABLE`, `CF_TURNSTILE_SECRET`, `CF_TURNSTILE_EXPECTED_ACTION`, `CF_TURNSTILE_ALLOWED_HOSTNAMES`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.
 7. For Vercel email notifications, verify `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `RESEND_NOTIFICATION_TO` are set, then redeploy.
+8. For internal crawl jobs, verify `INTERNAL_CRAWL_API_KEY`, `CF_BROWSER_RENDERING_ACCOUNT_ID`, and `CF_BROWSER_RENDERING_API_TOKEN` are set.
 
 ## 🤝 Contributing
 

@@ -16,6 +16,13 @@ function parseRecipients(value) {
     .filter(Boolean);
 }
 
+function resolveLeadSubjectPrefix() {
+  const targetTable = process.env.LEADS_TARGET_TABLE?.trim();
+  if (targetTable === "leads_dev") return "[DEV] ";
+  if (targetTable === "leads_demo" || process.env.VITE_DEMO_MODE === "true") return "[DEMO] ";
+  return "";
+}
+
 export async function sendLeadNotification(payload, requestId) {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const fromEmail = process.env.RESEND_FROM_EMAIL?.trim();
@@ -36,11 +43,12 @@ export async function sendLeadNotification(payload, requestId) {
     const safeEmail = escapeHtml(payload.email);
     const safeCompany = payload.company ? escapeHtml(payload.company) : "No company";
     const safeMessage = escapeHtml(payload.message);
+    const subjectPrefix = resolveLeadSubjectPrefix();
 
     const { error } = await resend.emails.send({
       from: fromEmail,
       to: recipients,
-      subject: `${process.env.VITE_DEMO_MODE === "true" ? "[DEMO] " : ""}New Lead: ${payload.name} (${payload.company || "No company"})`,
+      subject: `${subjectPrefix}New Lead: ${payload.name} (${payload.company || "No company"})`,
       html: `
         <h2>New Lead Submission</h2>
         <p><strong>Name:</strong> ${safeName}</p>

@@ -1,21 +1,18 @@
-const turnstileSiteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY?.trim();
-const apiUrl = import.meta.env.VITE_API_URL?.trim();
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 
-const missingContactConfig = [
-  !turnstileSiteKey ? "VITE_TURNSTILE_SITE_KEY" : null,
+const missingSupabaseConfig = [
+  !supabaseUrl ? "VITE_SUPABASE_URL" : null,
+  !supabaseAnonKey ? "VITE_SUPABASE_ANON_KEY" : null,
 ].filter(Boolean) as string[];
 
-export const isContactFormConfigured = missingContactConfig.length === 0;
+export const isSupabaseConfigured = missingSupabaseConfig.length === 0;
 
-export const contactConfigError = isContactFormConfigured
+export const supabaseConfigError = isSupabaseConfigured
   ? null
-  : `Missing frontend configuration: ${missingContactConfig.join(", ")}`;
-
-export const isDemoMode = import.meta.env.VITE_DEMO_MODE === "true";
-
-export const leadTableName = isDemoMode ? "leads_demo" : "leads";
+  : `Missing frontend configuration: ${missingSupabaseConfig.join(", ")}`;
 
 export const runtimeConfig = {
-  turnstileSiteKey,
-  apiUrl,
+  supabaseUrl,
+  supabaseAnonKey,
 } as const;
