@@ -148,34 +148,6 @@ Behavior:
 - Subject prefixes are environment-aware: `[DEV]` for `leads_dev`, `[DEMO]` for `leads_demo`, and no prefix for `leads`.
 - `/api/send-notification` is retired and now returns `410`.
 
-Docker (optional):
-
-```
-# Ensure .env has N8N_WEBHOOK_URL configured (see .env.example)
-docker compose up --build
-```
-
-Notes:
-- The backend will forward validated JSON to the `N8N_WEBHOOK_URL` environment variable (defaults to `http://localhost:5678`).
-- If n8n runs on your host and the backend runs in Docker, set `N8N_WEBHOOK_URL=http://host.docker.internal:5678` so the container can reach host n8n.
-- The backend performs schema validation (Zod), Turnstile verification, and rate limiting (5 requests per 10 minutes per IP hash).
-
-Integration test & curl examples
-
-Quick curl test (replace values as needed):
-
-```bash
-curl -X POST http://localhost:3001/api/contact \
-   -H "Content-Type: application/json" \
-   -d '{"name":"Acme Corp","email":"hello@acme.test","company":"Acme","message":"Hello from curl","turnstileToken":"token","website":""}'
-```
-
-Expected responses:
-- `200 {"ok":true}` — forwarded to n8n successfully
-- `400` — validation error (invalid or missing fields)
-- `429` — rate limited
-- `502` — n8n forwarding error
-
 ### Internal Crawl API (Ops)
 
 Start a crawl job:
@@ -203,16 +175,9 @@ curl "https://your-domain.com/api/crawl?jobId=<job-id>" \
 
 Expected response: `200` with normalized status and records summary.
 
-If you prefer a small Node-based smoke test, run this from the repo root (requires Node >=18):
-
-```bash
-# from repo root
-node -e "(async()=>{const res=await fetch('http://localhost:3001/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Test',email:'test@example.com',company:'Acme',message:'Hello',turnstileToken:'token',website:''})});console.log(await res.text());})()"
-```
-
 Security & production notes
 
-- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, `N8N_WEBHOOK_SECRET`, `INTERNAL_CRAWL_API_KEY`, and `CF_BROWSER_RENDERING_API_TOKEN` server-side only.
+- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, `INTERNAL_CRAWL_API_KEY`, and `CF_BROWSER_RENDERING_API_TOKEN` server-side only.
 - Rotate sensitive secrets every 90 days.
 - Apply the migrations in `supabase/migrations/20260309120000_harden_leads_rls.sql` and `supabase/migrations/20260313213000_align_leads_tables_rls.sql` to enforce RLS and column constraints for `public.leads`, `public.leads_demo`, and `public.leads_dev`.
 
