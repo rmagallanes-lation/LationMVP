@@ -55,25 +55,11 @@ A modern, full-featured interview scheduling and management platform built for t
    
    Navigate to `http://localhost:5173` (or the port shown in your terminal)
 
-## Backend Integration (n8n) — Contact Form
-
-This project includes two hardened contact ingestion paths:
-- `POST /api/lead` (Vercel serverless): validates input, verifies Turnstile, enforces Redis-backed rate limiting, writes to Supabase using service-role credentials, and triggers non-blocking Resend notifications.
-- `POST /api/contact` (Express backend): validates input, verifies Turnstile, enforces Redis-backed rate limiting, and forwards to n8n with a timeout and shared secret header.
-
-Steps to run locally:
+## Contact Form — Local Setup
 
 1. Create a `.env` file at project root (or set environment variables). Example values are in `.env.example`.
 
-2. Start the backend in dev mode:
-
-```bash
-cd server
-npm install
-npm run dev
-```
-
-3. Set required frontend and server variables:
+2. Set required frontend and server variables:
 
 ```
 VITE_TURNSTILE_SITE_KEY=0x4AAAAAAAxxxxxxxxxxxxxx
@@ -85,13 +71,7 @@ UPSTASH_REDIS_REST_TOKEN=your-upstash-rest-token
 ALLOWED_ORIGINS=http://localhost:5173
 ```
 
-4. If you need backend routes for n8n forwarding, also set:
-
-```
-VITE_API_URL=http://localhost:3001
-```
-
-5. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Turnstile config is missing, the app keeps rendering and disables only contact submission.
+3. Start the frontend as normal (`npm run dev` from repo root) and submit the contact form. If Turnstile config is missing, the app keeps rendering and disables only contact submission.
 
 ### Vercel Resend Notifications (Optional)
 
@@ -110,44 +90,9 @@ Behavior:
 - Email notification is non-blocking (if it fails, user still sees success and only operational metadata is logged).
 - `/api/send-notification` is retired and now returns `410`.
 
-Docker (optional):
-
-```
-# Ensure .env has N8N_WEBHOOK_URL configured (see .env.example)
-docker compose up --build
-```
-
-Notes:
-- The backend will forward validated JSON to the `N8N_WEBHOOK_URL` environment variable (defaults to `http://localhost:5678`).
-- If n8n runs on your host and the backend runs in Docker, set `N8N_WEBHOOK_URL=http://host.docker.internal:5678` so the container can reach host n8n.
-- The backend performs schema validation (Zod), Turnstile verification, and rate limiting (5 requests per 10 minutes per IP hash).
-
-Integration test & curl examples
-
-Quick curl test (replace values as needed):
-
-```bash
-curl -X POST http://localhost:3001/api/contact \
-   -H "Content-Type: application/json" \
-   -d '{"name":"Acme Corp","email":"hello@acme.test","company":"Acme","message":"Hello from curl","turnstileToken":"token","website":""}'
-```
-
-Expected responses:
-- `200 {"ok":true}` — forwarded to n8n successfully
-- `400` — validation error (invalid or missing fields)
-- `429` — rate limited
-- `502` — n8n forwarding error
-
-If you prefer a small Node-based smoke test, run this from the repo root (requires Node >=18):
-
-```bash
-# from repo root
-node -e "(async()=>{const res=await fetch('http://localhost:3001/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:'Test',email:'test@example.com',company:'Acme',message:'Hello',turnstileToken:'token',website:''})});console.log(await res.text());})()"
-```
-
 Security & production notes
 
-- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, and `N8N_WEBHOOK_SECRET` server-side only.
+- Keep `SUPABASE_SERVICE_ROLE_KEY`, `CF_TURNSTILE_SECRET`, `UPSTASH_REDIS_REST_TOKEN`, `RESEND_API_KEY`, and `INTERNAL_CRAWL_API_KEY` server-side only.
 - Rotate sensitive secrets every 90 days.
 - Apply the migration in `supabase/migrations/20260309120000_harden_leads_rls.sql` to enforce RLS and column constraints for `public.leads`.
 
@@ -305,24 +250,9 @@ npm run preview
 
 ### Deployment Options
 
-**For lation.com.mx: Cloudflare Pages + Backend + n8n Tunnel**
+**Frontend:** Vercel or Cloudflare Pages (auto-deploys from GitHub)
 
-- **Frontend:** Cloudflare Pages (auto-deploys from GitHub)
-- **Backend:** Node.js/Express on same server (Docker)
-- **n8n:** Exposed via Cloudflare Tunnel (local workflow automation, publicly accessible)
-- **SSL/TLS:** Auto-issued by Cloudflare
-
-📖 **[See DEPLOYMENT.md for Complete Setup Guide →](./DEPLOYMENT.md)**
-
-This includes:
-- 7-step deployment walkthrough
-- Architecture diagram
-- Environment variable configuration
-- Cloudflare Tunnel setup for n8n
-- GitHub Actions CI/CD template
-- Troubleshooting and production checklist
-
-**Other platforms:** Vercel, Netlify, GitHub Pages, AWS S3+CloudFront also supported
+**Other platforms:** Netlify, GitHub Pages, AWS S3+CloudFront also supported
 
 ### Cloudflare Pages Deployment
 

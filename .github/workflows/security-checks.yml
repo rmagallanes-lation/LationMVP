@@ -34,20 +34,3 @@ jobs:
         run: npm ci
       - name: Audit root runtime dependencies
         run: npm audit --omit=dev --audit-level=high
-
-  runtime-audit-server:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: "18"
-          cache: "npm"
-          cache-dependency-path: server/package-lock.json
-      - name: Install server dependencies
-        run: npm ci
-      - name: Audit server runtime dependencies
-        run: npm audit --omit=dev --audit-level=high

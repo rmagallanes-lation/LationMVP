@@ -28,7 +28,6 @@ jobs:
     - name: Build frontend
       run: npm run build
       env:
-        VITE_API_URL: ${{ secrets.VITE_API_URL }}
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
@@ -52,7 +51,7 @@ jobs:
 
     - name: Validate required frontend env vars
       run: |
-        required=(VITE_API_URL VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY VITE_TURNSTILE_SITE_KEY)
+        required=(VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY VITE_TURNSTILE_SITE_KEY)
         missing=0
         for key in "${required[@]}"; do
           if [ -z "${!key}" ]; then
@@ -64,62 +63,20 @@ jobs:
           exit 1
         fi
       env:
-        VITE_API_URL: ${{ secrets.VITE_API_URL }}
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
-    
+
     - name: Build frontend
       run: npm run build
       env:
-        VITE_API_URL: ${{ secrets.VITE_API_URL }}
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
         VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
-    
+
     - name: Deploy to Cloudflare Pages
       uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3
       with:
         apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         command: pages deploy --project-name=lation-interviews --directory=dist
-
-  deploy-backend:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    
-    steps:
-    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-    
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
-    
-    - name: Login to Docker Hub
-      uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-    
-    - name: Build and push backend image
-      uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5
-      with:
-        context: ./server
-        push: true
-        tags: |
-          ${{ secrets.DOCKER_USERNAME }}/lation-backend:latest
-          ${{ secrets.DOCKER_USERNAME }}/lation-backend:${{ github.sha }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-    
-    - name: Deploy to server
-      uses: appleboy/ssh-action@55dabf81b49d4120609345970c91507e2d734799 # v1.0.0
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /opt/lation
-          docker pull ${{ secrets.DOCKER_USERNAME }}/lation-backend:latest
-          docker compose up -d --force-recreate
-          docker system prune -f
