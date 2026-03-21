@@ -30,7 +30,6 @@ jobs:
       env:
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
 
   deploy:
     needs: test-and-build
@@ -51,7 +50,7 @@ jobs:
 
     - name: Validate required frontend env vars
       run: |
-        required=(VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY VITE_TURNSTILE_SITE_KEY)
+        required=(VITE_SUPABASE_URL VITE_SUPABASE_ANON_KEY)
         missing=0
         for key in "${required[@]}"; do
           if [ -z "${!key}" ]; then
@@ -65,14 +64,12 @@ jobs:
       env:
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
 
     - name: Build frontend
       run: npm run build
       env:
         VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
         VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-        VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
     
     - name: Deploy to Cloudflare Pages
       uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3
